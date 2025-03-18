@@ -1,0 +1,53 @@
+# 📦 Archivos de Python y entornos virtuales
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.pyo
+*.pyd
+*.log
+
+# 📂 Virtualenv & Pipenv
+venv/
+.env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ⚙️ Archivos de configuración y entornos
+.env
+*.env
+config.yaml
+instance/
+secrets.json
+
+# 🛢 PostgreSQL & Bases de Datos
+*.sqlite3
+*.db
+*.sql
+pgdata/
+dump.sql
+
+# 📝 Logs y caché
+*.log
+logs/
+cache/
+*.pid
+*.seed
+
+# 🔍 Archivos de pruebas y cobertura
+.coverage
+.tox/
+.nox/
+pytest_cache/
+
+# 🚀 Deploy & Docker
+*.dockerfile
+*.tar
+*.pem
+docker-compose.override.yml
+
+# 🔹 IDEs y editores
+.vscode/
+.idea/
+*.iml
