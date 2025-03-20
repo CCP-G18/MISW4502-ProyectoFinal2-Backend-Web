@@ -1,7 +1,7 @@
 name: Integración continua rama develop
 on:
-  push:
-    branches: [ develop ]
+    push:
+      branches: [ release ]
 jobs:
   tests:
     name: Tests
@@ -32,22 +32,6 @@ jobs:
       run: |
           coverage run -m pytest
           coverage report -m
-  generate-release:
-    name: GenerateRelease
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-      - name: Checkout de repositorio
-        uses: actions/checkout@v2
-        if: ${{ contains(github.event.head_commit.message, 'release') }}
-        with:
-          ref: 'develop'
-      - name: Generación rama Release
-        if: ${{ contains(github.event.head_commit.message, 'release') }}
-        id: release
-        run: |
-          git checkout -b release
-          git push -f -u origin release
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -59,4 +43,5 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source-branch: release
-          target-branch: main      
+          target-branch: main
+      

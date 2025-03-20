@@ -1,7 +1,9 @@
 name: Integración continua ramas feature y fix
 on:
   push:
-    branches: [ feature/*, fix/* ]
+    branches: [ feature/*, hotfix/* ]
+  pull_request:
+    types: [opened, edited, synchronize]
 jobs:
   tests:
     name: Tests
