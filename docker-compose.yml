@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  user_app:
+    build: ./src/users
+    container_name: user_app
+    ports:
+      - "5000:5000"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_USERS_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    depends_on:
+      user_db:
+        condition: service_healthy
+    networks:
+      - user_net
+      - app_net
+  user_db:
+    image: postgres:16-alpine
+    container_name: user_db
+    restart: always
+    ports:
+      - "5433:5432"     
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB: ${USERS_POSTGRES_DB}
+      POSTGRES_USER: ${USERS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${USERS_POSTGRES_PASSWORD}
+      TZ: America/Bogota
+    volumes:
+      - postgres_data_users:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d users_db" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    networks:
+      - user_net
+ 
+networks:
+  app_net:
+    driver: bridge
+    name: app_net
+  user_net:
+    driver: bridge
+    name: user_net
+
+volumes:
+  postgres_data_users:
