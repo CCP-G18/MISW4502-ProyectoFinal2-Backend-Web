@@ -1,0 +1,54 @@
+name: Integracion Continua Backend
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  discover-services:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.set-matrix.outputs.services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validar nombre de rama
+        run: |
+          echo "Rama origen: ${{ github.head_ref }}"
+          if [[ "${{ github.head_ref }}" != feature/* && "${{ github.head_ref }}" != hotfix/* && "${{ github.head_ref }}" != bugfix/* ]]; then
+            echo "❌ Solo se permiten pull requests desde ramas que comiencen con 'feature/', 'hotfix/' o 'bugfix/'."
+            exit 1
+          fi
+
+      - name: Descubrir microservicios en src/
+        id: set-matrix
+        run: |
+          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/requirements.txt" \; -print | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=$services"
+          echo "services=$services" >> $GITHUB_OUTPUT
+
+  test:
+    needs: discover-services
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ${{ matrix.service }}/requirements.txt
+
+      - name: Ejecutar pruebas con cobertura mínima del 70%
+        run: |
+          pytest --cov=${{ matrix.service }} --cov-fail-under=70 ${{ matrix.service }}/tests
