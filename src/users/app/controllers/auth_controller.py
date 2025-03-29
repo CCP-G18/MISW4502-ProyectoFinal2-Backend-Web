@@ -14,7 +14,7 @@ def login():
         user_data = request.get_json()
         user = UserService.check_credentials(user_data)
     except (UnauthorizedError, BadRequestError, ForbiddenError) as e:
-        return format_response("error", e.code, error=e.description), e.code
+      return format_response("error", e.code, error=e.description)
     else:
         response: dict = {
             "user": user_schema.dump(user),
