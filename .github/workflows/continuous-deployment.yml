@@ -1,0 +1,61 @@
+name: Despliegue Continuo Backend
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configurar Docker para Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+      - name: Build Docker images
+        run: |
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/users:latest -f ./src/users/Dockerfile .
+
+      - name: Push Docker images to Artifact Registry
+        run: |
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/users:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configurar acceso a GKE
+        run: |
+          gcloud container clusters get-credentials uniandes-proyecto-final-misw-k8s --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+
+      - name: Desplegar en Kubernetes
+        run: |
+          kubectl apply -f k8s/k8s-service.yml
