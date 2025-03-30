@@ -5,8 +5,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  discover-services:
     runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.set-matrix.outputs.services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Descubrir microservicios en src/
+        id: set-matrix
+        run: |
+          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=${services}" >> $GITHUB_OUTPUT
+
+  build-and-push:
+    needs: discover-services
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
 
     steps:
       - name: Checkout code
@@ -20,10 +38,10 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r src/${{ matrix.service }}/requirements.txt
 
       - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
@@ -31,24 +49,27 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
 
-      - name: Build Docker images
+      - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/users:latest -f ./src/users/Dockerfile .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f ./src/${{ matrix.service }}/Dockerfile .
 
-      - name: Push Docker images to Artifact Registry
+      - name: Push Docker image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/users:latest
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
 
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
@@ -58,4 +79,4 @@ jobs:
 
       - name: Desplegar en Kubernetes
         run: |
-          kubectl apply -f k8s/k8s-service.yml
+          kubectl set image deployment/${{ matrix.service }} ${ matrix.service }}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
