@@ -51,7 +51,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f ./src/${{ matrix.service }}/Dockerfile .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f ./${{ matrix.service }}/Dockerfile .
 
       - name: Push Docker image to Artifact Registry
         run: |
@@ -72,11 +72,3 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Configurar acceso a GKE
-        run: |
-          gcloud container clusters get-credentials uniandes-proyecto-final-misw-k8s --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-
-      - name: Desplegar en Kubernetes
-        run: |
-          kubectl set image deployment/${{ matrix.service }} ${ matrix.service }}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
