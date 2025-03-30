@@ -38,7 +38,7 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install -r src/${{ matrix.service }}/requirements.txt
+          pip install -r ${{ matrix.service }}/requirements.txt
 
       - name: Autenticarse en Google Cloud
         uses: google-github-actions/auth@v1
