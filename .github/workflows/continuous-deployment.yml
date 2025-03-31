@@ -48,24 +48,3 @@ jobs:
       - name: Push Docker image to Artifact Registry
         run: |
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: ${{ needs.discover-services.outputs.services != '[]' }}
-    strategy:
-      matrix:
-        service: ${{ fromJson(needs.discover-services.outputs.services) }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Configurar Docker para Artifact Registry
-        run: |
-          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
