@@ -1,19 +1,24 @@
-FROM python:3.12-slim
+FROM python:3.12-bullseye
 
 ENV PYTHONUNBUFFERED True
 
 EXPOSE 5000
+
 WORKDIR /app
+
 COPY . ./
 
-RUN apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
+
+RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
+    gcc-10 \
+    g++-10 \
     build-essential \
     libpq-dev \
     libffi-dev \
     musl-dev \
     git \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
 RUN pip install --upgrade pip setuptools wheel
 
