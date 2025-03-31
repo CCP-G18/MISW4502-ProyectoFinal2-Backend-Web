@@ -16,12 +16,14 @@ jobs:
       - name: Descubrir microservicios en src/
         id: set-matrix
         run: |
-          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | xargs -n 1 basename | jq -R -s -c 'split("\n")[:-1]')
-          echo "services=${services}" >> $GITHUB_OUTPUT
+          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | xargs -n 1 basename)
+          services_json=$(echo "${services}" | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=${services_json}" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: discover-services
     runs-on: ubuntu-latest
+    if: ${{ needs.discover-services.outputs.services != '[]' }}
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover-services.outputs.services) }}
@@ -50,6 +52,7 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    if: ${{ needs.discover-services.outputs.services != '[]' }}
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover-services.outputs.services) }}
