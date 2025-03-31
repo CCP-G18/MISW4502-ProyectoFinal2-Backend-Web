@@ -16,7 +16,7 @@ jobs:
       - name: Descubrir microservicios en src/
         id: set-matrix
         run: |
-          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | jq -R -s -c 'split("\n")[:-1]')
+          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | xargs -n 1 basename | jq -R -s -c 'split("\n")[:-1]')
           echo "services=${services}" >> $GITHUB_OUTPUT
 
   build-and-push:
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f ${{ matrix.service }}/Dockerfile ${{ matrix.service }}
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f src/${{ matrix.service }}/Dockerfile src/${{ matrix.service }}
 
       - name: Push Docker image to Artifact Registry
         run: |
