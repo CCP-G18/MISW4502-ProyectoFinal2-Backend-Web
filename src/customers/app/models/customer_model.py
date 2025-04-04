@@ -27,9 +27,24 @@ class Customer(db.Model):
     address = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-
-    def __repr__(self):
-        return '<Customer %r>' % self.identification_number
+    user_id = db.Column(UUID(as_uuid=True), unique=True, nullable=False)
+    
+    def __init__(self,
+                identification_type,
+                identification_number,
+                country,
+                city,
+                address,
+                user_id):
+        self.identification_type = identification_type
+        self.identification_number = identification_number
+        self.role = RoleEnum.CLIENTE
+        self.country = country
+        self.city = city
+        self.address = address
+        self.user_id = user_id
+ 
+        super().__init__()
     
 class CustomerSchema(ma.Schema):
     identification_type = EnumField(DocumentTypeEnum, by_value=True)
@@ -37,7 +52,7 @@ class CustomerSchema(ma.Schema):
     class Meta:
         model = Customer
         fields = (
-            'id',
+            'id',            
             'identification_type',
             'identification_number',
             'role',
@@ -45,5 +60,6 @@ class CustomerSchema(ma.Schema):
             'city',
             'address',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'user_id'
         )    
