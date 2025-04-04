@@ -27,7 +27,8 @@ def test_login_success(mocker, client):
         name="Test",
         lastname="User",
         email="test@example.com",
-        password="123456"
+        password="123456",
+        role="admin",
     )
 
     # Mock del servicio y del token
@@ -66,7 +67,8 @@ def test_verify_success(mocker, client):
         name="Test",
         lastname="User",
         email="test@example.com",
-        password="123456"
+        password="123456",
+        role="admin",
     )
 
     # Mocks necesarios
