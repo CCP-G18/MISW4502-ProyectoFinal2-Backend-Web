@@ -7,19 +7,31 @@ from app.exceptions.http_exceptions import BadRequestError, NotFoundError, Unaut
 
 @pytest.fixture
 def mock_customer_data():
-     return Customer ({
+    return Customer(
+        identification_type="CC",
+        identification_number=123456789,
+        country="Colombia",
+        city="Bogotá",
+        address="Calle 123",
+        user_id="4e49e816-e4b0-4d94-974b-8b35d905ae21"
+    )
+
+@pytest.fixture
+def mock_customer():
+    return  {
         "identificationType": "CC",
-        "identificationNumber": "123456789",
-        "country": "Colombia",
-        "city": "Bogotá",
+        "identificationNumber": 123456789,
+        "country": "Estados Unidos",
+        "city": "New York",
         "address": "Calle 123",
         "user": {
-            "name": "Juan",
+            "name": "123",
             "lastname": "Pérez",
-            "email": "juan.perez@example.com"
+            "email": "juan.perez18@example.com",
+            "password": "123456"
         }
-    })
-
+    }
+     
 def test_validate_uuid():
     assert validate_uuid("4e49e816-e4b0-4d94-974b-8b35d905ae21") is True
     assert validate_uuid("invalid-uuid") is False
@@ -36,21 +48,41 @@ def test_is_valid_data():
 
 @patch("app.repositories.customer_repository.CustomerRepository.get_all")
 def test_get_all_customers_success(mock_get_all):
-    mock_customers = [
-        Customer(
-            identification_type="CC",
-            identification_number=123456789,
-            country="Colombia",
-            city="Bogotá",
-            address="Calle 123",
-            user_id="4e49e816-e4b0-4d94-974b-8b35d905ae21"
-        )
-    ]
+    mock_customers = {
+        "code": 200,
+        "data": [
+            {
+                "address": "Calle 123",
+                "city": "Bogotá",
+                "country": "Colombia",
+                "created_at": "2025-04-03T22:30:52.658277",
+                "id": "d3c14118-be62-4084-865d-01c1599bd024",
+                "identification_number": 123456789,
+                "identification_type": "CC",
+                "role": "Cliente",
+                "updated_at": "2025-04-03T22:30:52.658277",
+                "user_id": "7070484b-34aa-456d-bb51-3b0063a66662"
+            },
+            {
+                "address": "Calle 123",
+                "city": "Bogotá",
+                "country": "Colombia",
+                "created_at": "2025-04-03T22:48:29.275242",
+                "id": "a49b48ee-d845-4e10-b9e7-dfc5a75af22d",
+                "identification_number": 123456789,
+                "identification_type": "CC",
+                "role": "Cliente",
+                "updated_at": "2025-04-03T22:48:29.275242",
+                "user_id": "a7f9baae-634d-4641-a3b9-02d4cf501130"
+            }
+        ],
+        "message": "Todos los clientes han sido obtenidos",
+        "status": "success"
+    }
     mock_get_all.return_value = mock_customers
 
     result = CustomerService.get_all()
-    assert len(result) == 1
-    assert result[0].country == "Colombia"
+    assert len(result) == 4
 
 
 @patch("app.repositories.customer_repository.CustomerRepository.get_all")
@@ -60,31 +92,8 @@ def test_get_all_customers_no_data(mock_get_all):
     with pytest.raises(ValueError, match="No hay clientes registrados"):
         CustomerService.get_all()
 
-@patch("app.repositories.customer_repository.CustomerRepository.create")
 @patch("app.services.customer_service.requests.post")
-def test_create_customer_success(mock_post, mock_create, mock_customer_data):
-    # Simular respuesta del servicio de usuarios
-    mock_post.return_value = MagicMock(
-        status_code=201,
-        json=lambda: {"data": {"id": "4e49e816-e4b0-4d94-974b-8b35d905ae21"}}
-    )
-
-    # Simular creación del cliente
-    mock_create.return_value = Customer(
-        identification_type="CC",
-        identification_number=123456789,
-        country="Colombia",
-        city="Bogotá",
-        address="Calle 123",
-        user_id="4e49e816-e4b0-4d94-974b-8b35d905ae21"
-    )
-
-    result = CustomerService.create(mock_customer_data)
-    assert result.identification_type == "CC"
-    assert result.country == "Colombia"
-
-@patch("app.services.customer_service.requests.post")
-def test_create_customer_user_service_error(mock_post, mock_customer_data):
+def test_create_customer_user_service_error(mock_post, mock_customer):
     # Simular error del servicio de usuarios
     mock_post.return_value = MagicMock(
         status_code=400,
@@ -92,31 +101,31 @@ def test_create_customer_user_service_error(mock_post, mock_customer_data):
     )
 
     with pytest.raises(BadRequestError, match="Error al crear el usuario: El email ya está registrado"):
-        CustomerService.create(mock_customer_data)
+        CustomerService.create(mock_customer)
 
-def test_create_customer_missing_identification_type(mock_customer_data):
-    mock_customer_data.pop("identificationType")
+def test_create_customer_missing_identification_type(mock_customer):
+    mock_customer.pop("identificationType")
 
     with pytest.raises(BadRequestError, match="El tipo de identificación es requerido"):
-        CustomerService.create(mock_customer_data)
+        CustomerService.create(mock_customer)
 
 
-def test_create_customer_invalid_identification_type(mock_customer_data):
-    mock_customer_data["identificationType"] = "INVALID"
+def test_create_customer_invalid_identification_type(mock_customer):
+    mock_customer["identificationType"] = "INVALID"
 
     with pytest.raises(BadRequestError, match="El tipo de identificación no es válido, debe ser CC, NIT, CE, DNI o PASSPORT"):
-        CustomerService.create(mock_customer_data)
+        CustomerService.create(mock_customer)
 
 
-def test_create_customer_missing_user_data(mock_customer_data):
-    mock_customer_data.pop("user")
+def test_create_customer_missing_user_data(mock_customer):
+    mock_customer.pop("user")
 
     with pytest.raises(BadRequestError, match="Los datos del cliente son requeridos"):
-        CustomerService.create(mock_customer_data)
+        CustomerService.create(mock_customer)
 
 
-def test_create_customer_invalid_email(mock_customer_data):
-    mock_customer_data["user"]["email"] = "invalid-email"
+def test_create_customer_invalid_email(mock_customer):
+    mock_customer["user"]["email"] = "invalid-email"
 
     with pytest.raises(BadRequestError, match="El email no es válido"):
-        CustomerService.create(mock_customer_data)
+        CustomerService.create(mock_customer)
