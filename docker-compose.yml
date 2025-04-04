@@ -39,6 +39,45 @@ services:
       retries: 5
     networks:
       - user_net
+  customer_app:
+    build: ./src/customers
+    container_name: customer_app
+    ports:
+      - "5001:5001"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_CUSTOMERS_URI}
+      USER_SERVICE_URL: ${USER_SERVICE_URL}    
+    depends_on:
+      customer_db:
+        condition: service_healthy
+    networks:
+      - customer_net
+      - app_net
+  
+  customer_db:
+    image: postgres:16-alpine
+    container_name: customer_db
+    restart: always
+    ports:
+      - "5434:5432"     
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB: ${CUSTOMERS_POSTGRES_DB}
+      POSTGRES_USER: ${CUSTOMERS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CUSTOMERS_POSTGRES_PASSWORD}
+      TZ: America/Bogota
+    volumes:
+      - postgres_data_customers:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d customers_db" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    networks:
+      - customer_net      
  
 networks:
   app_net:
@@ -47,6 +86,10 @@ networks:
   user_net:
     driver: bridge
     name: user_net
+  customer_net:
+    driver: bridge
+    name: customer_net
 
 volumes:
   postgres_data_users:
+  postgres_data_customers:
