@@ -23,7 +23,7 @@ def create_customer():
 
 
 @customer_bp.route('/', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def get_customers():
     try:
         customers = CustomerService.get_all()

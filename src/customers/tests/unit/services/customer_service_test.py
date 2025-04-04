@@ -1,122 +1,122 @@
-# import pytest
-# from unittest.mock import MagicMock, patch
-# from customers.app.services.customer_service import UserService, is_valid_email, validate_uuid
-# from customers.app.models.customer_model import Customer
-# from app.exceptions.http_exceptions import BadRequestError, NotFoundError, UnauthorizedError, ForbiddenError
+import pytest
+from unittest.mock import MagicMock, patch
+from app.services.customer_service import CustomerService, is_valid_email, validate_uuid, is_valid_data
+from app.models.customer_model import Customer
+from app.exceptions.http_exceptions import BadRequestError, NotFoundError, UnauthorizedError, ForbiddenError
 
 
-# @pytest.fixture
-# def mock_user():
-#     return User(
-#         name="Test",
-#         lastname="User",
-#         email="test@example.com",
-#         password="123456"
-#     )
+@pytest.fixture
+def mock_customer_data():
+     return Customer ({
+        "identificationType": "CC",
+        "identificationNumber": "123456789",
+        "country": "Colombia",
+        "city": "Bogotá",
+        "address": "Calle 123",
+        "user": {
+            "name": "Juan",
+            "lastname": "Pérez",
+            "email": "juan.perez@example.com"
+        }
+    })
+
+def test_validate_uuid():
+    assert validate_uuid("4e49e816-e4b0-4d94-974b-8b35d905ae21") is True
+    assert validate_uuid("invalid-uuid") is False
+
+def test_is_valid_email():
+    assert is_valid_email("test@example.com") is True
+    assert is_valid_email("invalid-email") is False
+
+def test_is_valid_data():
+    assert is_valid_data("Colombia") is True
+    assert is_valid_data("Bogotá") is True
+    assert is_valid_data("12345") is False
+    assert is_valid_data("Colombia123") is False
+
+@patch("app.repositories.customer_repository.CustomerRepository.get_all")
+def test_get_all_customers_success(mock_get_all):
+    mock_customers = [
+        Customer(
+            identification_type="CC",
+            identification_number=123456789,
+            country="Colombia",
+            city="Bogotá",
+            address="Calle 123",
+            user_id="4e49e816-e4b0-4d94-974b-8b35d905ae21"
+        )
+    ]
+    mock_get_all.return_value = mock_customers
+
+    result = CustomerService.get_all()
+    assert len(result) == 1
+    assert result[0].country == "Colombia"
 
 
-# def test_validate_uuid():
-#     assert validate_uuid("4e49e816-e4b0-4d94-974b-8b35d905ae21") is True
-#     assert validate_uuid("invalid-uuid") is False
+@patch("app.repositories.customer_repository.CustomerRepository.get_all")
+def test_get_all_customers_no_data(mock_get_all):
+    mock_get_all.return_value = []
+
+    with pytest.raises(ValueError, match="No hay clientes registrados"):
+        CustomerService.get_all()
+
+@patch("app.repositories.customer_repository.CustomerRepository.create")
+@patch("app.services.customer_service.requests.post")
+def test_create_customer_success(mock_post, mock_create, mock_customer_data):
+    # Simular respuesta del servicio de usuarios
+    mock_post.return_value = MagicMock(
+        status_code=201,
+        json=lambda: {"data": {"id": "4e49e816-e4b0-4d94-974b-8b35d905ae21"}}
+    )
+
+    # Simular creación del cliente
+    mock_create.return_value = Customer(
+        identification_type="CC",
+        identification_number=123456789,
+        country="Colombia",
+        city="Bogotá",
+        address="Calle 123",
+        user_id="4e49e816-e4b0-4d94-974b-8b35d905ae21"
+    )
+
+    result = CustomerService.create(mock_customer_data)
+    assert result.identification_type == "CC"
+    assert result.country == "Colombia"
+
+@patch("app.services.customer_service.requests.post")
+def test_create_customer_user_service_error(mock_post, mock_customer_data):
+    # Simular error del servicio de usuarios
+    mock_post.return_value = MagicMock(
+        status_code=400,
+        json=lambda: {"error": "El email ya está registrado"}
+    )
+
+    with pytest.raises(BadRequestError, match="Error al crear el usuario: El email ya está registrado"):
+        CustomerService.create(mock_customer_data)
+
+def test_create_customer_missing_identification_type(mock_customer_data):
+    mock_customer_data.pop("identificationType")
+
+    with pytest.raises(BadRequestError, match="El tipo de identificación es requerido"):
+        CustomerService.create(mock_customer_data)
 
 
-# def test_is_valid_email():
-#     assert is_valid_email("test@example.com") is True
-#     assert is_valid_email("invalid-email") is False
+def test_create_customer_invalid_identification_type(mock_customer_data):
+    mock_customer_data["identificationType"] = "INVALID"
+
+    with pytest.raises(BadRequestError, match="El tipo de identificación no es válido, debe ser CC, NIT, CE, DNI o PASSPORT"):
+        CustomerService.create(mock_customer_data)
 
 
-# @patch("app.repositories.user_repository.UserRepository.get_all")
-# def test_get_all_success(mock_get_all, mock_user):
-#     mock_get_all.return_value = [mock_user]
-#     result = UserService.get_all()
-#     assert len(result) == 1
+def test_create_customer_missing_user_data(mock_customer_data):
+    mock_customer_data.pop("user")
+
+    with pytest.raises(BadRequestError, match="Los datos del cliente son requeridos"):
+        CustomerService.create(mock_customer_data)
 
 
-# @patch("app.repositories.user_repository.UserRepository.get_all")
-# def test_get_all_no_users(mock_get_all):
-#     mock_get_all.return_value = []
-#     with pytest.raises(ValueError, match="No hay usuarios registrados"):
-#         UserService.get_all()
+def test_create_customer_invalid_email(mock_customer_data):
+    mock_customer_data["user"]["email"] = "invalid-email"
 
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_id")
-# def test_get_by_id_success(mock_get_by_id, mock_user):
-#     mock_get_by_id.return_value = mock_user
-#     result = UserService.get_by_id("4e49e816-e4b0-4d94-974b-8b35d905ae21")
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_id")
-# def test_get_by_id_not_found(mock_get_by_id):
-#     mock_get_by_id.return_value = None
-#     with pytest.raises(NotFoundError, match="Usuario no encontrado"):
-#         UserService.get_by_id("4e49e816-e4b0-4d94-974b-8b35d905ae21")
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_id")
-# def test_get_by_id_and_status_success(mock_get_by_id, mock_user):
-#     mock_user.status = StatusEnum.ACTIVE
-#     mock_get_by_id.return_value = mock_user
-#     result = UserService.get_by_id_and_status("4e49e816-e4b0-4d94-974b-8b35d905ae21")
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_id")
-# def test_get_by_id_and_status_blocked(mock_get_by_id, mock_user):
-#     mock_user.status = StatusEnum.BLOCKED
-#     mock_get_by_id.return_value = mock_user
-#     with pytest.raises(ForbiddenError, match="Tu cuenta ha sido bloqueada. Contacta al soporte del G18 para más información."):
-#         UserService.get_by_id_and_status("4e49e816-e4b0-4d94-974b-8b35d905ae21")
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_email")
-# def test_get_by_email_success(mock_get_by_email, mock_user):
-#     mock_get_by_email.return_value = mock_user
-#     result = UserService.get_by_email("test@example.com")
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_email")
-# def test_get_by_email_invalid_email(mock_get_by_email):
-#     with pytest.raises(BadRequestError, match="El email no es válido"):
-#         UserService.get_by_email("invalid-email")
-
-
-# @patch("app.repositories.user_repository.UserRepository.create")
-# @patch("app.repositories.user_repository.UserRepository.get_by_email", return_value=None)
-# def test_create_user_success(mock_get_by_email, mock_create, mock_user):
-#     mock_create.return_value = mock_user
-#     result = UserService.create({
-#         "name": "Test",
-#         "lastname": "User",
-#         "email": "test@example.com",
-#         "password": "123456"
-#     })
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_id")
-# @patch("app.repositories.user_repository.UserRepository.update")
-# def test_update_user_status_success(mock_update, mock_get_by_id, mock_user):
-#     mock_get_by_id.return_value = mock_user
-#     result = UserService.update_status("4e49e816-e4b0-4d94-974b-8b35d905ae21", {"status": "ACTIVE"})
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_email")
-# @patch("app.repositories.user_repository.UserRepository.get_by_username")
-# def test_check_credentials_success(mock_get_by_email, mock_get_by_username, mock_user):
-#     mock_user.check_password = MagicMock(return_value=True)
-#     mock_get_by_email.return_value = None
-#     mock_get_by_username.return_value = mock_user
-#     result = UserService.check_credentials({"username": "testuser", "password": "123456"})
-#     assert result == mock_user
-
-
-# @patch("app.repositories.user_repository.UserRepository.get_by_email")
-# @patch("app.repositories.user_repository.UserRepository.get_by_username")
-# def test_check_credentials_invalid(mock_get_by_email, mock_get_by_username):
-#     mock_get_by_email.return_value = None
-#     mock_get_by_username.return_value = None
-#     with pytest.raises(UnauthorizedError, match="Credenciales inválidas"):
-#         UserService.check_credentials({"username": "invaliduser", "password": "wrongpassword"})
+    with pytest.raises(BadRequestError, match="El email no es válido"):
+        CustomerService.create(mock_customer_data)
