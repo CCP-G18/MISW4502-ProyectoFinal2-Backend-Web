@@ -12,4 +12,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5001
-      nodePort: 31017
+      nodePort: 31019
