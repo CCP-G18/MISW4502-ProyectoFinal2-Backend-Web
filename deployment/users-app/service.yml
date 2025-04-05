@@ -7,7 +7,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: user-app
+    app: users-app
   ports:
     - protocol: TCP
       port: 80
