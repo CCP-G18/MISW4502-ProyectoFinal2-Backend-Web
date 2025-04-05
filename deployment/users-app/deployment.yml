@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-app
+  name: users-app
   labels:
-    app: user-app
+    app: users-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-app
+      app: users-app
   template:
     metadata:
       labels:
-        app: user-app
+        app: users-app
     spec:
       containers:
-      - name: user-app
+      - name: users-app
         image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/users:latest
         resources:
           requests:

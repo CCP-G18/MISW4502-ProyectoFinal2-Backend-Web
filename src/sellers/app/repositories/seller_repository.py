@@ -4,6 +4,12 @@ from app.core.database import db
 class SellerRepository:
     
     @staticmethod
+    def get_all():
+        sellers = Seller.query.all()
+        
+        return sellers
+    
+    @staticmethod
     def create(seller):
         seller = Seller(
             assigned_area=seller.get("assigned_area"),
