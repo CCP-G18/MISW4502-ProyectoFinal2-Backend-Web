@@ -59,7 +59,7 @@ class CustomerService:
             raise BadRequestError("La dirección es requerida")
         
         if not customer_data.get("user"):
-            raise BadRequestError("Los datos del cliente son requeridos")
+            raise BadRequestError("Los datos del cliente son requeridos") 
 
         # Validar los datos del usuario
         user_data = customer_data["user"]
@@ -73,9 +73,12 @@ class CustomerService:
             raise BadRequestError("El email es requerido")
         if not is_valid_email(user_data.get("email")):
             raise BadRequestError("El email no es válido")
+        if "role" not in user_data:
+            user_data["role"] = "customer"
+        
 
         # Crear el usuario en el servicio de usuarios
-        user_service_url = f'{CustomerService.BASE_URL_USER_API}'
+        user_service_url = CustomerService.BASE_URL_USER_API
         user_response = requests.post(user_service_url, json=user_data)
 
         if user_response.status_code != 201:

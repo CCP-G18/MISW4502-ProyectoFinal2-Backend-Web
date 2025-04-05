@@ -30,7 +30,8 @@ def test_login_success(mocker, client):
             "name": "Juan",
             "lastname": "Pérez",
             "email": "juan.perez@example.com",
-            "password": "123456"
+            "password": "123456",
+            "role": "customer"
         }
     }
 
@@ -508,7 +509,6 @@ def test_get_customers_success(mocker, client):
                 "id": "d3c14118-be62-4084-865d-01c1599bd024",
                 "identification_number": 123456789,
                 "identification_type": "CC",
-                "role": "Cliente",
                 "updated_at": "2025-04-03T22:30:52.658277",
                 "user_id": "7070484b-34aa-456d-bb51-3b0063a66662"
             },
@@ -520,7 +520,6 @@ def test_get_customers_success(mocker, client):
                 "id": "a49b48ee-d845-4e10-b9e7-dfc5a75af22d",
                 "identification_number": 123456789,
                 "identification_type": "CC",
-                "role": "Cliente",
                 "updated_at": "2025-04-03T22:48:29.275242",
                 "user_id": "a7f9baae-634d-4641-a3b9-02d4cf501130"
             }
