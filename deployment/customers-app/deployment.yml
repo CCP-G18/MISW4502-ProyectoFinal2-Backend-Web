@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-app
+  labels:
+    app: customer-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-app
+  template:
+    metadata:
+      labels:
+        app: customer-app
+    spec:
+      containers:
+      - name: customer-app
+        image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/customers:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: "POSTGRES_DB_URI"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: uri
+          - name: "JWT_SECRET_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: JWT_SECRET_KEY
+        ports:
+          - containerPort: 5002
+        imagePullPolicy: Always
+      volumes:
+        - name: appsecrets-volume
+          secret:
+            secretName: appsecrets
