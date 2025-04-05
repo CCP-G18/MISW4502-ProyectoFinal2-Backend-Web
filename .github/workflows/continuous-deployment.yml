@@ -59,10 +59,6 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     if: ${{ needs.build-and-push.outputs.services != '[]' }}
-    strategy:
-      matrix:
-        service: ${{ fromJson(needs.build-and-push.outputs.services) }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -72,10 +68,21 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Desplegar Ingress Controller
+      - name: Instalar gke-gcloud-auth-plugin (Autenticación para GKE)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+          gcloud components update
+          gcloud components install gke-gcloud-auth-plugin
+
+      - name: Obtener credenciales de Kubernetes
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          kubectl apply -f deployment/ingress/gateway-ingress.yml
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+      - name: Desplegar Ingress Controller
+        run: |
+          kubectl apply -f k8s-configs/ingress/gateway-ingress.yaml --validate=false
 
       - name: Desplegar todos los microservicios en GKE
         run: |
