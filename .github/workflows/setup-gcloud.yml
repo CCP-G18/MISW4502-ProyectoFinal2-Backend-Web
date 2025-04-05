@@ -17,7 +17,7 @@ on:
         type: string
 
 jobs:
-  setup-gcloud:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
