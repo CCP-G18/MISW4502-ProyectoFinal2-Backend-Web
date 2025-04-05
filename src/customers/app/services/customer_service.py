@@ -11,11 +11,7 @@ def validate_uuid(id):
         uuid.UUID(id, version=4)
         return True
     except ValueError:
-        return False
-    
-def is_valid_email(email):
-    pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-    return re.match(pattern, email) is not None
+        return False    
 
 def is_valid_data(data):
     pattern = r"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
@@ -37,7 +33,7 @@ class CustomerService:
 
         if not customer_data.get("identificationType"):
             raise BadRequestError("El tipo de identificación es requerido")               
-        if not customer_data.get("identificationType") in ["CC", "NIT", "CE", "DNI", "PASSPORT"]:
+        if customer_data.get("identificationType") not in ["CC", "NIT", "CE", "DNI", "PASSPORT"]:
             raise BadRequestError("El tipo de identificación no es válido, debe ser CC, NIT, CE, DNI o PASSPORT")
         
         if not customer_data.get("identificationNumber"):
@@ -63,16 +59,6 @@ class CustomerService:
 
         # Validar los datos del usuario
         user_data = customer_data["user"]
-        if not user_data.get("name"):
-            raise BadRequestError("El nombre del cliente es requerido")
-        if not user_data.get("lastname"):
-            raise BadRequestError("El apellido del cliente es requerido")
-        if not user_data.get("password"):
-            raise BadRequestError("La contraseña es requerida")
-        if not user_data.get("email"):
-            raise BadRequestError("El email es requerido")
-        if not is_valid_email(user_data.get("email")):
-            raise BadRequestError("El email no es válido")
         if "role" not in user_data:
             user_data["role"] = "customer"
         

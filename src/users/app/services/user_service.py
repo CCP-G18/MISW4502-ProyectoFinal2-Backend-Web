@@ -17,6 +17,10 @@ def is_valid_email(email):
     return re.match(pattern, email) is not None
 
 class UserService:
+
+    USER_NOT_FOUND_MESSAGE = "Usuario no encontrado"
+    INVALID_ID_FORMAT_MESSAGE = "El formato del id del producto no es correcto"
+
     @staticmethod
     def get_all():
         users = UserRepository.get_all()
@@ -27,21 +31,21 @@ class UserService:
     @staticmethod
     def get_by_id(user_id):
         if not validate_uuid(user_id):
-            raise BadRequestError("El formato del id del producto no es correcto")
+            raise BadRequestError(UserService.INVALID_ID_FORMAT_MESSAGE)
             
         user = UserRepository.get_by_id(user_id)
         if not user:
-            raise NotFoundError("Usuario no encontrado")
+            raise NotFoundError(UserService.USER_NOT_FOUND_MESSAGE)
         return user
     
     @staticmethod
     def get_by_id_and_status(user_id):
         if not validate_uuid(user_id):
-            raise BadRequestError("El formato del id del producto no es correcto")
+            raise BadRequestError(UserService.INVALID_ID_FORMAT_MESSAGE)
             
         user = UserRepository.get_by_id(user_id)
         if not user:
-            raise NotFoundError("Usuario no encontrado")
+            raise NotFoundError(UserService.USER_NOT_FOUND_MESSAGE)
         if user.status == StatusEnum.BLOCKED:
             raise ForbiddenError("Tu cuenta ha sido bloqueada. Contacta al soporte del G18 para más información.")
         return user
@@ -81,7 +85,7 @@ class UserService:
         
         user = UserRepository.get_by_id(user_id)
         if not user:
-            raise NotFoundError("Usuario no encontrado")
+            raise NotFoundError(UserService.USER_NOT_FOUND_MESSAGE)
         
         user.status = user_data["status"]
         UserRepository.update(user)

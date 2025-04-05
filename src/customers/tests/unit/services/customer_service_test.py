@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from app.services.customer_service import CustomerService, is_valid_email, validate_uuid, is_valid_data
+from app.services.customer_service import CustomerService, validate_uuid, is_valid_data
 from app.models.customer_model import Customer
-from app.exceptions.http_exceptions import BadRequestError, NotFoundError, UnauthorizedError, ForbiddenError
+from app.exceptions.http_exceptions import BadRequestError
 
 
 @pytest.fixture
@@ -35,10 +35,6 @@ def mock_customer():
 def test_validate_uuid():
     assert validate_uuid("4e49e816-e4b0-4d94-974b-8b35d905ae21") is True
     assert validate_uuid("invalid-uuid") is False
-
-def test_is_valid_email():
-    assert is_valid_email("test@example.com") is True
-    assert is_valid_email("invalid-email") is False
 
 def test_is_valid_data():
     assert is_valid_data("Colombia") is True
@@ -114,16 +110,51 @@ def test_create_customer_invalid_identification_type(mock_customer):
     with pytest.raises(BadRequestError, match="El tipo de identificación no es válido, debe ser CC, NIT, CE, DNI o PASSPORT"):
         CustomerService.create(mock_customer)
 
+def test_create_customer_missing_identification_number(mock_customer):
+    mock_customer.pop("identificationNumber")
+
+    with pytest.raises(BadRequestError, match="El número de identificación es requerido"):
+        CustomerService.create(mock_customer)
+
+
+def test_create_customer_invalid_identification_type(mock_customer):
+    mock_customer["identificationNumber"] = "INVALID"
+
+    with pytest.raises(BadRequestError, match="El número de identificación no es válido, debe ser un valor numerico"):
+        CustomerService.create(mock_customer)        
+
+def test_create_customer_missing_country(mock_customer):
+    mock_customer.pop("country")
+
+    with pytest.raises(BadRequestError, match="El país es requerido"):
+        CustomerService.create(mock_customer)
+
+def test_create_customer_invalid_country(mock_customer):
+    mock_customer["country"] = "Colombia123"
+
+    with pytest.raises(BadRequestError, match="El país debe contener solo letras y espacios"):
+        CustomerService.create(mock_customer)
+
+def test_create_customer_missing_city(mock_customer):
+    mock_customer.pop("city")
+
+    with pytest.raises(BadRequestError, match="La ciudad es requerida"):
+        CustomerService.create(mock_customer)
+
+def test_create_customer_invalid_city(mock_customer):
+    mock_customer["city"] = "Bogotá123"
+
+    with pytest.raises(BadRequestError, match="La ciudad debe contener solo letras y espacios"):
+        CustomerService.create(mock_customer)
+
+def test_create_customer_missing_address(mock_customer):
+    mock_customer.pop("address")
+
+    with pytest.raises(BadRequestError, match="La dirección es requerida"):
+        CustomerService.create(mock_customer)
 
 def test_create_customer_missing_user_data(mock_customer):
     mock_customer.pop("user")
 
     with pytest.raises(BadRequestError, match="Los datos del cliente son requeridos"):
-        CustomerService.create(mock_customer)
-
-
-def test_create_customer_invalid_email(mock_customer):
-    mock_customer["user"]["email"] = "invalid-email"
-
-    with pytest.raises(BadRequestError, match="El email no es válido"):
         CustomerService.create(mock_customer)

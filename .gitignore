@@ -51,3 +51,9 @@ docker-compose.override.yml
 .vscode/
 .idea/
 *.iml
+
+# SonarQube
+coverage.xml
+sonar-project.properties
+.sonar_lok
+report-task.xml
