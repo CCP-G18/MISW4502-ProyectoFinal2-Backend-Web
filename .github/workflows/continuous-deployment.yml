@@ -68,17 +68,21 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Instalar gke-gcloud-auth-plugin (Autenticación para GKE)
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+          sudo apt-get install -y google-cloud-sdk
           gcloud components update
           gcloud components install gke-gcloud-auth-plugin
+
+      - name: Configurar el Plugin de Autenticación
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
       - name: Obtener credenciales de Kubernetes
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
       - name: Desplegar Ingress Controller
         run: |
