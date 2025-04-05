@@ -29,9 +29,6 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-    # seller = db.relationship('Seller', backref='user', uselist=False)
-
-
     def __init__(self, name, lastname, email, password, role):
         self.name = name
         self.username = email.split('@')[0]
