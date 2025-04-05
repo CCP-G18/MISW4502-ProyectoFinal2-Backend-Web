@@ -20,11 +20,37 @@ jobs:
           services_json=$(echo "${services}" | jq -R -s -c 'split("\n")[:-1]')
           echo "services=${services_json}" >> $GITHUB_OUTPUT
 
-  build-and-push:
-    needs: discover-services
+  setup-gcloud:
     runs-on: ubuntu-latest
     outputs:
-      services: ${{ steps.set-services.outputs.services }}
+      kubeconfig: ${{ steps.get-credentials.outputs.kubeconfig }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Configurar kubectl y obtener credenciales
+        id: get-credentials
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          echo "kubeconfig=${KUBECONFIG}" >> $GITHUB_OUTPUT
+
+  build-and-push:
+    needs: [discover-services, setup-gcloud]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover-services.outputs.services) }}
@@ -33,10 +59,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Leer versión del microservicio
+        id: version
+        run: |
+          VERSION=$(cat src/${{ matrix.service }}/version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Configurar Docker para Artifact Registry
         run: |
@@ -44,86 +71,51 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_TAG=${{ github.sha }}
+          IMAGE_TAG=${{ env.VERSION }}
           docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${IMAGE_TAG} -f src/${{ matrix.service }}/Dockerfile src/${{ matrix.service }}
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+          docker tag ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${IMAGE_TAG} ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.VERSION }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
 
-      - name: Set services output
-        id: set-services
-        run: |
-          echo "services=[\"${{ matrix.service }}\"]" >> $GITHUB_OUTPUT
   deploy:
-    needs: build-and-push
+    needs: [build-and-push, setup-gcloud]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [ "sellers-app", "users-app", "customers-app" ]
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+      - name: Leer versión del microservicio
+        id: version
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
-          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-          sudo apt-get update -y
-          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
-      
-      - name: Configurar kubectl
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          kubectl version
+          VERSION=$(cat src/${{ matrix.service }}/version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Desplegar BackendConfig
         run: |
-          kubectl apply -f deployment/${{ matrix.app }}/backendconfig.yml
-      
+          kubectl apply -f deployment/${{ matrix.service }}-app/backendconfig.yml
+
       - name: Desplegar Deployment
         run: |
-          kubectl set image deployment/${{ matrix.app }} ${matrix.app}=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.IMAGE_TAG }} --record -n default
+          kubectl set image deployment/${{ matrix.service }}-app ${{ matrix.service }}-app=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.VERSION }} --record -n default
 
       - name: Desplegar Service
         run: |
-          kubectl apply -f deployment/${{ matrix.app }}/service.yml
+          kubectl apply -f deployment/${{ matrix.service }}-app/service.yml
 
   deploy-ingress:
-    needs: deploy
+    needs: [deploy, setup-gcloud]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Instalar Google Cloud SDK y Plugin de Autenticación
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
-          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-          sudo apt-get update -y
-          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
-
-      - name: Configurar kubectl
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          kubectl version
-    
-      - name: Desplear Ingress
+      - name: Desplegar Ingress
         run: |
           kubectl apply -f deployment/ingress/gateway-ingress.yml

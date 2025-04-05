@@ -24,9 +24,36 @@ jobs:
       - name: Descubrir microservicios en src/
         id: set-matrix
         run: |
-          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/requirements.txt" \; -print | jq -R -s -c 'split("\n")[:-1]')
-          echo "services=$services"
-          echo "services=$services" >> $GITHUB_OUTPUT
+          services=$(find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print | xargs -n 1 basename)
+          services_json=$(echo "${services}" | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=${services_json}" >> $GITHUB_OUTPUT
+        
+  validate-version:
+    needs: discover-services
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validar incremento de version
+        run: |
+          git fetch origin main
+          PREVIOUS_VERSION=$(git show origin/main:src/${{ matrix.service }}/version || echo "0.0.0")
+
+          NEW_VERSION=$(cat src/${{ matrix.service }}/version)
+
+          echo "Versión anterior: $PREVIOUS_VERSION"
+          echo "Nueva versión: $NEW_VERSION"
+
+          if [ "$PREVIOUS_VERSION" == "$NEW_VERSION" ]; then
+            echo "❌ La versión del microservicio ${{ matrix.service }} no ha sido incrementada. Por favor, incrementa la versión en el archivo 'version'."
+            exit 1
+          fi
+
+          echo "✅ La versión del microservicio ${{ matrix.service }} ha sido incrementada correctamente."
 
   test:
     needs: discover-services
@@ -47,8 +74,8 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install -r ${{ matrix.service }}/requirements.txt
+          pip install -r src/${{ matrix.service }}/requirements.txt
 
       - name: Ejecutar pruebas con cobertura mínima del 70%
         run: |
-          pytest --cov=${{ matrix.service }} --cov-fail-under=70 ${{ matrix.service }}/tests
+          pytest --cov=src/${{ matrix.service }} --cov-fail-under=70 src/${{ matrix.service }}/tests
