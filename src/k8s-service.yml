@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-service
+  labels:
+    app: k8s-service
+spec:
