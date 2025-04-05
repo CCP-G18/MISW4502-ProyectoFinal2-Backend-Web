@@ -20,36 +20,8 @@ jobs:
           services_json=$(echo "${services}" | jq -R -s -c 'split("\n")[:-1]')
           echo "services=${services_json}" >> $GITHUB_OUTPUT
 
-  setup-gcloud:
-    runs-on: ubuntu-latest
-    outputs:
-      kubeconfig: ${{ steps.get-credentials.outputs.kubeconfig }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Autenticarse en Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Instalar Google Cloud SDK y Plugin de Autenticación
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
-          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-          sudo apt-get update -y
-          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
-
-      - name: Configurar kubectl y obtener credenciales
-        id: get-credentials
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          echo "kubeconfig=${KUBECONFIG}" >> $GITHUB_OUTPUT
-
   build-and-push:
-    needs: [discover-services, setup-gcloud]
+    needs: discover-services
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -59,15 +31,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Google Cloud
+        uses: ./.github/workflows/setup-gcloud.yml
+        with:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+          GCP_REGION: ${{ secrets.GCP_REGION }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+
+      - name: Configurar Docker para Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
       - name: Leer versión del microservicio
         id: version
         run: |
           VERSION=$(cat src/${{ matrix.service }}/version)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Configurar Docker para Artifact Registry
-        run: |
-          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
 
       - name: Build Docker image
         run: |
@@ -81,7 +61,7 @@ jobs:
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
 
   deploy:
-    needs: [build-and-push, setup-gcloud]
+    needs: build-and-push
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -91,11 +71,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Leer versión del microservicio
-        id: version
+      - name: Setup Google Cloud
+        uses: ./.github/workflows/setup-gcloud.yml
+        with:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+          GCP_REGION: ${{ secrets.GCP_REGION }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+
+      - name: Configurar kubectl
         run: |
-          VERSION=$(cat src/${{ matrix.service }}/version)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          kubectl version
 
       - name: Desplegar BackendConfig
         run: |
@@ -110,11 +97,24 @@ jobs:
           kubectl apply -f deployment/${{ matrix.service }}-app/service.yml
 
   deploy-ingress:
-    needs: [deploy, setup-gcloud]
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Setup Google Cloud
+        uses: ./.github/workflows/setup-gcloud.yml
+        with:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+          GCP_REGION: ${{ secrets.GCP_REGION }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+
+      - name: Configurar kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          kubectl version
 
       - name: Desplegar Ingress
         run: |
