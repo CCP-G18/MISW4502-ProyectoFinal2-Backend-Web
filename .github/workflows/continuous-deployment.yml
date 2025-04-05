@@ -31,13 +31,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Google Cloud
-        uses: CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/.github/workflows/setup-gcloud.yml@main
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-          GCP_REGION: ${{ secrets.GCP_REGION }}
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Configurar kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          kubectl version
 
       - name: Configurar Docker para Artifact Registry
         run: |
@@ -71,13 +82,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Google Cloud
-        uses: CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/.github/workflows/setup-gcloud.yml@main
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-          GCP_REGION: ${{ secrets.GCP_REGION }}
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Configurar kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          kubectl version
 
       - name: Configurar kubectl
         run: |
@@ -103,13 +125,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Google Cloud
-        uses: CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/.github/workflows/setup-gcloud.yml@main
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-          GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-          GCP_REGION: ${{ secrets.GCP_REGION }}
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Configurar kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          kubectl version
 
       - name: Configurar kubectl
         run: |
