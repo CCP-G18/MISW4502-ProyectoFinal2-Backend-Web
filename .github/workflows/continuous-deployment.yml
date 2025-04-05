@@ -98,5 +98,6 @@ jobs:
           kubectl apply -f deployment/${{ matrix.app }}/service.yml
 
       - name: Desplear Ingress
+        if: matrix.app == 'ingress'
         run: |
           kubectl apply -f deployment/ingress/gateway-ingress.yml
