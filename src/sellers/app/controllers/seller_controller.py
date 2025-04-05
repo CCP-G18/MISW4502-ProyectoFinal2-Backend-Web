@@ -19,3 +19,7 @@ def create_seller():
     return format_response("success", 201, "Vendedor creado con éxito", seller_schema.dump(seller))
   except BadRequestError as e:
     return format_response("error", e.code, error=e.description)
+  
+@seller_bp.route('/ping', methods=['GET'])
+def ping():
+    return format_response("success", 200, "pong")
