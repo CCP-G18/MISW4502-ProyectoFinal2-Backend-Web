@@ -23,7 +23,8 @@ jobs:
   build-and-push:
     needs: discover-services
     runs-on: ubuntu-latest
-    if: ${{ needs.discover-services.outputs.services != '[]' }}
+    outputs:
+      services: ${{ steps.set-services.outputs.services }}
     strategy:
       matrix:
         service: ${{ fromJson(needs.discover-services.outputs.services) }}
@@ -49,6 +50,11 @@ jobs:
         run: |
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
 
+      - name: Set services output
+        id: set-services
+        run: |
+          echo "services=[\"${{ matrix.service }}\"]" >> $GITHUB_OUTPUT
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -71,8 +77,11 @@ jobs:
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
           kubectl apply -f deployment/ingress/gateway-ingress.yml
 
-      - name: Desplegar microservicio en GKE
+      - name: Desplegar todos los microservicios en GKE
         run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-          kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest --record
-          kubectl rollout status deployment/${{ matrix.service }}-app
+          services=$(echo '${{ needs.build-and-push.outputs.services }}' | jq -c '.[]')
+          for service in ${services}; do
+            service=$(echo $service | tr -d '"')
+            kubectl set image deployment/${service}-app ${service}-app=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${service}:latest --record
+            kubectl rollout status deployment/${service}-app
+          done
