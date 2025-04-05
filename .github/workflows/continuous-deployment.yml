@@ -87,11 +87,11 @@ jobs:
 
       - name: Desplegar Deployment (Crear si no existe)
         run: |
-          kubectl apply -f deployment/${{ matrix.service }}/deployment.yml
+          kubectl apply -f deployment/${{ matrix.service }}-app/deployment.yml
       
       - name: Actualizar imagen del Deployment
         run: |
-          kubectl set image deployment/${{ matrix.service }} ${matrix.service}=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.VERSION }} -n default
+          kubectl set image deployment/${{ matrix.service }}-app ${matrix.service}-app=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.VERSION }} -n default
 
       - name: Desplegar Service
         run: |
