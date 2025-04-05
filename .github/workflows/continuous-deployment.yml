@@ -58,7 +58,10 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: ${{ needs.build-and-push.outputs.services != '[]' }}
+    strategy:
+      matrix:
+        app: [ "sellers-app", "users-app" ]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -67,32 +70,23 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Instalar Google Cloud SDK y Plugin de Autenticación
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y apt-transport-https ca-certificates gnupg google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
-          gcloud components update
-          gcloud components install gke-gcloud-auth-plugin
-
-      - name: Configurar el Plugin de Autenticación
-        run: |
-          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
-          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-
-      - name: Obtener credenciales de Kubernetes
+      
+      - name: Configurar kubectl
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
 
-      - name: Desplegar Ingress Controller
+      - name: Desplegar BackendConfig
         run: |
-          kubectl apply -f k8s-configs/ingress/gateway-ingress.yaml --validate=false
+          kubectl apply -f deployment/${{ matrix.app }}/backendconfig.yml
+      
+      - name: Desplegar Deployment
+        run: |
+          kubectl apply -f deployment/${{ matrix.app }}/deployment.yml
 
-      - name: Desplegar todos los microservicios en GKE
+      - name: Desplegar Service
         run: |
-          services=$(echo '${{ needs.build-and-push.outputs.services }}' | jq -c '.[]')
-          for service in ${services}; do
-            service=$(echo $service | tr -d '"')
-            kubectl set image deployment/${service}-app ${service}-app=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${service}:latest --record
-            kubectl rollout status deployment/${service}-app
-          done
+          kubectl apply -f deployment/${{ matrix.app }}/service.yml
+
+      - name: Desplear Ingress
+        run: |
+          kubectl apply -f deployment/ingress/gateway-ingress.yml
