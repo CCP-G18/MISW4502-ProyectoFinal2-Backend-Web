@@ -34,7 +34,7 @@ jobs:
       - name: Autenticarse en Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
@@ -47,7 +47,7 @@ jobs:
 
       - name: Configurar kubectl
         run: |
-          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
           kubectl version
 
       - name: Configurar Docker para Artifact Registry
@@ -85,7 +85,7 @@ jobs:
       - name: Autenticarse en Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
@@ -98,7 +98,7 @@ jobs:
 
       - name: Configurar kubectl
         run: |
-          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
           kubectl version
 
       - name: Configurar kubectl
@@ -128,7 +128,7 @@ jobs:
       - name: Autenticarse en Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ inputs.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
@@ -141,7 +141,7 @@ jobs:
 
       - name: Configurar kubectl
         run: |
-          gcloud container clusters get-credentials ${{ inputs.GKE_CLUSTER }} --region ${{ inputs.GCP_REGION }} --project ${{ inputs.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
           kubectl version
 
       - name: Configurar kubectl
