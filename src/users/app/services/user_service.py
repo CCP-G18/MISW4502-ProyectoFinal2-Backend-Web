@@ -88,7 +88,7 @@ class UserService:
         return user
     
     @staticmethod
-    def check_credentials(user_data):
+    def check_credentials(user_data) -> User:
         if not user_data.get("username"):
             raise BadRequestError("El username es requerido")
         if not user_data.get("password"):

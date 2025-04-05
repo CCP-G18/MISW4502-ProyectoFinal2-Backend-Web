@@ -16,9 +16,12 @@ def login():
     except (UnauthorizedError, BadRequestError, ForbiddenError) as e:
       return format_response("error", e.code, error=e.description)
     else:
+        claims = {
+            "role": user.role.value,
+        }
         response: dict = {
             "user": user_schema.dump(user),
-            "access_token": create_access_token(identity=user.id)
+            "access_token": create_access_token(identity=user.id, additional_claims=claims),
         }
         return format_response("success", 200, message="Usuario logueado con éxito", data=response)
     
