@@ -60,38 +60,44 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [ "sellers-app", "users-app" ]
-
+        app: [ "customers-app", "sellers-app", "users-app" ]
+        
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+  
       - name: Autenticarse en Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Instalar gke-gcloud-auth-plugin
+  
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
-      
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+          sudo apt-get update -y && sudo apt-get install -y google-cloud-sdk
+          gcloud components install gke-gcloud-auth-plugin
+  
       - name: Configurar kubectl
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
-
-      - name: Desplegar BackendConfig
+          kubectl version
+  
+      - name: Desplegar backendconfig
         run: |
           kubectl apply -f deployment/${{ matrix.app }}/backendconfig.yml
-      
-      - name: Desplegar Deployment
+  
+      - name: Desplegar deployment
         run: |
           kubectl apply -f deployment/${{ matrix.app }}/deployment.yml
-
-      - name: Desplegar Service
+  
+      - name: Desplegar service
         run: |
           kubectl apply -f deployment/${{ matrix.app }}/service.yml
-
-      - name: Desplear Ingress
+  
+      - name: Desplegar ingress (solo si es necesario)
+        if: matrix.app == 'ingress'
         run: |
           kubectl apply -f deployment/ingress/gateway-ingress.yml
