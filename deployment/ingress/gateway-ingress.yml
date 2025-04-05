@@ -29,3 +29,10 @@ spec:
             name: sellers-app-service
             port:
               number: 80
+      - pathType: Prefix
+        path: /customers
+        backend:
+          service:
+            name: customers-app-service
+            port:
+              number: 80

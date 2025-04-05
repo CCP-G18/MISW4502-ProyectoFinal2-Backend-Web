@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [ "sellers-app", "users-app", "customers-app" ]
+        app: [ "sellers-app", "users-app", "customers-app", "ingress" ]
 
     steps:
       - name: Checkout code
