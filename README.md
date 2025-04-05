@@ -30,6 +30,13 @@ El proyecto está compuesto por varios servicios independientes que trabajan en 
    - **Principales Endpoints:**
      - `POST /login`: Iniciar sesión y obtener un token JWT.
      - `GET /verify`: Verificar la validez del token JWT y el estado del usuario.
+
+### 3. **Servicio de Clientes**
+  Gestiona la creación y administración de clientes, asegurando la seguridad mediante el uso de tokens JWT.
+   - **Principales Endpoints:**
+     - `POST /customers`: Registra un nuevo cliente en la base de datos.
+     - `GET /customers`: Recupera la lista completa de clientes registrados. Requiere un token JWT válido.
+     - `GET /customers/ping`: Verificar la conectividad del servicio.
     
 ## Despliegue de los servicios
 
@@ -107,6 +114,7 @@ Cada servicio del backend tiene su propia colección de Postman para facilitar l
 |-------------------------------|------------------------------------------------------------------------|
 | **Servicio de Usuarios**      | [Colección de Usuarios](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_parrar12_uniandes_edu_co/Eb7SZvuf0DlMicGvcv9OJscBa58NhxP9wuE1kIWuz16Szw?e=mOZnvi)     |
 | **Servicio de Autenticación** | [Colección de Autenticación](https://uniandes-my.sharepoint.com/personal/ja_parrar12_uniandes_edu_co/_layouts/15/download.aspx?UniqueId=ac08fdbdd0fe49f68912ac038082604f&e=z9VEkF)|
+| **Servicio de Clientes**      | [Colección de Clientes](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_parrar12_uniandes_edu_co/EeJriyNz6n5NrlVkF0qsi4ABB1DtoE0xaU6MHSOhhJ9cJg?e=8gxZBX)|
 
 ### 2. Importar una Colección en Postman
 
