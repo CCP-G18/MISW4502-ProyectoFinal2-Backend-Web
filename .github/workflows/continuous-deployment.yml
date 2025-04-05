@@ -97,6 +97,32 @@ jobs:
         run: |
           kubectl apply -f deployment/${{ matrix.app }}/service.yml
 
+  deploy-ingress:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Instalar Google Cloud SDK y Plugin de Autenticación
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Configurar kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          kubectl version
+    
       - name: Desplear Ingress
         run: |
           kubectl apply -f deployment/ingress/gateway-ingress.yml
