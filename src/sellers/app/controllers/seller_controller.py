@@ -9,6 +9,17 @@ from flask_jwt_extended import jwt_required
 seller_bp = Blueprint('seller', __name__, url_prefix="/sellers")
 seller_schema = SellerSchema()
 
+
+@seller_bp.route('/', methods=['GET'])
+@jwt_required()
+@validate_role("admin")
+def get_sellers():
+    try:
+        sellers = SellerService.get_all()
+        return format_response("success", 200, "Vendedores obtenidos con éxito", sellers)
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)
+
 @seller_bp.route('/', methods=['POST'])
 @jwt_required()
 @validate_role("admin")

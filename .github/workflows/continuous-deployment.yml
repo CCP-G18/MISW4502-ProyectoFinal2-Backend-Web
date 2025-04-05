@@ -44,17 +44,18 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest -f src/${{ matrix.service }}/Dockerfile src/${{ matrix.service }}
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${IMAGE_TAG} -f src/${{ matrix.service }}/Dockerfile src/${{ matrix.service }}
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.IMAGE_TAG }}
 
       - name: Set services output
         id: set-services
         run: |
           echo "services=[\"${{ matrix.service }}\"]" >> $GITHUB_OUTPUT
-
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -91,7 +92,7 @@ jobs:
       
       - name: Desplegar Deployment
         run: |
-          kubectl apply -f deployment/${{ matrix.app }}/deployment.yml
+          kubectl set image deployment/${{ matrix.app }} ${matrix.app}=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:${{ env.IMAGE_TAG }} --record -n default
 
       - name: Desplegar Service
         run: |
