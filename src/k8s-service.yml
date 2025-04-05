@@ -5,3 +5,32 @@ metadata:
   labels:
     app: k8s-service
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-app
+    template:
+      labels:
+        app: user-app
+      spec:
+        containers:
+          - name: user-app
+            image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/users:latest
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "250m"
+              limits:
+                memory: "128Mi"
+                cpu: "500m"
+              env: 
+                - name: POSTGRES_DB_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: appsecrets
+                      key: uri
+                - name: "JWT_SECRET_KEY"
+                  valueFrom:
+                    secretKeyRef:
+                      name: appsecrets
+                      key: JWT_SECRET_KEY

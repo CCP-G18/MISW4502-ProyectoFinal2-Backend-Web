@@ -48,3 +48,31 @@ jobs:
       - name: Push Docker image to Artifact Registry
         run: |
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: ${{ needs.build-and-push.outputs.services != '[]' }}
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.build-and-push.outputs.services) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Desplegar Ingress Controller
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          kubectl apply -f deployment/ingress/gateway-ingress.yml
+
+      - name: Desplegar microservicio en GKE
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GCP_REGION }} --project ${{ secrets.GCP_PROJECT }}
+          kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uniandes-misw-proyecto-final/${{ matrix.service }}:latest --record
+          kubectl rollout status deployment/${{ matrix.service }}-app

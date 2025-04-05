@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: user-app-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "user-app-service-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: user-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 31017
