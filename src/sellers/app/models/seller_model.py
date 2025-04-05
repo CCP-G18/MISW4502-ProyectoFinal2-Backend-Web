@@ -1,6 +1,7 @@
 import uuid
 from app.core.database import db, ma
 from sqlalchemy.dialects.postgresql import UUID
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 class Seller(db.Model):
   __tablename__ = 'sellers'
@@ -10,7 +11,6 @@ class Seller(db.Model):
   created_at = db.Column(db.DateTime, server_default=db.func.now())
   updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-  # user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), unique=True, nullable=False)
   user_id = db.Column(UUID(as_uuid=True), unique=True, nullable=False)
 
   def __init__(self, assigned_area, user_id):
@@ -19,8 +19,9 @@ class Seller(db.Model):
 
     super().__init__()
 
-class SellerSchema(ma.Schema):
-  
+class SellerSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = Seller
-    fields = ('id', 'assigned_area', 'created_at', 'updated_at', 'user_id')
+    load_instance = True
+    include_relationships = True
+    fields = ('id', 'assigned_area', 'created_at', 'updated_at', 'user_id', 'name', 'email')
