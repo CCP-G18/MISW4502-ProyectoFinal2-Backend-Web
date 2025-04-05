@@ -64,10 +64,12 @@ class UserService:
             raise BadRequestError("El email es requerido")
         if is_valid_email(user_data.get("email")) is False:
             raise BadRequestError("El email no es válido")
+        if not user_data.get("role"):
+            raise BadRequestError("El rol es requerido")
         if UserRepository.get_by_email(user_data["email"]):
             raise BadRequestError("El email ya está registrado")
         
-        user = User(name=user_data["name"], lastname=user_data["lastname"], email=user_data["email"], password=user_data["password"])
+        user = User(name=user_data["name"], lastname=user_data["lastname"], email=user_data["email"], password=user_data["password"], role=user_data["role"])
         return UserRepository.create(user)
     
     @staticmethod
@@ -86,7 +88,7 @@ class UserService:
         return user
     
     @staticmethod
-    def check_credentials(user_data):
+    def check_credentials(user_data) -> User:
         if not user_data.get("username"):
             raise BadRequestError("El username es requerido")
         if not user_data.get("password"):
