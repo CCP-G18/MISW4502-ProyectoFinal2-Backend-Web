@@ -9,75 +9,77 @@ services:
     env_file: 
       - .env
     environment:
-      POSTGRES_DB_URI: ${DB_USERS_URI}
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     depends_on:
-      user_db:
+      database:
         condition: service_healthy
     networks:
       - user_net
       - app_net
-  user_db:
+    
+  seller_app:
+    build: ./src/sellers
+    container_name: seller_app
+    ports:
+      - "5001:5001"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      PATH_API_USER: ${PATH_API_USER}
+      PASSWORD_DEFAULT: ${PASSWORD_DEFAULT}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - seller_net
+      - app_net
+
+  customer_app:
+    build: ./src/customers
+    container_name: customer_app
+    ports:
+      - "5002:5002"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      PATH_API_USER: ${PATH_API_USER}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - customer_net
+      - app_net    
+
+  database:
     image: postgres:16-alpine
-    container_name: user_db
+    container_name: database
     restart: always
     ports:
       - "5433:5432"     
     env_file: 
       - .env
     environment:
-      POSTGRES_DB: ${USERS_POSTGRES_DB}
-      POSTGRES_USER: ${USERS_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${USERS_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_POSTGRES_DB}
+      POSTGRES_USER: ${DB_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       TZ: America/Bogota
     volumes:
       - postgres_data_users:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d users_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d cpp" ]
       interval: 2s
       timeout: 5s
       retries: 5
     networks:
-      - user_net
-  customer_app:
-    build: ./src/customers
-    container_name: customer_app
-    ports:
-      - "5001:5001"
-    env_file: 
-      - .env
-    environment:
-      POSTGRES_DB_URI: ${DB_CUSTOMERS_URI}
-      USER_SERVICE_URL: ${USER_SERVICE_URL}    
-    depends_on:
-      customer_db:
-        condition: service_healthy
-    networks:
-      - customer_net
       - app_net
-  
-  customer_db:
-    image: postgres:16-alpine
-    container_name: customer_db
-    restart: always
-    ports:
-      - "5434:5432"     
-    env_file: 
-      - .env
-    environment:
-      POSTGRES_DB: ${CUSTOMERS_POSTGRES_DB}
-      POSTGRES_USER: ${CUSTOMERS_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${CUSTOMERS_POSTGRES_PASSWORD}
-      TZ: America/Bogota
-    volumes:
-      - postgres_data_customers:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d customers_db" ]
-      interval: 2s
-      timeout: 5s
-      retries: 5
-    networks:
-      - customer_net      
+      - user_net
+      - seller_net
+      - customer_net
  
 networks:
   app_net:
@@ -86,10 +88,12 @@ networks:
   user_net:
     driver: bridge
     name: user_net
+  seller_net:
+    driver: bridge
+    name: seller_net
   customer_net:
     driver: bridge
-    name: customer_net
+    name: customer_net  
 
 volumes:
   postgres_data_users:
-  postgres_data_customers:

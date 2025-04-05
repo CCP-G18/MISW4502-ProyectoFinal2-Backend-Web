@@ -21,8 +21,8 @@ def client(app):
 
 
 def test_get_users(mocker, client):
-    mock_users = [User(name="Test1", lastname="User1", email="test1@example.com", password="123456"),
-                  User(name="Test2", lastname="User2", email="test2@example.com", password="123456")]
+    mock_users = [User(name="Test1", lastname="User1", email="test1@example.com", password="123456", role="admin"),
+                  User(name="Test2", lastname="User2", email="test2@example.com", password="123456", role="seller")]
     
     mocker.patch("app.services.user_service.UserService.get_all", return_value=mock_users)
     mocker.patch("flask_jwt_extended.view_decorators.verify_jwt_in_request", lambda *args, **kwargs: None)
@@ -35,7 +35,7 @@ def test_get_users(mocker, client):
 
 
 def test_get_user(mocker, client):
-    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456")
+    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456", role="seller")
     
     mocker.patch("app.services.user_service.UserService.get_by_id", return_value=mock_user)
     mocker.patch("app.controllers.user_controller.jwt_required", lambda fn: fn)
@@ -71,7 +71,7 @@ def test_get_user_not_found(mocker, client):
 
 
 def test_create_user(mocker, client):
-    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456")
+    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456", role="seller")
     
     mocker.patch("app.services.user_service.UserService.create", return_value=mock_user)
     
@@ -89,7 +89,7 @@ def test_create_user(mocker, client):
 
 
 def test_update_user_status(mocker, client):
-    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456")
+    mock_user = User(name="Test", lastname="User", email="test@example.com", password="123456", role="seller")
     
     # Mocks necesarios
     mocker.patch("app.services.user_service.UserService.update_status", return_value=mock_user)

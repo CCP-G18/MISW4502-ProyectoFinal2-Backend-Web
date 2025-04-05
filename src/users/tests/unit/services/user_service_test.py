@@ -11,7 +11,8 @@ def mock_user():
         name="Test",
         lastname="User",
         email="test@example.com",
-        password="123456"
+        password="123456",
+        role="admin",
     )
 
 
@@ -90,7 +91,8 @@ def test_create_user_success(mock_get_by_email, mock_create, mock_user):
         "name": "Test",
         "lastname": "User",
         "email": "test@example.com",
-        "password": "123456"
+        "password": "123456",
+        "role": "admin",
     })
     assert result == mock_user
 
