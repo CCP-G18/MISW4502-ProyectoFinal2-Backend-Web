@@ -9,8 +9,7 @@ class Seller(db.Model):
   assigned_area = db.Column(db.String(120), nullable=False)
   created_at = db.Column(db.DateTime, server_default=db.func.now())
   updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-
-  # user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), unique=True, nullable=False)
+  
   user_id = db.Column(UUID(as_uuid=True), unique=True, nullable=False)
 
   def __init__(self, assigned_area, user_id):
