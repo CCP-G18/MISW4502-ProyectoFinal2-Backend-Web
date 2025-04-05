@@ -71,7 +71,8 @@ jobs:
       - name: Instalar Google Cloud SDK y Plugin de Autenticación
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-cloud-sdk
+          sudo apt-get install -y google-cloud-cli
+          sudo apt-get install -y google-cloud-cli-gke-gcloud-auth-plugin
           gcloud components update
           gcloud components install gke-gcloud-auth-plugin
 
