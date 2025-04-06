@@ -1,27 +1,32 @@
-FROM python:3.12-bullseye
-
-ENV PYTHONUNBUFFERED True
-
-EXPOSE 5002
+FROM python:3.12-slim as builder
 
 WORKDIR /app
 
-COPY . ./
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        libpq-dev \
+        libffi-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    gcc-10 \
-    g++-10 \
-    build-essential \
-    libpq-dev \
-    libffi-dev \
-    musl-dev \
-    git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
 
-RUN pip install --upgrade pip setuptools wheel
+FROM python:3.12-slim
 
-RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache /wheels/*
+
+COPY . .
+
+EXPOSE 5002
 CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5002", "main:app"]
