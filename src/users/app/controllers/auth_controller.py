@@ -6,7 +6,7 @@ from app.services.user_service import UserService
 from app.models.user_model import UserSchema
 
 auth_bp = Blueprint('auth', __name__)
-user_schema = UserSchema(only=("id", "email", "username"))
+user_schema = UserSchema(only=("id", "email", "username", "role"))
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
