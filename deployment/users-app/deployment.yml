@@ -35,6 +35,11 @@ spec:
               secretKeyRef:
                 name: appsecrets
                 key: JWT_SECRET_KEY
+          - name: "ALLOWED_ORIGINS"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: ALLOWED_ORIGINS
         ports:
           - containerPort: 5000
         imagePullPolicy: Always
