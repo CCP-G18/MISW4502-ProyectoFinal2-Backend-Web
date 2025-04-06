@@ -37,7 +37,15 @@ El proyecto está compuesto por varios servicios independientes que trabajan en 
      - `POST /customers`: Registra un nuevo cliente en la base de datos.
      - `GET /customers`: Recupera la lista completa de clientes registrados. Requiere un token JWT válido.
      - `GET /customers/ping`: Verificar la conectividad del servicio.
-    
+
+### 4. **Servicio de Vendedores**
+  Gestiona la creación y administración de vendedores, asegurando la seguridad mediante el uso de tokens JWT.
+   - **Principales Endpoints:**
+     - `POST /sellers`: Registra un nuevo vendedor en la base de datos.
+     - `GET /sellers`: Recupera la lista completa de vendedores registrados. Requiere un token JWT válido.
+     - `GET /sellers/ping`: Verificar la conectividad del servicio.
+ 
+  
 ## Despliegue de los servicios
 
 ### 1. Despliegue Local
@@ -106,15 +114,17 @@ Para verificar la cobertura de código, utiliza los siguientes comandos:
 
 ## Documentación de API (Colecciones de Postman)
 
-Cada servicio del backend tiene su propia colección de Postman para facilitar las pruebas y el uso de los endpoints. A continuación, se describen las colecciones disponibles y cómo utilizarlas:
+A continuación, se describen los recursos disponibles y cómo utilizarlas:
 
-### 1. Colecciones de Postman por Servicio
+### 1. Colección y Ambientes para usar en Postman
 
-| **Servicio**                  | **Enlace a la Colección**                                              |
+La colección de servicios y los ambientes disponibles se encuentran en el repositorio en la carpeta ```collections``` o en los siguientes enlaces.
+
+| **Recurso**                  | **Enlace**                                              |
 |-------------------------------|------------------------------------------------------------------------|
-| **Servicio de Usuarios**      | [Colección de Usuarios](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_parrar12_uniandes_edu_co/Eb7SZvuf0DlMicGvcv9OJscBa58NhxP9wuE1kIWuz16Szw?e=mOZnvi)     |
-| **Servicio de Autenticación** | [Colección de Autenticación](https://uniandes-my.sharepoint.com/personal/ja_parrar12_uniandes_edu_co/_layouts/15/download.aspx?UniqueId=ac08fdbdd0fe49f68912ac038082604f&e=z9VEkF)|
-| **Servicio de Clientes**      | [Colección de Clientes](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_parrar12_uniandes_edu_co/EeJriyNz6n5NrlVkF0qsi4ABB1DtoE0xaU6MHSOhhJ9cJg?e=8gxZBX)|
+| **Colección de los servicios**      | [Colección de los servicios](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/%5BMISO%5D%20Proyecto%20Final.postman_collection.json)  |
+| **Ambiente Local**      | [Ambiente Local](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/MISO%20Proyecto%20Final%20Local.postman_environment.json)     |
+| **Ambiente Productivo**      | [Ambiente Local](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/MISO%20Proyecto%20Final%20Production.postman_environment.json)     |
 
 ### 2. Importar una Colección en Postman
 
@@ -123,7 +133,7 @@ Cada servicio del backend tiene su propia colección de Postman para facilitar l
 4. Carga el archivo `.json` de la colección descargada.
 
 ### 3. Configurar el entorno en Postman
-1. Descarga el archivo de entorno de Postman desde el siguiente enlace: [Entorno de Postman](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_parrar12_uniandes_edu_co/EejSz_pXINVAq0nN778OMRgBv2Q8hNz7QR2Se7GRaZ4ohg?e=LmOP5C)
+1. Puedes utilizar dos ambientes para el consumo de los servicios, de manera local o de manera productivo. Debes escoger el archivo listado en el punto 1 y descarga el archivo de entorno de Postman.
 2. Importa el archivo de entorno en Postman desde la pestaña **Environments**.
 
 ### 4. Probar los endpoints
@@ -137,4 +147,4 @@ Cada servicio del backend tiene su propia colección de Postman para facilitar l
 | Jeniffer Corredor        | j.corredore@uniandes.edu.co  | 
 | Juan Diego García        | j.garcia55@uniandes.edu.co   |
 | Brayan Ricardo García    | br.garciam1@uniandes.edu.co  |
-| Jhon Andrés Parra        |  ja.parrar12@uniandes.edu.co |
+| Jhon Andrés Parra        | ja.parrar12@uniandes.edu.co  |
