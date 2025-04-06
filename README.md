@@ -37,6 +37,13 @@ El proyecto está compuesto por varios servicios independientes que trabajan en 
      - `POST /customers`: Registra un nuevo cliente en la base de datos.
      - `GET /customers`: Recupera la lista completa de clientes registrados. Requiere un token JWT válido.
      - `GET /customers/ping`: Verificar la conectividad del servicio.
+
+### 4. **Servicio de Vendedores**
+   Gestiona la creación y administración de vendedores, asegurando la seguridad mediante el uso de tokens JWT.
+- **Principales Endpoints:**
+  - `POST /sellers`: Registra un nuevo vendedor en la base de datos.
+  - `GET /sellers`: Recupera la lista completa de vendedores registrados. Requiere un token JWT válido.
+  - `GET /sellers/ping`: Verificar la conectividad del servicio.
     
 ## Despliegue de los servicios
 
