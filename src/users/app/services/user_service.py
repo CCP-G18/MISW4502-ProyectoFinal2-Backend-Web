@@ -71,7 +71,7 @@ class UserService:
         if not user_data.get("role"):
             raise BadRequestError("El rol es requerido")
         if UserRepository.get_by_email(user_data["email"]):
-            raise BadRequestError("El email ya está registrado")
+            raise BadRequestError("El email se encuentra en uso")
         
         user = User(name=user_data["name"], lastname=user_data["lastname"], email=user_data["email"], password=user_data["password"], role=user_data["role"])
         return UserRepository.create(user)
