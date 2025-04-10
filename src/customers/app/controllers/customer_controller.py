@@ -30,7 +30,7 @@ def get_customers():
     except ValueError as e:
         return format_response("success", 200, message=str(e), data=[])
     else:
-        return format_response("success", 200, message="Todos los clientes han sido obtenidos", data=customers_schema.dump(customers))
+        return format_response("success", 200, message="Todos los clientes han sido obtenidos", data=customers)
 
 
 @customer_bp.route('/ping', methods=['GET'])

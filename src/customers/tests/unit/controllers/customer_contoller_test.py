@@ -18,7 +18,7 @@ def app():
 def client(app):
     return app.test_client()
 
-def test_login_success(mocker, client):
+def test_create_customer_success(mocker, client):
     # Datos del cliente a registrar en el sistema
     customer_data = {
         "identificationType": "CC",
@@ -502,26 +502,29 @@ def test_get_customers_success(mocker, client):
         "code": 200,
         "data": [
             {
+                "id": "d3c14118-be62-4084-865d-01c1599bd024",
                 "address": "Calle 123",
                 "city": "Bogotá",
-                "country": "Colombia",
-                "created_at": "2025-04-03T22:30:52.658277",
-                "id": "d3c14118-be62-4084-865d-01c1599bd024",
+                "country": "Colombia",      
                 "identification_number": 123456789,
                 "identification_type": "CC",
-                "updated_at": "2025-04-03T22:30:52.658277",
-                "user_id": "7070484b-34aa-456d-bb51-3b0063a66662"
+                "name": "Ana Villanueva",                
+                "email": "ana.villanueva@example.com",  
+                "created_at": "2025-04-03T22:30:52.658277",
+                "updated_at": "2025-04-03T22:30:52.658277"
             },
             {
+                "id": "a49b48ee-d845-4e10-b9e7-dfc5a75af22d",
                 "address": "Calle 123",
                 "city": "Bogotá",
                 "country": "Colombia",
-                "created_at": "2025-04-03T22:48:29.275242",
-                "id": "a49b48ee-d845-4e10-b9e7-dfc5a75af22d",
+                "name": "Ana Lozano",
+                "email": "ana.lozano@example.com",                
                 "identification_number": 123456789,
                 "identification_type": "CC",
+                "created_at": "2025-04-03T22:48:29.275242",
                 "updated_at": "2025-04-03T22:48:29.275242",
-                "user_id": "a7f9baae-634d-4641-a3b9-02d4cf501130"
+                
             }
         ],
         "message": "Todos los clientes han sido obtenidos",
