@@ -4,7 +4,8 @@ import requests
 import os
 from app.repositories.customer_repository import CustomerRepository
 from app.exceptions.http_exceptions import BadRequestError
-from app.models.customer_model import Customer
+from app.models.customer_model import Customer, DocumentTypeEnum
+from flask import request
 
 def validate_uuid(id):
     try:
@@ -23,10 +24,48 @@ class CustomerService:
 
     @staticmethod
     def get_all():
+
         customers = CustomerRepository.get_all()
         if not customers:
             raise ValueError("No hay clientes registrados")
-        return customers  
+        
+        customers_dict = []
+        token = request.headers.get("Authorization").split(" ")[1]
+
+        for customer in customers:
+            # Realizar una solicitud al servicio de usuarios para obtener los datos del usuario
+            headers = {
+                'Authorization': f'Bearer {token}',
+            }
+            response = requests.get(f'{CustomerService.BASE_URL_USER_API}/{customer.user_id}', headers=headers)
+
+            if response.status_code != 200:
+                raise BadRequestError(f"No se pudo obtener los datos del usuario con ID {customer.user_id}")
+
+            # Obtener los datos del usuario desde la respuesta
+            user_data = response.json().get("data")
+
+            if isinstance(customer.identification_type, DocumentTypeEnum):
+                identification_type = customer.identification_type.value
+            elif isinstance(customer.identification_type, str):
+                identification_type = customer.identification_type
+            else:
+                raise BadRequestError(f"Tipo de identificación inválido para el cliente con ID {customer.id}")
+
+            # Combinar los datos del cliente con los datos del usuario
+            customer_dict = {
+                "id": str(customer.id),
+                "identification_type": identification_type,
+                "identification_number": customer.identification_number,
+                "country": customer.country,
+                "city": customer.city,
+                "address": customer.address,
+                "name": f"{user_data.get('name')} {user_data.get('lastname')}",
+                "email": user_data.get('email')
+            }
+            customers_dict.append(customer_dict)
+
+        return customers_dict
 
     @staticmethod
     def create(customer_data):
