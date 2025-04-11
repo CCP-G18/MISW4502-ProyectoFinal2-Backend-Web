@@ -45,7 +45,6 @@ def test_is_valid_data():
 
 @patch("app.services.customer_service.requests.post")
 def test_create_customer_user_service_error(mock_post, mock_customer):
-    # Simular error del servicio de usuarios
     mock_post.return_value = MagicMock(
         status_code=400,
         json=lambda: {"error": "El email ya está registrado"}
@@ -126,7 +125,6 @@ def test_get_all_customers_no_data(mock_get_all):
 @patch("app.repositories.customer_repository.CustomerRepository.get_all")
 @patch("app.services.customer_service.requests.get")
 def test_get_all_customers_success(mock_requests_get, mock_get_all):
-    # Simular clientes en la base de datos
     mock_get_all.return_value = [
         Customer(
             identification_type="CC",
@@ -145,7 +143,6 @@ def test_get_all_customers_success(mock_requests_get, mock_get_all):
             user_id="a7f9baae-634d-4641-a3b9-02d4cf501130"
         )
     ]
-    # Simular respuesta del servicio de usuarios
     mock_requests_get.side_effect = [
         MagicMock(
             status_code=200,
@@ -192,7 +189,6 @@ def test_get_all_customers_success(mock_requests_get, mock_get_all):
 @patch("app.repositories.customer_repository.CustomerRepository.get_all")
 @patch("app.services.customer_service.requests.get")
 def test_get_all_customers_identification_type(mock_requests_get, mock_get_all):
-    # Caso 1: identification_type es una instancia de DocumentTypeEnum
     customer_enum = Customer(
         identification_type=DocumentTypeEnum.CC,
         identification_number=123456789,
@@ -201,8 +197,6 @@ def test_get_all_customers_identification_type(mock_requests_get, mock_get_all):
         address="Calle 123",
         user_id="7070484b-34aa-456d-bb51-3b0063a66662"
     )
-
-    # Caso 2: identification_type es una cadena de texto
     customer_str = Customer(
         identification_type="CC",
         identification_number=987654321,
@@ -211,8 +205,6 @@ def test_get_all_customers_identification_type(mock_requests_get, mock_get_all):
         address="Carrera 45",
         user_id="a7f9baae-634d-4641-a3b9-02d4cf501130"
     )
-
-    # Caso 3: identification_type es un tipo inválido
     customer_invalid = Customer(
         identification_type=123,  # Tipo inválido
         identification_number=111222333,
@@ -221,11 +213,7 @@ def test_get_all_customers_identification_type(mock_requests_get, mock_get_all):
         address="Calle 10",
         user_id="c8d9b3f2-f8e8-4c8d-9b3f-2f8e8c8d9b3f"
     )
-
-    # Simular clientes en la base de datos
     mock_get_all.return_value = [customer_enum, customer_str, customer_invalid]
-
-    # Simular respuesta del servicio de usuarios
     mock_requests_get.side_effect = [
         MagicMock(
             status_code=200,
@@ -255,14 +243,11 @@ def test_get_all_customers_identification_type(mock_requests_get, mock_get_all):
 
     app = Flask(__name__)
     with app.test_request_context(headers={"Authorization": "Bearer test_token"}):
-        # Procesar solo los clientes válidos
         mock_get_all.return_value = [customer_enum, customer_str]
         result = CustomerService.get_all()
         assert len(result) == 2
         assert result[0]["identification_type"] == "CC"
         assert result[1]["identification_type"] == "CC"
-
-        # Procesar el cliente inválido y verificar que lance un BadRequestError
         mock_get_all.return_value = [customer_invalid]
         with pytest.raises(BadRequestError, match="No se pudo obtener los datos del usuario con ID c8d9b3f2-f8e8-4c8d-9b3f-2f8e8c8d9b3f"):
             CustomerService.get_all()
