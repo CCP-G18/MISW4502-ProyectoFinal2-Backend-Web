@@ -33,7 +33,6 @@ class CustomerService:
         token = request.headers.get("Authorization").split(" ")[1]
 
         for customer in customers:
-            # Realizar una solicitud al servicio de usuarios para obtener los datos del usuario
             headers = {
                 'Authorization': f'Bearer {token}',
             }
@@ -41,8 +40,6 @@ class CustomerService:
 
             if response.status_code != 200:
                 raise BadRequestError(f"No se pudo obtener los datos del usuario con ID {customer.user_id}")
-
-            # Obtener los datos del usuario desde la respuesta
             user_data = response.json().get("data")
 
             if isinstance(customer.identification_type, DocumentTypeEnum):
@@ -51,8 +48,6 @@ class CustomerService:
                 identification_type = customer.identification_type
             else:
                 raise BadRequestError(f"Tipo de identificación inválido para el cliente con ID {customer.id}")
-
-            # Combinar los datos del cliente con los datos del usuario
             customer_dict = {
                 "id": str(customer.id),
                 "identification_type": identification_type,
@@ -95,14 +90,11 @@ class CustomerService:
         
         if not customer_data.get("user"):
             raise BadRequestError("Los datos del cliente son requeridos") 
-
-        # Validar los datos del usuario
+        
         user_data = customer_data["user"]
         if "role" not in user_data:
-            user_data["role"] = "customer"
-        
+            user_data["role"] = "customer"        
 
-        # Crear el usuario en el servicio de usuarios
         user_service_url = CustomerService.BASE_URL_USER_API
         user_response = requests.post(user_service_url, json=user_data)
 

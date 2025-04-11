@@ -19,7 +19,6 @@ def client(app):
     return app.test_client()
 
 def test_create_customer_success(mocker, client):
-    # Datos del cliente a registrar en el sistema
     customer_data = {
         "identificationType": "CC",
         "identificationNumber": "123456789",
@@ -34,17 +33,12 @@ def test_create_customer_success(mocker, client):
             "role": "customer"
         }
     }
-
-    # Mock del servicio
     mocker.patch("app.services.customer_service.CustomerService.create", return_value=None)
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Eliminar la contraseña del campo "user" para que coincida con la respuesta esperada
     customer_data["user"].pop("password", None)
 
-    # Verificar respuesta
     assert response.status_code == 201
     data = response.get_json()
     assert data["status"] == "success"
@@ -65,13 +59,10 @@ def test_create_customer_bad_request_identificationType(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El tipo de identificación es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -93,13 +84,10 @@ def test_create_customer_bad_request_identificationType_invalid(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El tipo de identificación no es válido, debe ser CC, NIT, CE, DNI o PASSPORT"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -120,13 +108,10 @@ def test_create_customer_bad_request_identificationNumber(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El número de identificación es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -148,13 +133,10 @@ def test_create_customer_bad_request_identificationNumber_invalid(mocker, client
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El número de identificación no es válido, debe ser un valor numerico"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -174,14 +156,10 @@ def test_create_customer_bad_request_country(mocker, client):
             "password": "123456"
         }
     }
-
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El país es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -202,14 +180,11 @@ def test_create_customer_bad_request_country_invalid(mocker, client):
             "password": "123456"
         }
     }
-
-    # Mock del servicio para lanzar una excepción
+   
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El país debe contener solo letras y espacios"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -230,13 +205,10 @@ def test_create_customer_bad_request_city(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("La ciudad es requerida"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -258,13 +230,10 @@ def test_create_customer_bad_request_city_invalid(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("La ciudad debe contener solo letras y espacios"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -285,13 +254,10 @@ def test_create_customer_bad_request_address(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("La dirección es requerida"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -307,13 +273,10 @@ def test_create_customer_bad_request_user(mocker, client):
         "address": "Calle 123"
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("Los datos del cliente son requeridos"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -334,13 +297,10 @@ def test_create_customer_bad_request_name(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El nombre del cliente es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -361,13 +321,10 @@ def test_create_customer_missing_lastname(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El apellido del cliente es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -388,13 +345,10 @@ def test_create_customer_bad_request_password(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("La contraseña es requerida"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -415,13 +369,10 @@ def test_create_customer_bad_request_email(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El email es requerido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -443,13 +394,10 @@ def test_create_customer_bad_request_invalid_email(mocker, client):
         }
     }
 
-    # Mock del servicio para lanzar una excepción
     mocker.patch("app.services.customer_service.CustomerService.create", side_effect=BadRequestError("El email no es válido"))
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -471,14 +419,12 @@ def test_create_customer_user_service_error(mocker, client):
         }
     }
 
-    # Respuesta simulada del servicio de usuarios con un error
     user_service_error_response = {
         "code": 400,
         "error": "El email no es válido",
         "status": "error"
     }
-
-    # Mock del servicio para simular el error del servicio de usuarios
+ 
     mocker.patch(
         "app.services.customer_service.requests.post",
         return_value=mocker.Mock(
@@ -487,10 +433,8 @@ def test_create_customer_user_service_error(mocker, client):
         )
     )
 
-    # Enviar solicitud POST
     response = client.post("/customers/", json=customer_data)
 
-    # Verificar respuesta
     assert response.status_code == 400
     data = response.get_json()
     assert data["status"] == "error"
@@ -531,32 +475,23 @@ def test_get_customers_success(mocker, client):
         "status": "success"
     }
 
-    # Mock del servicio
     mocker.patch("app.services.customer_service.CustomerService.get_all", return_value=mock_customers)
 
-    # Mock de JWT para evitar autenticación
     mocker.patch("flask_jwt_extended.view_decorators.verify_jwt_in_request", lambda *args, **kwargs: None)
 
-    # Enviar solicitud GET
     response = client.get("/customers/")
 
-    # Verificar respuesta
     assert response.status_code == 200
     data = response.get_json()
     assert data["status"] == "success"
     assert len(data["data"]) == 4
 
 def test_get_customers_no_data(mocker, client):
-    # Mock del servicio para devolver una lista vacía
     mocker.patch("app.services.customer_service.CustomerService.get_all", side_effect=ValueError("No hay clientes registrados"))
-
-    # Mock de JWT para evitar autenticación
     mocker.patch("flask_jwt_extended.view_decorators.verify_jwt_in_request", lambda *args, **kwargs: None)
 
-    # Enviar solicitud GET
     response = client.get("/customers/")
 
-    # Verificar respuesta
     assert response.status_code == 200
     data = response.get_json()
     assert data["status"] == "success"
@@ -564,10 +499,8 @@ def test_get_customers_no_data(mocker, client):
     assert "No hay clientes registrados" in data["message"]
 
 def test_ping(client):
-    # Enviar solicitud GET al endpoint de ping
     response = client.get("/customers/ping")
 
-    # Verificar respuesta
     assert response.status_code == 200
     data = response.get_json()
     assert data["status"] == "success"
