@@ -56,7 +56,25 @@ services:
         condition: service_healthy
     networks:
       - customer_net
-      - app_net    
+      - app_net   
+
+  product_app:
+    build: ./src/products
+    container_name: product_app
+    ports:
+      - "5003:5003"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - product_app
+      - app_net   
 
   database:
     image: postgres:16-alpine
@@ -83,6 +101,7 @@ services:
       - user_net
       - seller_net
       - customer_net
+      - product_app
  
 networks:
   app_net:
@@ -96,7 +115,9 @@ networks:
     name: seller_net
   customer_net:
     driver: bridge
-    name: customer_net  
-
+    name: customer_net
+  product_app:
+    driver: bridge
+    name: product_app
 volumes:
   postgres_data_users:
