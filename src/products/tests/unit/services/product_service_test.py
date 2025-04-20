@@ -14,7 +14,7 @@ valid_product_data = {
 
 def test_create_success():
   with patch("app.services.product_service.ProductRepository.create") as mock_create:
-    mock_create.return_value = MagicMock(spec=Product)
+    mock_create.return_value = MagicMock()
 
     result = ProductService.create(valid_product_data)
 
