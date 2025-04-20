@@ -10,6 +10,10 @@ def validate_uuid(id):
         return False
     
 class ProductService:
+    
+    @staticmethod
+    def get():
+        ...    
         
     @staticmethod
     def create(product_data):
