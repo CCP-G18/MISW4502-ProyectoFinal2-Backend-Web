@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: product-app-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "product-app-service-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: products-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5003
+      nodePort: 31019
