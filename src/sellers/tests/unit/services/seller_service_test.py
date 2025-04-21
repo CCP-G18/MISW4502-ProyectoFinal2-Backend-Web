@@ -18,6 +18,7 @@ def seller_data():
     "email": "juan.perez@example.com",
     "assignedArea": "North"
   }
+
 @pytest.fixture
 def app():
   app = Flask(__name__)
