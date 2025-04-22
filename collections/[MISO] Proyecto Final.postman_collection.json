@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "19748906-2366-41ec-a682-3628239401da",
+		"_postman_id": "9342415d-973d-4967-9b8a-b800f45da4d2",
 		"name": "[MISO] Proyecto Final",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29640591"
+		"_exporter_id": "26593736"
 	},
 	"item": [
 		{
@@ -485,6 +485,35 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"code\": 400,\n    \"error\": \"La contraseña es requerida\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "201 | Crear usuario administrador",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Fernando\",\r\n  \"lastname\": \"Gutierrez\",\r\n  \"email\": \"administrador@cpp.com\",\r\n  \"password\": \"default\",\r\n  \"role\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_USERS}}/users",
+									"host": [
+										"{{PATH_URL_USERS}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
 						}
 					]
 				},
@@ -650,10 +679,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						},
 						{
 							"name": "401 | Credenciales Invalidas",
@@ -679,10 +708,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						},
 						{
 							"name": "400 | Campos faltantes",
@@ -708,10 +737,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				},
@@ -756,10 +785,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				}
@@ -1183,10 +1212,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						},
 						{
 							"name": "400 | Correo ya existente",
@@ -1212,10 +1241,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				},
@@ -1260,6 +1289,173 @@
 									]
 								}
 							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products/ping",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 | Creación Exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "400 | Campos Obligatorios",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Obtener Productos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Obtener Productos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
 							"_postman_previewlanguage": null,
 							"header": null,
 							"cookie": [],
@@ -1268,7 +1464,7 @@
 					]
 				}
 			],
-			"description": "El **servicio de** vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+			"description": "El servicio de productos permite gestionar la información de los productos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un producto:** `POST /products/`  \n    Permite registrar un nuevo producto en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los productos:** `GET /products/`  \n    Recupera la lista de todos los productos registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /products/ping`  \n    Verifica que el servicio de productos está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		}
 	]
 }

@@ -1,7 +1,8 @@
 import pytest
+from flask import Flask
 from unittest.mock import patch, MagicMock
 from app.services.product_service import ProductService, BadRequestError
-from app.repositories.product_repository import Product
+from app.models.product_model import ProductSchema
 
 valid_product_data = {
   "name": "Test Product",
@@ -11,6 +12,24 @@ valid_product_data = {
   "manufacturer_id": "123e4567-e89b-12d3-a456-426614174000",
   "category_id": "123e4567-e89b-12d3-a456-426614174001"
 }
+
+@pytest.fixture
+def mock_product():
+  return valid_product_data
+
+@pytest.fixture
+def mock_products(mock_product):
+  return [mock_product]
+
+@pytest.fixture
+def app():
+  app = Flask(__name__)
+  app.config['TESTING'] = True
+  return app
+  
+@pytest.fixture
+def client(app):
+  return app.test_client()
 
 def test_create_success():
   with patch("app.services.product_service.ProductRepository.create") as mock_create:
@@ -53,3 +72,14 @@ def test_create_invalid_category_id():
     ProductService.create(data)
 
   assert "categoría no es válida" in str(excinfo.value).lower()
+
+@patch('app.repositories.product_repository.ProductRepository.get_all')
+def test_get_all_success(mock_get_all):
+    prod1 = MagicMock(id="prod-1111")
+    prod2 = MagicMock(id="prod-2222")
+    mock_get_all.return_value = [prod1, prod2]
+
+    result = ProductService.get_all()
+
+    mock_get_all.assert_called_once()
+    assert result == [prod1, prod2]

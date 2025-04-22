@@ -15,14 +15,24 @@ products_schema = ProductSchema(many=True)
 @jwt_required()
 @validate_role("admin")
 def create_product():
-    try:
-        product_data = request.get_json()
-        product_created = ProductService.create(product_data)
-        return format_response("success", 201, "Producto creado con éxito", product_schema.dump(product_created))
-    except BadRequestError as e:
-        return format_response("error", e.code, error=e.description)
+  try:
+    product_data = request.get_json()
+    product_created = ProductService.create(product_data)
+    return format_response("success", 201, "Producto creado con éxito", product_schema.dump(product_created))
+  except BadRequestError as e:
+    return format_response("error", e.code, error=e.description)
+        
+@product_bp.route('/', methods=['GET'])
+@jwt_required()
+@validate_role("admin")
+def get_products():
+  try:
+    products = ProductService.get_all()
+    return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
+  except BadRequestError as e:
+    return format_response("error", e.code, error=e.description)
         
 
 @product_bp.route('/ping', methods=['GET'])
 def ping():
-    return format_response("success", 200, "pong")
+  return format_response("success", 200, "pong")
