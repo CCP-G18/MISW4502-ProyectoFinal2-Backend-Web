@@ -45,3 +45,12 @@ class ProductService:
     )
       
     return ProductRepository.create(product)
+  
+  @staticmethod
+  def get_product_by_id(product_id):
+    if not validate_uuid(product_id):
+      raise BadRequestError("El id no es válido")   
+    product = ProductRepository.get_product_by_id(product_id)
+    if not product:
+      raise BadRequestError("El producto no existe")    
+    return product

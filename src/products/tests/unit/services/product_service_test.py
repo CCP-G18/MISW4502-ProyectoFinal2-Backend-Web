@@ -83,3 +83,28 @@ def test_get_all_success(mock_get_all):
 
     mock_get_all.assert_called_once()
     assert result == [prod1, prod2]
+
+@patch('app.repositories.product_repository.ProductRepository.get_product_by_id')
+def test_get_product_by_id_success(mock_get_product_by_id):
+    product_id = "123e4567-e89b-12d3-a456-426614174000"
+    mock_product = MagicMock(id=product_id, name="Test Product")
+    mock_get_product_by_id.return_value = mock_product
+
+    result = ProductService.get_product_by_id(product_id)
+    mock_get_product_by_id.assert_called_once_with(product_id)
+    assert result == mock_product
+
+def test_get_product_by_id_invalid_id():
+    invalid_product_id = "invalid-uuid"
+
+    with pytest.raises(BadRequestError, match="El id no es válido"):
+        ProductService.get_product_by_id(invalid_product_id)
+
+@patch('app.repositories.product_repository.ProductRepository.get_product_by_id')
+def test_get_product_by_id_not_found(mock_get_product_by_id):    
+    product_id = "123e4567-e89b-12d3-a456-426614174000"
+    mock_get_product_by_id.return_value = None
+
+    with pytest.raises(BadRequestError, match="El producto no existe"):
+        ProductService.get_product_by_id(product_id)
+    mock_get_product_by_id.assert_called_once_with(product_id)     
