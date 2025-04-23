@@ -15,3 +15,10 @@ class OrderRepository:
         db.session.add(order)
         db.session.commit()
         return order
+    
+    @staticmethod
+    def update_total_amount(order_id, total_amount):
+        order = Order.query.get(order_id)
+        order.total_amount = total_amount
+        db.session.commit()
+        return order

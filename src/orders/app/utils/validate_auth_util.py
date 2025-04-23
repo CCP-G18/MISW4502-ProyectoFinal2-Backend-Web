@@ -5,10 +5,10 @@ from flask import request
 from app.exceptions.http_exceptions import UnauthorizedError, NotFoundError, ForbiddenError
 from app.utils.response_util import format_response
 
-USER_SERVICE_URL = f"{os.getenv('PATH_API_USER')}/verify"
+AUTH_SERVICE_URL = f"{os.getenv('PATH_API_AUTH')}/verify"
 
 def check_auth(token):
-    response = requests.get(USER_SERVICE_URL, headers={"Authorization": token})
+    response = requests.get(AUTH_SERVICE_URL, headers={"Authorization": token})
     if response.status_code == 401:
         raise UnauthorizedError(response.json()["error"])
     if response.status_code == 403:

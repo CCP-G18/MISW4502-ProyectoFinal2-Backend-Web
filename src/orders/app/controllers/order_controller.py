@@ -14,13 +14,13 @@ orders_schema = OrderSchema(many=True)
 @auth_required
 def get_orders():
     try:
-        customer_id = get_authenticated_user_id() 
+        customer_id = get_authenticated_user_id()
         orders = OrderService.get_orders_by_customer(customer_id)
         if not orders:
-            raise ValueError("No hay pedidos registrados")
+            return format_response("success", 200, message="No hay pedidos registrados", data=[])
         return format_response("success", 200, message="Todos los pedidos han sido obtenidos", data=orders)
-    except ValueError as e:
-        return format_response("success", 200, message=str(e), data=[])
+    except Exception as e:
+        return format_response("error", 500, message="Ocurrió un error al obtener los pedidos", error=str(e))
 
 @order_bp.route('/<string:id>', methods=['GET'])
 def get_order(id:str):
@@ -33,10 +33,11 @@ def get_order(id:str):
 
     
 @order_bp.route('/', methods=['POST'])
-@auth_required_with_id
-def create_order(user_id:int):
+@auth_required
+def create_order():
     try:
         order_data = request.get_json()
+        user_id = get_authenticated_user_id()
         order = OrderService.create(user_id, order_data)
     except (BadRequestError, NotFoundError) as e:
         set_user_status()

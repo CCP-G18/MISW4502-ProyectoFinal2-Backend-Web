@@ -36,42 +36,65 @@ class OrderService:
         return order
 
     @staticmethod
-    def create(user_id, order_data):
-        if set(order_data.keys()) != {"products_id_list"}:
-            raise BadRequestError("Existen datos inconsistentes en la petición, se hará un bloqueo preventivo de su cuenta")
-        
-        order = Order(user_id=user_id, delivery_date=get_delivery_date(datetime.today().date()))
-        OrderRepository.create(order)
+    def create(customer_id, order_data):
+        if "items" not in order_data or not isinstance(order_data["items"], list):
+            raise BadRequestError("La petición debe contener una lista de productos válida")
 
-        for product_id in order_data.get("products_id_list"):
-            product = get_product_info(str(product_id))
-            if not product:
+        order = Order(
+            customer_id=customer_id,
+            total_amount=order_data["total"],            
+            delivery_date=get_delivery_date(order_data["date"])
+        )
+        order = OrderRepository.create(order)
+
+        for product_data in order_data["items"]:
+            product_id = product_data.get("product_id")
+            quantity = product_data.get("quantity")        
+            amount = product_data.get("price")
+           
+            if not product_id or not validate_uuid(product_id):
+                raise BadRequestError("El ID del producto no es válido")
+            if not isinstance(quantity, int) or quantity <= 0:
+                raise BadRequestError("La cantidad debe ser un número entero positivo")
+
+            product_info = get_product_info(str(product_id))
+            if not product_info:
                 raise NotFoundError("Producto no encontrado, se hará un bloqueo preventivo de su cuenta por datos inconsistentes")
-            OrderProductRepository.create(OrderProducts(order_id=str(order.id), product_id=product_id, quantity=1))
-        
+          
+            order_product = OrderProducts(
+                order_id=str(order.id),
+                product_id=product_id,
+                quantity_ordered=quantity,
+                amount=amount
+            )
+            OrderProductRepository.create(order_product)
+
+        order = OrderRepository.update_total_amount(order.id, order_data["total"])
         return order
     
     @staticmethod
-    def get_orders_by_customer(customer_id):
-        orders = Order.query.filter_by(customer_id=customer_id).all()
+    def get_orders_by_customer(customer_id):        
+        orders = Order.query.filter(Order.customer_id == customer_id).all()
         result = []
 
         for order in orders:
             items = []
             summary = []
-            for order_product in order.order_products:
+            for order_product in order.items:
                 product_info = get_product_info(order_product.product_id)
-                if product_info:
+                if product_info and product_info.get("data"):
+                    product_name = product_info["data"].get("name")
+                    if product_name:
+                        summary.append(product_name)
                     items.append({
-                        "title": product_info.get("name"),
+                        "title": product_name,
                         "quantity": order_product.quantity_ordered,
                         "price": order_product.amount,
-                        #"image_url": product_info.get("image_url")
+                        #"image_url": product_info["data"].get("image_url") 
                     })
-                    summary.append(product_info.get("name"))
 
             result.append({
-                "id": str(order.id),
+                "order_id": str(order.id),
                 "summary": ", ".join(summary[:3]) + ("..." if len(summary) > 3 else ""),
                 "date": order.delivery_date.strftime("%Y-%m-%d"),
                 "total": order.total_amount,
@@ -79,5 +102,4 @@ class OrderService:
                 "items": items
             })
 
-        print(result)
         return result
