@@ -31,7 +31,15 @@ def get_products():
     return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
   except BadRequestError as e:
     return format_response("error", e.code, error=e.description)
-        
+  
+@product_bp.route('/<string:product_id>', methods=['GET'])
+@jwt_required()
+def get_product_by_id(product_id):
+    try:
+        product = ProductService.get_product_by_id(product_id)
+        return format_response("success", 200, "Producto obtenido con éxito", product_schema.dump(product))
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)        
 
 @product_bp.route('/ping', methods=['GET'])
 def ping():

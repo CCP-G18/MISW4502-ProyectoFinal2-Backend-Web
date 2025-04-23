@@ -15,3 +15,7 @@ class ProductRepository:
     db.session.commit()
     
     return product
+  
+  @staticmethod
+  def get_product_by_id(product_id):
+    return Product.query.get(product_id)
