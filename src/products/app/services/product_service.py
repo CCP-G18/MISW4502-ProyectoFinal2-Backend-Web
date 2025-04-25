@@ -27,6 +27,8 @@ class ProductService:
       raise BadRequestError("El monto es requerido")
     if not product_data.get("quantity"):
       raise BadRequestError("La cantidad es requerida")
+    if not product_data.get("image_url"):
+      raise BadRequestError("La url de la imagen es requerida")
     if not product_data.get("manufacturer_id"):
       raise BadRequestError("El fabricante es requerido")
     if not product_data.get("category_id"):
@@ -40,6 +42,7 @@ class ProductService:
       name=product_data.get("name"),
       unit_amount=product_data.get("unit_amount"),
       quantity=product_data.get("quantity"),
+      image_url=product_data.get("image_url"),
       manufacturer_id=product_data.get("manufacturer_id"),
       category_id=product_data.get("category_id"),
     )
@@ -54,3 +57,22 @@ class ProductService:
     if not product:
       raise BadRequestError("El producto no existe")    
     return product
+  
+  @staticmethod
+  def update_quantity(product_id, product_data):
+    if not validate_uuid(product_id):
+        raise BadRequestError("El ID del producto no es válido")
+    
+    if not product_data.get("quantity"):
+      raise BadRequestError("La cantidad es requerida")                 
+    if not isinstance(product_data.get("quantity"), int) or product_data.get("quantity") < 0:
+        raise BadRequestError("La cantidad debe ser un número entero no negativo")    
+    
+    product = ProductRepository.get_product_by_id(product_id)
+    if not product:
+        raise BadRequestError("El producto no existe")
+
+    product.quantity = product_data.get("quantity")
+    updated_product = ProductRepository.update(product)
+    
+    return updated_product
