@@ -43,7 +43,7 @@ def create_order():
         set_user_status()
         return format_response("error", e.code, error=e.description)
     else:
-        return format_response("success", 201, "Pedido creado con éxito", order_schema.dump(order))
+        return format_response("success", 201, "Pedido creado con éxito", data=order)
 
 @order_bp.route('/ping', methods=['GET'])
 def ping():

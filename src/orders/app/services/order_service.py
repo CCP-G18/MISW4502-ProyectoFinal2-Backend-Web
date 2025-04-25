@@ -46,6 +46,8 @@ class OrderService:
             delivery_date=get_delivery_date(order_data["date"])
         )
         order = OrderRepository.create(order)
+        items = []
+        summary = []
 
         for product_data in order_data["items"]:
             product_id = product_data.get("product_id")
@@ -61,6 +63,14 @@ class OrderService:
             if not product_info:
                 raise NotFoundError("Producto no encontrado, se hará un bloqueo preventivo de su cuenta por datos inconsistentes")
           
+            product_name = product_info["data"].get("name")
+            product_price = product_info["data"].get("unit_amount", 0.0)
+            product_image_url = product_info["data"].get("image_url")
+
+            if product_name:
+                summary.append(product_name)
+
+
             order_product = OrderProducts(
                 order_id=str(order.id),
                 product_id=product_id,
@@ -69,8 +79,25 @@ class OrderService:
             )
             OrderProductRepository.create(order_product)
 
-        order = OrderRepository.update_total_amount(order.id, order_data["total"])
-        return order
+            items.append({
+                "title": product_name,
+                "quantity": quantity,
+                "price": product_price,
+                "image_url": product_image_url
+            })
+
+        OrderRepository.update_total_amount(order.id, order_data["total"])
+
+        response = {
+            "order_id": str(order.id),
+            "summary": ", ".join(summary[:3]) + ("..." if len(summary) > 3 else ""),
+            "date": order.delivery_date.strftime("%Y-%m-%d"),
+            "total": order.total_amount,
+            "status": order.state.value,
+            "items": items
+        }
+
+        return response
     
     @staticmethod
     def get_orders_by_customer(customer_id):        
@@ -90,7 +117,7 @@ class OrderService:
                         "title": product_name,
                         "quantity": order_product.quantity_ordered,
                         "price": order_product.amount,
-                        #"image_url": product_info["data"].get("image_url") 
+                        "image_url": product_info["data"].get("image_url")
                     })
 
             result.append({
