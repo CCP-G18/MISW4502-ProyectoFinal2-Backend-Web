@@ -44,3 +44,18 @@ def get_product_by_id(product_id):
 @product_bp.route('/ping', methods=['GET'])
 def ping():
   return format_response("success", 200, "pong")
+
+@product_bp.route('/<string:product_id>/quantity', methods=['PUT'])
+@jwt_required()
+def update_product_quantity(product_id):
+    try:
+        request_data = request.get_json() 
+        updated_product = ProductService.update_quantity(product_id, request_data)
+        return format_response(
+            "success",
+            200,
+            "Cantidad del producto actualizada con éxito",
+            product_schema.dump(updated_product)
+        )
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)

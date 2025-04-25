@@ -11,6 +11,7 @@ class Product(db.Model):
   description = db.Column(db.String(255), nullable=True)
   unit_amount = db.Column(db.Float, nullable=False)
   quantity = db.Column(db.Integer, nullable=False)
+  image_url = db.Column(db.String(255), nullable=True)
   
   manufacturer_id = db.Column(UUID(as_uuid=True), nullable=False)
   category_id = db.Column(UUID(as_uuid=True), nullable=False)
@@ -22,11 +23,13 @@ class Product(db.Model):
                 name,
                 unit_amount,
                 quantity,
+                image_url,
                 manufacturer_id,
                 category_id):
     self.name = name
     self.unit_amount = unit_amount
     self.quantity = quantity
+    self.image_url = image_url 
     self.manufacturer_id = manufacturer_id
     self.category_id = category_id
         
@@ -40,6 +43,7 @@ class ProductSchema(ma.Schema):
       'name',
       'unit_amount',
       'quantity',
+      'image_url',
       'manufacturer_id',
       'category_id',
       'created_at',
