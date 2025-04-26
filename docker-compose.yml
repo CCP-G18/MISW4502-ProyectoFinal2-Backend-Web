@@ -73,6 +73,24 @@ services:
     networks:
       - product_app
       - app_net   
+    
+  producers_app:
+    build: ./src/producers
+    container_name: producers_app
+    ports:
+      - "5005:5005"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - producers_app
+      - app_net   
 
   database:
     image: postgres:16-alpine
@@ -118,5 +136,8 @@ networks:
   product_app:
     driver: bridge
     name: product_app
+  producers_app:
+    driver: bridge
+    name: producers_app
 volumes:
   postgres_data:
