@@ -1,3 +1,5 @@
+
+import uuid
 from app.models.producer_model import Producer
 from app.core.database import db
 
@@ -8,6 +10,8 @@ class ProducerRepository:
 
     @staticmethod
     def get_by_id(producer_id):
+        if isinstance(producer_id, str):
+            producer_id = uuid.UUID(producer_id)
         return Producer.query.get(producer_id)
     
     @staticmethod

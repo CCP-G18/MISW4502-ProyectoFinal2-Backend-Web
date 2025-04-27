@@ -46,8 +46,6 @@ class ProducerService:
             raise BadRequestError("El email es requerido")
         if is_valid_email(data.get("email")) is False:
             raise BadRequestError("El email no es válido")
-        if ProducerRepository.get_by_email(data["email"]):
-            raise BadRequestError("El email se encuentra en uso")
         if not data.get("address"):
             raise BadRequestError("La direccion es requerida")
         if not data.get("phone"):
@@ -62,6 +60,8 @@ class ProducerService:
             raise BadRequestError("El email del contacto es requerido")
         if not data.get("contact_phone"):
             raise BadRequestError("El telefono del contacto es requerido")
+        if ProducerRepository.get_by_email(data["email"]):
+            raise BadRequestError("El email se encuentra en uso")
         
         producer = Producer(
             name = data["name"], 

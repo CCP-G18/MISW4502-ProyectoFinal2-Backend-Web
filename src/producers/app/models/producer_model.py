@@ -1,8 +1,6 @@
 import uuid
 from app.core.database import db, ma
 from sqlalchemy.dialects.postgresql import UUID
-from werkzeug.security import generate_password_hash, check_password_hash
-from marshmallow_enum import EnumField
 
 class Producer(db.Model):
     __tablename__ = 'producers'
