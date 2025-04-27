@@ -44,6 +44,23 @@ El proyecto está compuesto por varios servicios independientes que trabajan en 
      - `POST /sellers`: Registra un nuevo vendedor en la base de datos.
      - `GET /sellers`: Recupera la lista completa de vendedores registrados. Requiere un token JWT válido.
      - `GET /sellers/ping`: Verificar la conectividad del servicio.
+
+### 5. **Servicio de Productos**
+   Gestiona la creación, consulta y actualización de productos en el sistema.
+   - **Principales Endpoints:**
+     - `POST /products/`: Crear un nuevo producto. Requiere autenticación con un token JWT de un usuario administrador.
+     - `GET /products/`: Obtener todos los productos registrados.
+     - `GET /products/<product_id>`: Obtener un producto por su ID.
+     - `PUT /products/<product_id>/quantity`: Actualizar la cantidad de un producto.
+     - `GET /products/ping`: Verificar la conectividad del servicio.
+
+### 6. **Servicio de Órdenes**
+   Gestiona la creación, consulta y administración de órdenes en el sistema.
+   - **Principales Endpoints:**
+     - `POST /orders/`: Crear una nueva orden.
+     - `GET /orders/<order_id>`: Obtener una orden por su ID.
+     - `GET /orders/customer`: Obtener todas las órdenes asociadas a un cliente autenticado.
+     - `GET /orders/ping`: Verificar la conectividad del servicio.
  
   
 ## Despliegue de los servicios

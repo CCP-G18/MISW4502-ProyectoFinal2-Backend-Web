@@ -1,13 +1,1694 @@
 {
 	"info": {
-		"_postman_id": "9342415d-973d-4967-9b8a-b800f45da4d2",
+		"_postman_id": "639c52a1-bdc7-43f6-8d51-5a74748712b3",
 		"name": "[MISO] Proyecto Final",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26593736"
+		"_exporter_id": "34458013",
+		"_collection_link": "https://gp1844.postman.co/workspace/CCP~1e5935b8-9131-4c63-abc8-20265c303449/collection/34458013-639c52a1-bdc7-43f6-8d51-5a74748712b3?action=share&source=collection_link&creator=34458013"
 	},
 	"item": [
 		{
-			"name": "Users",
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Inicio de Sesión",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.response.json());",
+									"",
+									"const bodyResponse = pm.response.json();",
+									"",
+									"pm.environment.set(\"ACCESS_TOKEN\", bodyResponse.data.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"wrong_user\",\n    \"password\": \"default\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_USERS}}/login",
+							"host": [
+								"{{PATH_URL_USERS}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Respuesta Exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"cliente.ccp\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_USERS}}/login",
+									"host": [
+										"{{PATH_URL_USERS}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 21:22:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "629"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NTc4ODk1NCwianRpIjoiZjg2NjcyZTQtYTIwNC00M2UwLWJjYTQtYTUzZGVjNmRmZTUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjQ2ZThhNDQwLTZlYzMtNGI5Ni04Mzk2LWI2Y2RhM2EwZWI4YyIsIm5iZiI6MTc0NTc4ODk1NCwiY3NyZiI6ImNhNDE4Yzk2LTk5MjktNDNkOS1iMzE2LTc0MmQ1NDlmNzQwYiIsImV4cCI6MTc0NTc5MjU1NCwicm9sZSI6ImN1c3RvbWVyIn0.4J7_65ofzbz9hsf3TUDuwMN8ke3uGzJovb-Luf3MWls\",\n        \"user\": {\n            \"email\": \"cliente.ccp@example.com\",\n            \"id\": \"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c\",\n            \"role\": \"customer\",\n            \"username\": \"cliente.ccp\"\n        }\n    },\n    \"message\": \"Usuario logueado con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "401 | Credenciales inválidas",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"wrong_user\",\n    \"password\": \"default\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_USERS}}/login",
+									"host": [
+										"{{PATH_URL_USERS}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 21:20:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 401,\n    \"error\": \"Credenciales inválidas\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Campos Obligatorios",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"wrong_user\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_USERS}}/login",
+									"host": [
+										"{{PATH_URL_USERS}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 21:21:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "72"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La contraseña es requerida\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Verificar Identidad",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_USERS}}/verify",
+							"host": [
+								"{{PATH_URL_USERS}}"
+							],
+							"path": [
+								"verify"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Respuesta Exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_USERS}}/verify",
+									"host": [
+										"{{PATH_URL_USERS}}"
+									],
+									"path": [
+										"verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 21:23:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "208"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"email\": \"cliente.ccp@example.com\",\n        \"id\": \"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c\",\n        \"role\": \"customer\",\n        \"username\": \"cliente.ccp\"\n    },\n    \"message\": \"Usuario verificado con éxito\",\n    \"status\": \"success\"\n}"
+						}
+					]
+				}
+			],
+			"description": "El **servicio de autenticación** permite gestionar el acceso de los usuarios al sistema mediante la generación y verificación de tokens JWT. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Inicio de sesión (Login) :** `POST /login`  \n    Permite a un usuario autenticarse en el sistema y obtener un token JWT.\n    \n2. **Verificar usuario (Verify):**`GET /verify`  \n    Verifica si el token JWT proporcionado es válido y si el usuario asociado está activo."
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Crear  Cliente",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let username = \"user_\" + Math.random().toString(36).substring(2, 10);\r",
+									"\r",
+									"let password = Math.random().toString(36).substring(2) + \"!@#\";\r",
+									"\r",
+									"pm.environment.set(\"username\", username);\r",
+									"pm.environment.set(\"password\", password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código de respuesta es 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La respuesta es JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"user_id\", response.data.id);\r",
+									"\r",
+									"pm.test(\"El status es success\", function () {\r",
+									"    pm.expect(response.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El mensaje es correcto\", function () {\r",
+									"    pm.expect(response.message).to.eql(\"Usuario creado con éxito\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La respuesta contiene todos los campos esperados\", function () {\r",
+									"    pm.expect(response.data).to.have.all.keys(\r",
+									"        \"created_at\", \"email\", \"id\", \"lastname\", \"name\", \"status\", \"updated_at\", \"username\"\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El email tiene el dominio correcto\", function () {\r",
+									"    pm.expect(response.data.email).to.include(\"@uniandes.edu.co\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El usuario está activo\", function () {\r",
+									"    pm.expect(response.data.status).to.eql(\"active\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"identificationType\": \"CC\",\r\n  \"identificationNumber\": 123,\r\n  \"country\": \"Colombia\",\r\n  \"city\": \"Bogota\",\r\n  \"address\": \"Calle 100\",\r\n  \"user\": {\r\n    \"name\": \"Pedro\",\r\n    \"lastname\": \"Parker\",\r\n    \"password\": \"pedro123\",\r\n    \"email\": \"pedro.parker@gmail.com\",\r\n    \"role\": \"customer\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+							"host": [
+								"{{PATH_URL_CUSTOMERS}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 | Cliente creado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    \"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+									"host": [
+										"{{PATH_URL_CUSTOMERS}}"
+									],
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Apr 2025 02:57:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "306"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"address\": \"Calle \",\n        \"city\": \"Medellín\",\n        \"country\": \"Colombia\",\n        \"identificationNumber\": 123456789,\n        \"identificationType\": \"CC\",\n        \"user\": {\n            \"email\": \"ana.villanueva@example.com\",\n            \"lastname\": \"Villanueva\",\n            \"name\": \"Ana\",\n            \"role\": \"customer\"\n        }\n    },\n    \"message\": \"Cliente creado con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 |  Error datos requeridos",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    //\"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+									"host": [
+										"{{PATH_URL_CUSTOMERS}}"
+									],
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Apr 2025 00:00:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "104"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El número de identificación es requerido\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Error email ya registrado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    \"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+									"host": [
+										"{{PATH_URL_CUSTOMERS}}"
+									],
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 05 Apr 2025 00:01:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "113"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"Error al crear el usuario: El email ya está registrado\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Obtener Clientes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+							"host": [
+								"{{PATH_URL_CUSTOMERS}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Respuesta Exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
+									"host": [
+										"{{PATH_URL_CUSTOMERS}}"
+									],
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 21:25:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "766"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"address\": \"Calle \",\n            \"city\": \"Medellín\",\n            \"country\": \"Colombia\",\n            \"email\": \"ana.villanueva@example.com\",\n            \"id\": \"ed82b70f-f2e4-4709-b4af-9105a07187c3\",\n            \"identification_number\": 123456789,\n            \"identification_type\": \"CC\",\n            \"name\": \"Ana Villanueva\"\n        },\n        {\n            \"address\": \"Calle \",\n            \"city\": \"Medellín\",\n            \"country\": \"Colombia\",\n            \"email\": \"gonzalo.arias@example.com\",\n            \"id\": \"bc9a4bdd-c768-4f24-bc02-0892ec148d83\",\n            \"identification_number\": 123456789,\n            \"identification_type\": \"CC\",\n            \"name\": \"Gonzalo Arias\"\n        },\n        {\n            \"address\": \"Calle 100\",\n            \"city\": \"Bogota\",\n            \"country\": \"Colombia\",\n            \"email\": \"cliente.ccp@example.com\",\n            \"id\": \"a67e8322-1319-4bec-8910-c83a8270dfc3\",\n            \"identification_number\": 123,\n            \"identification_type\": \"CC\",\n            \"name\": \"cliente ccp\"\n        }\n    ],\n    \"message\": \"Todos los clientes han sido obtenidos\",\n    \"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_CUSTOMERS}}/customers/ping",
+							"host": [
+								"{{PATH_URL_CUSTOMERS}}"
+							],
+							"path": [
+								"customers",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "El **servicio de** clientes permite gestionar la información de los clientes en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un cliente:** `POST /customers/`  \n    Permite registrar un nuevo cliente en el sistema.\n    \n2. **Obtener todos los clientes:** `GET /customers/`  \n    Recupera la lista de todos los clientes registrados. Requiere autenticación con un token JWT.\n    \n3. **Ping (Prueba de conectividad).** `GET /customers/ping`  \n    Verifica que el servicio de clientes está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Crear Orden (Pedido)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 40000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"252e515a-8799-4fcd-a1c8-4bcc7ac0e6a8\",\r\n        \"quantity\": 1,\r\n        \"price\": 0     \r\n      }\r\n             \r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_ORDERS}}/orders",
+							"host": [
+								"{{PATH_URL_ORDERS}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Creación Orden Exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\r\n        \"quantity\": 2,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:34:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "480"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"date\": \"2025-05-06\",\n        \"items\": [\n            {\n                \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n                \"price\": 15000,\n                \"quantity\": 2,\n                \"title\": \"Avena\"\n            },\n            {\n                \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n                \"price\": 20000,\n                \"quantity\": 2,\n                \"title\": \"Papas Fritas Pollo\"\n            }\n        ],\n        \"order_id\": \"6fb6ec39-5724-4d31-942d-4fa5e94edcbc\",\n        \"status\": \"PREPARING\",\n        \"summary\": \"Avena, Papas Fritas Pollo\",\n        \"total\": 70000\n    },\n    \"message\": \"Pedido creado con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Campos obligatorios",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    //\"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\r\n        \"quantity\": 2,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:37:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El campo 'date' es obligatorio\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Producto inválido",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"001\",\r\n        \"quantity\": 2,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:38:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "77"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El ID del producto no es válido\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Producto sin stock",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\r\n        \"quantity\": 50,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:40:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"No hay suficiente cantidad del producto Avena en stock\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "404 | Producto no encontrado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c\",\r\n        \"quantity\": 50,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:41:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "107"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": \"Producto con ID 46e8a440-6ec3-4b96-8396-b6cda3a0eb8c no encontrado\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Cantidad inválida",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n    \"date\": \"2025-05-02\",\r\n    \"total\": 70000,\r\n    \"items\": [\r\n      {\r\n        \"product_id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\r\n        \"quantity\": -1,\r\n        \"price\": 30000.0      \r\n      },\r\n      {\r\n        \"product_id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\r\n        \"quantity\": 2,\r\n        \"price\": 40000.0    \r\n      }        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:42:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "92"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La cantidad debe ser un número entero positivo\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Obtener ordenes",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "200 | Cliente sin pedidos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"customer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:25:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [],\n    \"message\": \"No hay pedidos registrados\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "200  | Cliente con pedidos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"customer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:44:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "490"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"date\": \"2025-05-06\",\n            \"items\": [\n                {\n                    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n                    \"price\": 30000,\n                    \"quantity\": 2,\n                    \"title\": \"Avena\"\n                },\n                {\n                    \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n                    \"price\": 40000,\n                    \"quantity\": 2,\n                    \"title\": \"Papas Fritas Pollo\"\n                }\n            ],\n            \"order_id\": \"6fb6ec39-5724-4d31-942d-4fa5e94edcbc\",\n            \"status\": \"PREPARING\",\n            \"summary\": \"Avena, Papas Fritas Pollo\",\n            \"total\": 70000\n        }\n    ],\n    \"message\": \"Todos los pedidos han sido obtenidos\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "403 |  Usuario sin permisos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"customer"
+									]
+								}
+							},
+							"status": "FORBIDDEN",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 20:48:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "174"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 403,\n    \"error\": \"No posee los permisos necesarios para acceder a este recurso\",\n    \"message\": \"No tiene los permisos necesarios para acceder a este recurso\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_CUSTOMERS}}/customers/ping",
+							"host": [
+								"{{PATH_URL_CUSTOMERS}}"
+							],
+							"path": [
+								"customers",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "El servicio de órdenes permite gestionar la creación, consulta y administración de pedidos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear una nuevo pedido:** `POST /orders/`  \n    Permite registrar una nueva orden en el sistema. Requiere autenticación con un token JWT y que el usuario tenga el rol de \"customer\".\n    \n2. **Obtener todos los pedidos de un cliente:** `GET /orders/customers/`  \n    Recupera todas las órdenes asociadas al clietne autenticado. Requiere autenticación con un token JWT y que el usuario tenga el rol de \"cusotmer\".\n    \n3. **Obtener una orden (pedido) por ID:** `GET /orders/`  \n    Recupera los detalles de una orden específica utilizando su ID. Requiere autenticación con un token JWT y que el usuario tenga el rol de \"cusotmer\".\n    \n4. **Ping (Prueba de conectividad).** `GET /orders/ping`  \n    Verifica que el servicio de órdenes está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Crear Producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Creación Exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:38:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "443"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"category_id\": \"0d47a72e-757a-46da-af54-d163a471bc85\",\n        \"created_at\": \"2025-04-24T22:38:49.780264\",\n        \"id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\n        \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n        \"manufacturer_id\": \"99cf9b45-a5c2-439c-bad9-14789717bac5\",\n        \"name\": \"Avena\",\n        \"quantity\": 20,\n        \"unit_amount\": 15000,\n        \"updated_at\": \"2025-04-24T22:38:49.780264\"\n    },\n    \"message\": \"Producto creado con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Campos Obligatorios",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{    \n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:40:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El nombre es requerido\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Obtener Productos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta Exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:43:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "819"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n            \"created_at\": \"2025-04-24T22:31:33.742837\",\n            \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n            \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n            \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n            \"name\": \"Papas Fritas Pollo\",\n            \"quantity\": 18,\n            \"unit_amount\": 20000,\n            \"updated_at\": \"2025-04-24T22:31:33.742837\"\n        },\n        {\n            \"category_id\": \"0d47a72e-757a-46da-af54-d163a471bc85\",\n            \"created_at\": \"2025-04-24T22:38:49.780264\",\n            \"id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\n            \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n            \"manufacturer_id\": \"99cf9b45-a5c2-439c-bad9-14789717bac5\",\n            \"name\": \"Avena\",\n            \"quantity\": 20,\n            \"unit_amount\": 15000,\n            \"updated_at\": \"2025-04-24T22:38:49.780264\"\n        }\n    ],\n    \"message\": \"Productos obtenidos con éxito\",\n    \"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar Producto por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta Producto X Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products",
+										"ea25e8a6-184d-4d79-a645-03febb5641a1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:46:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "454"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n        \"created_at\": \"2025-04-24T22:31:33.742837\",\n        \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n        \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n        \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n        \"name\": \"Papas Fritas Pollo\",\n        \"quantity\": 18,\n        \"unit_amount\": 20000,\n        \"updated_at\": \"2025-04-24T22:31:33.742837\"\n    },\n    \"message\": \"Producto obtenido con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Id Producto inválido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products",
+										"ea25e8a6-184d-4d79-a645-03febb5641a"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:54:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "64"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El id no es válido\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Actualizar cantidad Producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": -1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products",
+								"ea25e8a6-184d-4d79-a645-03febb5641a1",
+								"quantity"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Actualización Exitosa",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": 18\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products",
+										"ea25e8a6-184d-4d79-a645-03febb5641a1",
+										"quantity"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:49:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "470"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n        \"created_at\": \"2025-04-24T22:31:33.742837\",\n        \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n        \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n        \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n        \"name\": \"Papas Fritas Pollo\",\n        \"quantity\": 18,\n        \"unit_amount\": 20000,\n        \"updated_at\": \"2025-04-24T22:31:33.742837\"\n    },\n    \"message\": \"Cantidad del producto actualizada con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Cantidad inválida",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": -1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products",
+										"ea25e8a6-184d-4d79-a645-03febb5641a1",
+										"quantity"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:51:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La cantidad debe ser un número entero no negativo\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Campo requerido",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
+									"host": [
+										"{{PATH_URL_PRODUCTS}}"
+									],
+									"path": [
+										"products",
+										"ea25e8a6-184d-4d79-a645-03febb5641a1",
+										"quantity"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Apr 2025 03:53:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "65"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La cantidad es requerida\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_PRODUCTS}}/products/ping",
+							"host": [
+								"{{PATH_URL_PRODUCTS}}"
+							],
+							"path": [
+								"products",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "El servicio de productos permite gestionar la información de los productos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un producto:** `POST /products/`  \n    Permite registrar un nuevo producto en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los productos:** `GET /products/`  \n    Recupera la lista de todos los productos registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Obtener un producto específico por su ID:** `GET /products/`  \n    Obtiene la información de un producto específico. Requiere autenticación con un token JWT (usuario administrador, cliente o vendedor).\n    \n4. **Actualizar la cantidad de un producto:** `PUT/products//quantity`  \n    Actualiza la cantidad de un producto específico por su identificador. Requiere autenticación con un token JWT (usuario administrador, cliente o vendedor).\n    \n5. **Ping (Prueba de conectividad).** `GET /products/ping`  \n    Verifica que el servicio de productos está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Seller",
 			"item": [
 				{
 					"name": "HealthCheck",
@@ -15,12 +1696,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{PATH_URL_USERS}}/users/ping",
+							"raw": "{{PATH_URL_SELLERS}}/sellers/ping",
 							"host": [
-								"{{PATH_URL_USERS}}"
+								"{{PATH_URL_SELLERS}}"
 							],
 							"path": [
-								"users",
+								"sellers",
 								"ping"
 							]
 						}
@@ -28,12 +1709,168 @@
 					"response": []
 				},
 				{
+					"name": "Crear vendedor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Respuesta Exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_SELLERS}}/sellers",
+									"host": [
+										"{{PATH_URL_SELLERS}}"
+									],
+									"path": [
+										"sellers"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "400 | Correo ya existente",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_SELLERS}}/sellers",
+									"host": [
+										"{{PATH_URL_SELLERS}}"
+									],
+									"path": [
+										"sellers"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Obtener Vendedores",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Respuesta Exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_SELLERS}}/sellers",
+									"host": [
+										"{{PATH_URL_SELLERS}}"
+									],
+									"path": [
+										"sellers"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
 					"name": "Get User by Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "{{PATH_URL_USERS}}/users/29f7a9b8-f608-4826-893d-622bb5f09ca3",
+							"host": [
+								"{{PATH_URL_USERS}}"
+							],
+							"path": [
+								"users",
+								"29f7a9b8-f608-4826-893d-622bb5f09ca3"
+							]
 						}
 					},
 					"response": [
@@ -117,12 +1954,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:5000/users",
-									"protocol": "http",
+									"raw": "{{PATH_URL_USERS}}/users",
 									"host": [
-										"localhost"
+										"{{PATH_URL_USERS}}"
 									],
-									"port": "5000",
 									"path": [
 										"users"
 									]
@@ -157,94 +1992,6 @@
 							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"created_at\": \"2025-03-30T16:38:51.374226\",\n            \"email\": \"correo@example.com\",\n            \"id\": \"29f7a9b8-f608-4826-893d-622bb5f09ca3\",\n            \"lastname\": \"Gutierrez\",\n            \"name\": \"Fernando\",\n            \"status\": \"active\",\n            \"updated_at\": \"2025-03-30T16:38:51.374226\",\n            \"username\": \"correo\"\n        },\n        {\n            \"created_at\": \"2025-03-30T16:57:59.941672\",\n            \"email\": \"fernando@example.com\",\n            \"id\": \"dd8251d0-e89e-43e0-a79d-fd50a5f3aad7\",\n            \"lastname\": \"Gutierrez\",\n            \"name\": \"Fernando\",\n            \"status\": \"active\",\n            \"updated_at\": \"2025-03-30T16:57:59.941672\",\n            \"username\": \"fernando\"\n        }\n    ],\n    \"message\": \"Todos los usuarios han sido obtenidos\",\n    \"status\": \"success\"\n}"
 						}
 					]
-				},
-				{
-					"name": "Create User - Random Data",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let username = \"user_\" + Math.random().toString(36).substring(2, 10);\r",
-									"\r",
-									"let password = Math.random().toString(36).substring(2) + \"!@#\";\r",
-									"\r",
-									"pm.environment.set(\"username\", username);\r",
-									"pm.environment.set(\"password\", password);\r",
-									"\r",
-									"console.log(\"Username:\", username);\r",
-									"console.log(\"Password:\", password);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Código de respuesta es 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"La respuesta es JSON\", function () {\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const response = pm.response.json();\r",
-									"\r",
-									"pm.environment.set(\"user_id\", response.data.id);\r",
-									"\r",
-									"pm.test(\"El status es success\", function () {\r",
-									"    pm.expect(response.status).to.eql(\"success\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El mensaje es correcto\", function () {\r",
-									"    pm.expect(response.message).to.eql(\"Usuario creado con éxito\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"La respuesta contiene todos los campos esperados\", function () {\r",
-									"    pm.expect(response.data).to.have.all.keys(\r",
-									"        \"created_at\", \"email\", \"id\", \"lastname\", \"name\", \"status\", \"updated_at\", \"username\"\r",
-									"    );\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El email tiene el dominio correcto\", function () {\r",
-									"    pm.expect(response.data.email).to.include(\"@uniandes.edu.co\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El usuario está activo\", function () {\r",
-									"    pm.expect(response.data.status).to.eql(\"active\");\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Prueba\",\r\n    \"lastname\": \"Prueba\",\r\n    \"email\": \"{{username}}@uniandes.edu.co\",\r\n    \"password\": \"{{password}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
 				},
 				{
 					"name": "Create User",
@@ -510,12 +2257,100 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
+				},
+				{
+					"name": "Create User - Random Data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let username = \"user_\" + Math.random().toString(36).substring(2, 10);\r",
+									"\r",
+									"let password = Math.random().toString(36).substring(2) + \"!@#\";\r",
+									"\r",
+									"pm.environment.set(\"username\", username);\r",
+									"pm.environment.set(\"password\", password);\r",
+									"\r",
+									"console.log(\"Username:\", username);\r",
+									"console.log(\"Password:\", password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Código de respuesta es 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La respuesta es JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"user_id\", response.data.id);\r",
+									"\r",
+									"pm.test(\"El status es success\", function () {\r",
+									"    pm.expect(response.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El mensaje es correcto\", function () {\r",
+									"    pm.expect(response.message).to.eql(\"Usuario creado con éxito\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La respuesta contiene todos los campos esperados\", function () {\r",
+									"    pm.expect(response.data).to.have.all.keys(\r",
+									"        \"created_at\", \"email\", \"id\", \"lastname\", \"name\", \"status\", \"updated_at\", \"username\"\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El email tiene el dominio correcto\", function () {\r",
+									"    pm.expect(response.data.email).to.include(\"@uniandes.edu.co\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El usuario está activo\", function () {\r",
+									"    pm.expect(response.data.status).to.eql(\"active\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Prueba\",\r\n    \"lastname\": \"Prueba\",\r\n    \"email\": \"{{username}}@uniandes.edu.co\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_USERS}}/users",
+							"host": [
+								"{{PATH_URL_USERS}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
 				},
 				{
 					"name": "Update Status for User",
@@ -607,938 +2442,27 @@
 							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"created_at\": \"2025-03-30T16:57:59.941672\",\n        \"email\": \"fernando@example.com\",\n        \"id\": \"dd8251d0-e89e-43e0-a79d-fd50a5f3aad7\",\n        \"lastname\": \"Gutierrez\",\n        \"name\": \"Fernando\",\n        \"status\": \"active\",\n        \"updated_at\": \"2025-03-30T16:57:59.941672\",\n        \"username\": \"fernando\"\n    },\n    \"message\": \"Usuario actualizado con éxito\",\n    \"status\": \"success\"\n}"
 						}
 					]
+				},
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_USERS}}/users/ping",
+							"host": [
+								"{{PATH_URL_USERS}}"
+							],
+							"path": [
+								"users",
+								"ping"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "El **servicio de usuarios** permite gestionar la información de los usuarios en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un usuario:** `POST /users/`  \n    Permite registrar un nuevo usuario en el sistema.\n    \n2. **Obtener todos los usuarios:** `GET /users/`  \n    Recupera la lista de todos los usuarios registrados. Requiere autenticación con un token JWT.\n    \n3. **Obtener un usuario por ID:** `GET /users/`  \n    Recupera la información de un usuario específico mediante su ID. Requiere autenticación con un token JWT.\n    \n4. **Actualizar el estado de un usuario:** `PATCH /users/`  \n    Permite actualizar el estado de un usuario autenticado (por ejemplo, activar, bloquear, etc.). Requiere autenticación con un token JWT.\n    \n5. **Ping (Prueba de conectividad).** `GET /users/ping`  \n    Verifica que el servicio de usuarios está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Inicio de Sesión",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"console.log(pm.response.json());",
-									"",
-									"const bodyResponse = pm.response.json();",
-									"",
-									"pm.environment.set(\"ACCESS_TOKEN\", bodyResponse.data.access_token);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"wrong_user\",\n    \"password\": \"default\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/login",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Respuesta exitosa",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"username\": \"administrador\",\n    \"password\": \"default\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "401 | Credenciales Invalidas",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"username\": \"wrong_user\",\n    \"password\": \"default\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "400 | Campos faltantes",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"username\": \"wrong_user\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				},
-				{
-					"name": "Verificar Identidad",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/verify",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"verify"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Respuesta exitosa",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/verify",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"verify"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				}
-			],
-			"description": "El **servicio de autenticación** permite gestionar el acceso de los usuarios al sistema mediante la generación y verificación de tokens JWT. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Inicio de sesión (Login) :** `POST /login`  \n    Permite a un usuario autenticarse en el sistema y obtener un token JWT.\n    \n2. **Verificar usuario (Verify):**`GET /verify`  \n    Verifica si el token JWT proporcionado es válido y si el usuario asociado está activo."
-		},
-		{
-			"name": "Customers",
-			"item": [
-				{
-					"name": "HealthCheck",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers/ping",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers",
-								"ping"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Customers",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let username = \"user_\" + Math.random().toString(36).substring(2, 10);\r",
-									"\r",
-									"let password = Math.random().toString(36).substring(2) + \"!@#\";\r",
-									"\r",
-									"pm.environment.set(\"username\", username);\r",
-									"pm.environment.set(\"password\", password);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Código de respuesta es 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"La respuesta es JSON\", function () {\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const response = pm.response.json();\r",
-									"\r",
-									"pm.environment.set(\"user_id\", response.data.id);\r",
-									"\r",
-									"pm.test(\"El status es success\", function () {\r",
-									"    pm.expect(response.status).to.eql(\"success\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El mensaje es correcto\", function () {\r",
-									"    pm.expect(response.message).to.eql(\"Usuario creado con éxito\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"La respuesta contiene todos los campos esperados\", function () {\r",
-									"    pm.expect(response.data).to.have.all.keys(\r",
-									"        \"created_at\", \"email\", \"id\", \"lastname\", \"name\", \"status\", \"updated_at\", \"username\"\r",
-									"    );\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El email tiene el dominio correcto\", function () {\r",
-									"    pm.expect(response.data.email).to.include(\"@uniandes.edu.co\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"El usuario está activo\", function () {\r",
-									"    pm.expect(response.data.status).to.eql(\"active\");\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"identificationType\": \"CC\",\r\n  \"identificationNumber\": 123,\r\n  \"country\": \"Colombia\",\r\n  \"city\": \"Bogota\",\r\n  \"address\": \"Calle 100\",\r\n  \"user\": {\r\n    \"name\": \"Pedro\",\r\n    \"lastname\": \"Parker\",\r\n    \"password\": \"pedro123\",\r\n    \"email\": \"pedro.parker@gmail.com\",\r\n    \"role\": \"customer\"\r\n  }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "201 | Cliente creado",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    \"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
-							},
-							"status": "CREATED",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 05 Apr 2025 02:57:59 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "306"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"address\": \"Calle \",\n        \"city\": \"Medellín\",\n        \"country\": \"Colombia\",\n        \"identificationNumber\": 123456789,\n        \"identificationType\": \"CC\",\n        \"user\": {\n            \"email\": \"ana.villanueva@example.com\",\n            \"lastname\": \"Villanueva\",\n            \"name\": \"Ana\",\n            \"role\": \"customer\"\n        }\n    },\n    \"message\": \"Cliente creado con éxito\",\n    \"status\": \"success\"\n}"
-						},
-						{
-							"name": "400 |  Error datos requeridos",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    //\"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
-							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 05 Apr 2025 00:00:28 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "104"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"El número de identificación es requerido\",\n    \"status\": \"error\"\n}"
-						},
-						{
-							"name": "400 | Error email ya registrado",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"identificationType\": \"CC\",\r\n    \"identificationNumber\": 123456789,\r\n    \"country\": \"Colombia\",\r\n    \"city\": \"Medellín\",\r\n    \"address\": \"Calle \",\r\n    \"user\": {\r\n        \"name\": \"Ana\",\r\n        \"lastname\": \"Villanueva\",\r\n        \"email\": \"ana.villanueva@example.com\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
-							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 05 Apr 2025 00:01:47 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "113"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"Error al crear el usuario: El email ya está registrado\",\n    \"status\": \"error\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Get All Customers",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Respuesta exitosa",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 05 Apr 2025 02:59:08 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "394"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"address\": \"Calle \",\n            \"city\": \"Medellín\",\n            \"country\": \"Colombia\",\n            \"created_at\": \"2025-04-04T21:57:59.744089\",\n            \"id\": \"bea0cdb2-6d86-46f8-b8b7-4632b5b95af0\",\n            \"identification_number\": 123456789,\n            \"identification_type\": \"CC\",\n            \"updated_at\": \"2025-04-04T21:57:59.744089\",\n            \"user_id\": \"34b47eb1-12a9-4791-a427-2542ea9e4a23\"\n        }\n    ],\n    \"message\": \"Todos los clientes han sido obtenidos\",\n    \"status\": \"success\"\n}"
-						}
-					]
-				}
-			],
-			"description": "El **servicio de** clientes permite gestionar la información de los clientes en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un cliente:** `POST /customers/`  \n    Permite registrar un nuevo cliente en el sistema.\n    \n2. **Obtener todos los clientes:** `GET /customers/`  \n    Recupera la lista de todos los clientes registrados. Requiere autenticación con un token JWT.\n    \n3. **Ping (Prueba de conectividad).** `GET /customers/ping`  \n    Verifica que el servicio de clientes está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
-		},
-		{
-			"name": "Seller",
-			"item": [
-				{
-					"name": "HealthCheck",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/ping",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"ping"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Crear vendedor",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Respuesta Exitosa",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "400 | Correo ya existente",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Juan\",\n    \"lastname\": \"Perez\",\n    \"email\": \"juan.perez@cpp.com\",\n    \"assignedArea\": \"COL-BOG-NORTE\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				},
-				{
-					"name": "Obtener Vendedores",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Respuesta Exitosa",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				},
-				{
-					"name": "Crear Plan de Ventas por Vendedor",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
-								"sales-plans"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Obtener Plan de Ventas por Vendedor",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"initial_date\": \"2025-04-28\",\n    \"end_date\": \"2025-09-29\",\n    \"sales_goals\": 120000\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
-								"sales-plans"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Crear Plan de Ventas por Vendedor:** `POST /sellers/seller-id/sales-plan`  \n    Permite registrar un nuevo plan de venta asociado al vendedor. Requiere autenticación con un token JWT de un usuario administrador.\n    \n4. **Obtener todos los planes de venta de un vendedor:** `GET /sellers/seller-id/sales-plan`  \n    Recupera la lista de todos los planes de venta de un vendedor especifico. Requiere autenticación con un token JWT de un usuario administrador\n    \n5. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
-		},
-		{
-			"name": "Products",
-			"item": [
-				{
-					"name": "HealthCheck",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/ping",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"ping"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Crear Producto",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"image_url\": \"http://localhost.3000/\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "201 | Creación Exitosa",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
-						},
-						{
-							"name": "400 | Campos Obligatorios",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
-						}
-					]
-				},
-				{
-					"name": "Obtener Productos",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Obtener Productos",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
-						}
-					]
-				}
-			],
-			"description": "El servicio de productos permite gestionar la información de los productos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un producto:** `POST /products/`  \n    Permite registrar un nuevo producto en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los productos:** `GET /products/`  \n    Recupera la lista de todos los productos registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /products/ping`  \n    Verifica que el servicio de productos está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		}
 	]
 }
