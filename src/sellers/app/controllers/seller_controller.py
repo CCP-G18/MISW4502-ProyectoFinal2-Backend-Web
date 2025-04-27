@@ -10,7 +10,7 @@ seller_bp = Blueprint('seller', __name__, url_prefix="/sellers")
 seller_schema = SellerSchema()
 
 
-@seller_bp.route('/', methods=['GET'])
+@seller_bp.route('', methods=['GET'])
 @jwt_required()
 @validate_role("admin")
 def get_sellers():
@@ -20,7 +20,7 @@ def get_sellers():
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
 
-@seller_bp.route('/', methods=['POST'])
+@seller_bp.route('', methods=['POST'])
 @jwt_required()
 @validate_role("admin")
 def create_seller():

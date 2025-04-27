@@ -8,7 +8,6 @@ class Product(db.Model):
     
   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
   name = db.Column(db.String(120), nullable=False)
-  description = db.Column(db.String(255), nullable=True)
   unit_amount = db.Column(db.Float, nullable=False)
   quantity = db.Column(db.Integer, nullable=False)
   image_url = db.Column(db.String(255), nullable=True)
