@@ -973,7 +973,7 @@
 					]
 				},
 				{
-					"name": "Obtener ordenes",
+					"name": "Consultar ordenes del cliente autenticado",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -1110,6 +1110,147 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"code\": 403,\n    \"error\": \"No posee los permisos necesarios para acceder a este recurso\",\n    \"message\": \"No tiene los permisos necesarios para acceder a este recurso\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar Orden por Id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "200 | Consulta Exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"7c7e9b63-7981-4143-93ed-21d1a106c55c"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 22:48:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "365"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"created_at\": \"2025-04-27T17:48:02.982040\",\n        \"customer_id\": \"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c\",\n        \"delivery_date\": \"2025-05-06T00:00:00\",\n        \"id\": \"7c7e9b63-7981-4143-93ed-21d1a106c55c\",\n        \"seller_id\": null,\n        \"state\": \"PREPARING\",\n        \"total_amount\": 20000,\n        \"updated_at\": \"2025-04-27T17:48:02.982040\"\n    },\n    \"message\": \"Pedido encontrado con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Id de la orden inválido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c5",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"7c7e9b63-7981-4143-93ed-21d1a106c5"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 22:51:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "84"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El formato del id del pedido no es correcto\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "404 | Orden no encontrada",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_ORDERS}}/orders/46e8a440-6ec3-4b96-8396-b6cda3a0eb8c",
+									"host": [
+										"{{PATH_URL_ORDERS}}"
+									],
+									"path": [
+										"orders",
+										"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Apr 2025 22:52:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": \"Pedido no encontrado\",\n    \"status\": \"error\"\n}"
 						}
 					]
 				},

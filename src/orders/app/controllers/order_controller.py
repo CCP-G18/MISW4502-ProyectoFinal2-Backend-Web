@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from app.services.order_service import OrderService
 from app.models.order_model import OrderSchema
 from app.utils.response_util import format_response
-from app.utils.validate_auth_util import get_authenticated_user_id, auth_required
+from app.utils.validate_auth_util import get_authenticated_user_id
 from app.exceptions.http_exceptions import NotFoundError, BadRequestError
 from flask_jwt_extended import jwt_required
 from app.utils.validate_role_util import validate_role
@@ -26,7 +26,7 @@ def get_orders_by_customer():
 
 
 @order_bp.route('/<string:id>', methods=['GET'])
-@auth_required
+@jwt_required()
 @validate_role(["customer"])
 def get_order_by_id(id:str):
     try:
@@ -38,7 +38,7 @@ def get_order_by_id(id:str):
 
     
 @order_bp.route('/', methods=['POST'])
-@auth_required
+@jwt_required()
 @validate_role(["customer"])
 def create_order():
     try:
