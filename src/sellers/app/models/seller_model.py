@@ -1,7 +1,6 @@
 import uuid
 from app.core.database import db, ma
 from sqlalchemy.dialects.postgresql import UUID
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 class Seller(db.Model):
   __tablename__ = 'sellers'

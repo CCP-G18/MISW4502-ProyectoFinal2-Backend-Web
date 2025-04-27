@@ -11,9 +11,9 @@ product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
 
-@product_bp.route('/', methods=['POST'])
+@product_bp.route('', methods=['POST'])
 @jwt_required()
-@validate_role("admin")
+@validate_role(["admin"])
 def create_product():
   try:
     product_data = request.get_json()
@@ -22,9 +22,9 @@ def create_product():
   except BadRequestError as e:
     return format_response("error", e.code, error=e.description)
         
-@product_bp.route('/', methods=['GET'])
+@product_bp.route('', methods=['GET'])
 @jwt_required()
-@validate_role("admin")
+@validate_role(["admin", "seller", "customer"])
 def get_products():
   try:
     products = ProductService.get_all()
