@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "639c52a1-bdc7-43f6-8d51-5a74748712b3",
+		"_postman_id": "9342415d-973d-4967-9b8a-b800f45da4d2",
 		"name": "[MISO] Proyecto Final",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34458013",
-		"_collection_link": "https://gp1844.postman.co/workspace/CCP~1e5935b8-9131-4c63-abc8-20265c303449/collection/34458013-639c52a1-bdc7-43f6-8d51-5a74748712b3?action=share&source=collection_link&creator=34458013"
+		"_exporter_id": "26593736"
 	},
 	"item": [
 		{
@@ -511,10 +510,10 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
+							"_postman_previewlanguage": null,
+							"header": null,
 							"cookie": [],
-							"body": ""
+							"body": null
 						}
 					]
 				},
@@ -1296,9 +1295,83 @@
 							"body": ""
 						}
 					]
+				},
+				{
+					"name": "Crear Plan de Ventas por Vendedor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers",
+								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
+								"sales-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Plan de Ventas por Vendedor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"initial_date\": \"2025-04-28\",\n    \"end_date\": \"2025-09-29\",\n    \"sales_goals\": 120000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers",
+								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
+								"sales-plans"
+							]
+						}
+					},
+					"response": []
 				}
 			],
-			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Crear Plan de Ventas por Vendedor:** `POST /sellers/seller-id/sales-plan`  \n    Permite registrar un nuevo plan de venta asociado al vendedor. Requiere autenticación con un token JWT de un usuario administrador.\n    \n4. **Obtener todos los planes de venta de un vendedor:** `GET /sellers/seller-id/sales-plan`  \n    Recupera la lista de todos los planes de venta de un vendedor especifico. Requiere autenticación con un token JWT de un usuario administrador\n    \n5. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		},
 		{
 			"name": "Products",
@@ -1338,7 +1411,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"image_url\": \"http://localhost.3000/\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1357,13 +1430,13 @@
 					},
 					"response": [
 						{
-							"name": "200 | Creación Exitosa",
+							"name": "201 | Creación Exitosa",
 							"originalRequest": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1380,33 +1453,10 @@
 									]
 								}
 							},
-							"status": "CREATED",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:38:49 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "443"
-								}
-							],
+							"_postman_previewlanguage": null,
+							"header": null,
 							"cookie": [],
-							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"category_id\": \"0d47a72e-757a-46da-af54-d163a471bc85\",\n        \"created_at\": \"2025-04-24T22:38:49.780264\",\n        \"id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\n        \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n        \"manufacturer_id\": \"99cf9b45-a5c2-439c-bad9-14789717bac5\",\n        \"name\": \"Avena\",\n        \"quantity\": 20,\n        \"unit_amount\": 15000,\n        \"updated_at\": \"2025-04-24T22:38:49.780264\"\n    },\n    \"message\": \"Producto creado con éxito\",\n    \"status\": \"success\"\n}"
+							"body": null
 						},
 						{
 							"name": "400 | Campos Obligatorios",
@@ -1415,7 +1465,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{    \n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+									"raw": "{\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1432,33 +1482,10 @@
 									]
 								}
 							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:40:24 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "63"
-								}
-							],
+							"_postman_previewlanguage": null,
+							"header": null,
 							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"El nombre es requerido\",\n    \"status\": \"error\"\n}"
+							"body": null
 						}
 					]
 				},
@@ -1489,7 +1516,7 @@
 					},
 					"response": [
 						{
-							"name": "200 | Consulta Exitosa",
+							"name": "200 | Obtener Productos",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
@@ -1503,355 +1530,15 @@
 									]
 								}
 							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:43:28 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "819"
-								}
-							],
+							"_postman_previewlanguage": null,
+							"header": null,
 							"cookie": [],
-							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n            \"created_at\": \"2025-04-24T22:31:33.742837\",\n            \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n            \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n            \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n            \"name\": \"Papas Fritas Pollo\",\n            \"quantity\": 18,\n            \"unit_amount\": 20000,\n            \"updated_at\": \"2025-04-24T22:31:33.742837\"\n        },\n        {\n            \"category_id\": \"0d47a72e-757a-46da-af54-d163a471bc85\",\n            \"created_at\": \"2025-04-24T22:38:49.780264\",\n            \"id\": \"79de9dcd-7b62-45e1-97e4-dbc165ec7cc1\",\n            \"image_url\": \"https://dx7csy7aghu7b.cloudfront.net/prods/7483438.webp\",\n            \"manufacturer_id\": \"99cf9b45-a5c2-439c-bad9-14789717bac5\",\n            \"name\": \"Avena\",\n            \"quantity\": 20,\n            \"unit_amount\": 15000,\n            \"updated_at\": \"2025-04-24T22:38:49.780264\"\n        }\n    ],\n    \"message\": \"Productos obtenidos con éxito\",\n    \"status\": \"success\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Consultar Producto por Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Consulta Producto X Id",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:46:12 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "454"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n        \"created_at\": \"2025-04-24T22:31:33.742837\",\n        \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n        \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n        \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n        \"name\": \"Papas Fritas Pollo\",\n        \"quantity\": 18,\n        \"unit_amount\": 20000,\n        \"updated_at\": \"2025-04-24T22:31:33.742837\"\n    },\n    \"message\": \"Producto obtenido con éxito\",\n    \"status\": \"success\"\n}"
-						},
-						{
-							"name": "400 | Id Producto inválido",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a"
-									]
-								}
-							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:54:01 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "64"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"El id no es válido\",\n    \"status\": \"error\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Actualizar cantidad Producto",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"quantity\": -1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"ea25e8a6-184d-4d79-a645-03febb5641a1",
-								"quantity"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 | Actualización Exitosa",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"quantity\": 18\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:49:55 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "470"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"category_id\": \"c395f53f-fa46-425c-a21e-14caae599cd0\",\n        \"created_at\": \"2025-04-24T22:31:33.742837\",\n        \"id\": \"ea25e8a6-184d-4d79-a645-03febb5641a1\",\n        \"image_url\": \"https://m.media-amazon.com/images/I/51751pTat5L.jpg\",\n        \"manufacturer_id\": \"87e26bb2-604b-4b45-bd92-750a97b4898e\",\n        \"name\": \"Papas Fritas Pollo\",\n        \"quantity\": 18,\n        \"unit_amount\": 20000,\n        \"updated_at\": \"2025-04-24T22:31:33.742837\"\n    },\n    \"message\": \"Cantidad del producto actualizada con éxito\",\n    \"status\": \"success\"\n}"
-						},
-						{
-							"name": "400 | Cantidad inválida",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"quantity\": -1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
-							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:51:33 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "95"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"La cantidad debe ser un número entero no negativo\",\n    \"status\": \"error\"\n}"
-						},
-						{
-							"name": "400 | Campo requerido",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"quantity\": null\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
-							},
-							"status": "BAD REQUEST",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "gunicorn"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Apr 2025 03:53:15 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "65"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"code\": 400,\n    \"error\": \"La cantidad es requerida\",\n    \"status\": \"error\"\n}"
+							"body": null
 						}
 					]
 				}
 			],
-			"description": "El servicio de productos permite gestionar la información de los productos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un producto:** `POST /products/`  \n    Permite registrar un nuevo producto en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los productos:** `GET /products/`  \n    Recupera la lista de todos los productos registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Obtener un producto específico por su ID:** `GET /products/`  \n    Obtiene la información de un producto específico. Requiere autenticación con un token JWT (usuario administrador, cliente o vendedor).\n    \n4. **Actualizar la cantidad de un producto:** `PUT/products//quantity`  \n    Actualiza la cantidad de un producto específico por su identificador. Requiere autenticación con un token JWT (usuario administrador, cliente o vendedor).\n    \n5. **Ping (Prueba de conectividad).** `GET /products/ping`  \n    Verifica que el servicio de productos está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+			"description": "El servicio de productos permite gestionar la información de los productos en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un producto:** `POST /products/`  \n    Permite registrar un nuevo producto en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los productos:** `GET /products/`  \n    Recupera la lista de todos los productos registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /products/ping`  \n    Verifica que el servicio de productos está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		}
 	]
 }

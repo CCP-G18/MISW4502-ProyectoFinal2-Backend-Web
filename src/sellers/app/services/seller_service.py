@@ -6,6 +6,7 @@ from app.exceptions.http_exceptions import BadRequestError
 from app.repositories.seller_repository import SellerRepository
 from flask import request
 from app.models.seller_model import SellerSchema
+from datetime import datetime
 
 seller_schema = SellerSchema()
 
@@ -74,3 +75,39 @@ class SellerService:
     }
     
     return SellerRepository.create(seller)
+  
+  @staticmethod
+  def get_sales_plan_by_seller(seller_id):
+    return SellerRepository.get_all_sales_plan_by_seller(seller_id)
+  
+  @staticmethod
+  def create_sales_plan_by_seller(seller_id, sales_plan_data):
+      if not sales_plan_data.get("initial_date"):
+        raise BadRequestError("La fecha de inicio es requerida")
+      
+      if not sales_plan_data.get("end_date"):
+        raise BadRequestError("La fecha de finalización es requerida")
+      
+      now = datetime.today().date()
+
+      sales_plan_data['initial_date'] = datetime.strptime(
+        sales_plan_data.get("initial_date"), '%Y-%m-%d'
+      ).date()
+
+      sales_plan_data['end_date'] = datetime.strptime(
+        sales_plan_data.get("end_date"), '%Y-%m-%d'
+      ).date()
+
+      if sales_plan_data['initial_date'] <= now:
+        raise BadRequestError("La fecha de inicio debe ser posterior a la fecha actual")
+      
+      if sales_plan_data['end_date'] <= sales_plan_data['initial_date']:
+        raise BadRequestError("La fecha de finalización debe ser posterior a la fecha de inicio")
+      
+      if not sales_plan_data.get("sales_goals"):
+        raise BadRequestError("La metas de ventas son requeridas")
+      
+      if not sales_plan_data.get("sales_goals") >= 0:
+        raise BadRequestError("Las metas deben ser mayor a cero")
+      
+      return SellerRepository.create_sales_plan_by_seller(seller_id, sales_plan_data)
