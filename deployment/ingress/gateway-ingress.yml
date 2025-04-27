@@ -40,3 +40,25 @@ spec:
             name: customer-app-service
             port:
               number: 80
+      - pathType: Prefix
+        path: /producers
+        backend:
+          service:
+            name: producer-app-service
+            port:
+              number: 80
+      - pathType: Prefix
+        path: /products
+        backend:
+          service:
+            name: product-app-service
+            port:
+              number: 80
+      - pathType: Prefix
+        path: /orders
+        backend:
+          service:
+            name: order-app-service
+            port:
+              number: 80
+          

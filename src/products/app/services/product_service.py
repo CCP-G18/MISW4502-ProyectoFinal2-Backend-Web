@@ -40,6 +40,7 @@ class ProductService:
       
     product = Product(
       name=product_data.get("name"),
+      description=product_data.get("description"),
       unit_amount=product_data.get("unit_amount"),
       quantity=product_data.get("quantity"),
       image_url=product_data.get("image_url"),

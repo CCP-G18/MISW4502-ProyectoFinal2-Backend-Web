@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: producer-app-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "producer-app-service-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: producers-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5005
+      nodePort: 31023
