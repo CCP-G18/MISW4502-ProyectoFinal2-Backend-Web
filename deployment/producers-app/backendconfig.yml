@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: producer-app-service-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 5005
+    type: HTTP
+    requestPath: /producers/ping
