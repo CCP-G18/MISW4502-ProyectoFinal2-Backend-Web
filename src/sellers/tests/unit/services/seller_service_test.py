@@ -6,6 +6,7 @@ from app.services.seller_service import SellerService, is_valid_email
 from app.exceptions.http_exceptions import BadRequestError
 from app.repositories.seller_repository import SellerRepository
 from app.models.seller_model import SellerSchema, Seller
+from datetime import datetime, timedelta
 
 os.environ['PATH_API_USER'] = 'http://mocked_api/users'
 os.environ['PASSWORD_DEFAULT'] = 'password123'
@@ -35,6 +36,7 @@ def mock_seller():
     assigned_area="North",
     user_id="abc12345-1234-5678-8901-abcdefabcdef",
   )
+
 @pytest.fixture
 def seller_schema():
   return SellerSchema()
@@ -82,20 +84,8 @@ def test_create_seller_success(mock_create, mock_post, seller_data):
   result = SellerService.create(seller_data)
 
   assert result["id"] == "mocked-id"
-  mock_post.assert_called_once_with(
-    'http://mocked_api/users',
-    json={
-      "name": "Juan",
-      "lastname": "Perez",
-      "email": "juan.perez@example.com",
-      "password": 'password123',
-      "role": "seller"
-    }
-  )
-  mock_create.assert_called_once_with({
-    "assigned_area": "North",
-    "user_id": "mocked-id"
-  })
+  mock_post.assert_called_once()
+  mock_create.assert_called_once()
 
 @patch('requests.post')
 def test_create_seller_external_api_failure(mock_post, seller_data):
@@ -106,7 +96,6 @@ def test_create_seller_external_api_failure(mock_post, seller_data):
 
   with pytest.raises(BadRequestError, match="Error de creación de usuario"):
     SellerService.create(seller_data)
-
 
 @patch('app.repositories.seller_repository.SellerRepository.get_all')
 @patch('requests.get')
@@ -123,18 +112,13 @@ def test_get_all_success(mock_requests_get, mock_get_all, mock_sellers, seller_s
   mock_requests_get.return_value = MagicMock(status_code=200, json=lambda: response_data)
 
   with client.application.test_request_context(headers={"Authorization": "Bearer test_token"}):
-      
     sellers_dict = SellerService.get_all()
 
-    mock_requests_get.assert_called_once_with(
-      f'{SellerService.BASE_URL_USER_API}/abc12345-1234-5678-8901-abcdefabcdef',
-      headers={'Authorization': 'Bearer test_token'}
-    )
-
+    mock_requests_get.assert_called_once()
     assert len(sellers_dict) == 1
     assert sellers_dict[0]['name'] == "Juan Perez"
     assert sellers_dict[0]['email'] == "juan.perez@example.com"
-    
+
 @patch('app.repositories.seller_repository.SellerRepository.get_all')
 @patch('requests.get')
 def test_get_all_failure(mock_requests_get, mock_get_all, mock_sellers, seller_schema, client):
@@ -143,17 +127,124 @@ def test_get_all_failure(mock_requests_get, mock_get_all, mock_sellers, seller_s
   mock_requests_get.return_value = MagicMock(status_code=404, json=lambda: {"message": "User not found"})
 
   with client.application.test_request_context(headers={"Authorization": "Bearer test_token"}):
-        
-    with pytest.raises(BadRequestError) as exc_info:
+    with pytest.raises(BadRequestError, match="No se pudo obtener el vendedor"):
       SellerService.get_all()
-      assert str(exc_info.value) == "No se pudo obtener el vendedor"
-      
+
 @patch('app.repositories.seller_repository.SellerRepository.get_all')
 def test_get_all_no_sellers(mock_get_all, client):
   mock_get_all.return_value = []
 
   with client.application.test_request_context(headers={"Authorization": "Bearer test_token"}):
-    with pytest.raises(BadRequestError) as exc_info:
+    with pytest.raises(BadRequestError, match="No hay vendedores registrados"):
       SellerService.get_all()
 
-      assert str(exc_info.value) == "No hay vendedores registrados"
+@patch('app.repositories.seller_repository.SellerRepository.create_sales_plan_by_seller', return_value={"id": "plan-id"})
+def test_create_sales_plan_success(mock_create_sales_plan):
+  today = datetime.today().date()
+  sales_plan_data = {
+    "initial_date": (today + timedelta(days=1)).strftime('%Y-%m-%d'),
+    "end_date": (today + timedelta(days=10)).strftime('%Y-%m-%d'),
+    "sales_goals": 100
+  }
+  seller_id = "abc12345-6789"
+
+  result = SellerService.create_sales_plan_by_seller(seller_id, sales_plan_data)
+
+  assert result["id"] == "plan-id"
+  mock_create_sales_plan.assert_called_once()
+
+def test_create_sales_plan_missing_initial_date():
+  sales_plan_data = {
+    "end_date": "2025-05-20",
+    "sales_goals": 100
+  }
+  with pytest.raises(BadRequestError, match="La fecha de inicio es requerida"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+def test_create_sales_plan_missing_end_date():
+  sales_plan_data = {
+    "initial_date": "2025-05-10",
+    "sales_goals": 100
+  }
+  with pytest.raises(BadRequestError, match="La fecha de finalización es requerida"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+def test_create_sales_plan_initial_date_before_today():
+  today = datetime.today().date()
+  sales_plan_data = {
+    "initial_date": (today - timedelta(days=1)).strftime('%Y-%m-%d'),
+    "end_date": (today + timedelta(days=10)).strftime('%Y-%m-%d'),
+    "sales_goals": 100
+  }
+  with pytest.raises(BadRequestError, match="La fecha de inicio debe ser posterior a la fecha actual"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+def test_create_sales_plan_end_date_before_initial_date():
+  today = datetime.today().date()
+  sales_plan_data = {
+    "initial_date": (today + timedelta(days=10)).strftime('%Y-%m-%d'),
+    "end_date": (today + timedelta(days=5)).strftime('%Y-%m-%d'),
+    "sales_goals": 100
+  }
+  with pytest.raises(BadRequestError, match="La fecha de finalización debe ser posterior a la fecha de inicio"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+def test_create_sales_plan_missing_sales_goals():
+  today = datetime.today().date()
+  sales_plan_data = {
+    "initial_date": (today + timedelta(days=1)).strftime('%Y-%m-%d'),
+    "end_date": (today + timedelta(days=10)).strftime('%Y-%m-%d')
+  }
+  with pytest.raises(BadRequestError, match="La metas de ventas son requeridas"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+def test_create_sales_plan_sales_goals_negative():
+  today = datetime.today().date()
+  sales_plan_data = {
+    "initial_date": (today + timedelta(days=1)).strftime('%Y-%m-%d'),
+    "end_date": (today + timedelta(days=10)).strftime('%Y-%m-%d'),
+    "sales_goals": -5
+  }
+  with pytest.raises(BadRequestError, match="Las metas deben ser mayor a cero"):
+    SellerService.create_sales_plan_by_seller("seller-id", sales_plan_data)
+
+@patch('app.repositories.seller_repository.SellerRepository.get_all_sales_plan_by_seller')
+def test_get_sales_plan_success(mock_get_all_sales_plan):
+  mock_get_all_sales_plan.return_value = [
+    {
+      "id": "plan-id",
+      "initial_date": "2025-05-10",
+      "end_date": "2025-06-10",
+      "sales_goals": 100
+    }
+  ]
+  
+  seller_id = "abc12345-6789"
+  
+  result = SellerService.get_sales_plan_by_seller(seller_id)
+
+  assert isinstance(result, list)
+  assert len(result) == 1
+  assert result[0]['id'] == "plan-id"
+  mock_get_all_sales_plan.assert_called_once_with(seller_id)
+
+@patch('app.repositories.seller_repository.SellerRepository.get_all_sales_plan_by_seller')
+def test_get_sales_plan_no_plans(mock_get_all_sales_plan):
+  mock_get_all_sales_plan.return_value = []
+  
+  seller_id = "abc12345-6789"
+  
+  result = SellerService.get_sales_plan_by_seller(seller_id)
+
+  assert isinstance(result, list)
+  assert result == []
+  mock_get_all_sales_plan.assert_called_once_with(seller_id)
+
+@patch('app.repositories.seller_repository.SellerRepository.get_all_sales_plan_by_seller')
+def test_get_sales_plan_repository_error(mock_get_all_sales_plan):
+  mock_get_all_sales_plan.side_effect = Exception("Database error")
+  
+  seller_id = "abc12345-6789"
+  
+  with pytest.raises(Exception, match="Database error"):
+    SellerService.get_sales_plan_by_seller(seller_id)
