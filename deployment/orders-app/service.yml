@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: order-app-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "order-app-service-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: orders-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5004
+      nodePort: 31021

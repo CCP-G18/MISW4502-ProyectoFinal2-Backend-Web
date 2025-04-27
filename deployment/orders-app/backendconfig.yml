@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: order-app-service-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 5004
+    type: HTTP
+    requestPath: /orders/ping
