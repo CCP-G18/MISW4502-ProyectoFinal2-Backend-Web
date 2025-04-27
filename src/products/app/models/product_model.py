@@ -8,6 +8,7 @@ class Product(db.Model):
     
   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
   name = db.Column(db.String(120), nullable=False)
+  description = db.Column(db.String(255), nullable=False)
   unit_amount = db.Column(db.Float, nullable=False)
   quantity = db.Column(db.Integer, nullable=False)
   image_url = db.Column(db.String(255), nullable=True)
@@ -20,12 +21,14 @@ class Product(db.Model):
     
   def __init__(self,
                 name,
+                description,
                 unit_amount,
                 quantity,
                 image_url,
                 manufacturer_id,
                 category_id):
     self.name = name
+    self.description = description
     self.unit_amount = unit_amount
     self.quantity = quantity
     self.image_url = image_url 
@@ -40,6 +43,7 @@ class ProductSchema(ma.Schema):
     fields = (
       'id',
       'name',
+      'description',
       'unit_amount',
       'quantity',
       'image_url',

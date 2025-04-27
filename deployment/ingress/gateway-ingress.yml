@@ -54,3 +54,11 @@ spec:
             name: product-app-service
             port:
               number: 80
+      - pathType: Prefix
+        path: /orders
+        backend:
+          service:
+            name: order-app-service
+            port:
+              number: 80
+          
