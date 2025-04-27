@@ -8,3 +8,8 @@ class OrderProductRepository:
         db.session.add(order_product)
         db.session.commit()
         return order_product
+    
+    @staticmethod
+    def create_order_product(order_product: OrderProducts):
+        db.session.add(order_product)
+        return order_product

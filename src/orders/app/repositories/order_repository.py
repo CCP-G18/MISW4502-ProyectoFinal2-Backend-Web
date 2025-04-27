@@ -16,9 +16,15 @@ class OrderRepository:
         db.session.commit()
         return order
     
+    def create_order(order: Order):
+        """
+        Agrega la orden a la sesión y sincroniza con la base de datos para obtener el ID.
+        """
+        db.session.add(order)
+        db.session.flush()  # Sincroniza con la base de datos para obtener el ID
+        return order
+    
     @staticmethod
-    def update_total_amount(order_id, total_amount):
-        order = Order.query.get(order_id)
-        order.total_amount = total_amount
+    def update(order: Order):
         db.session.commit()
         return order
