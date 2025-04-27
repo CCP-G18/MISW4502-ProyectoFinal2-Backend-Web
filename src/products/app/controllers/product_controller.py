@@ -11,9 +11,9 @@ product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
 
-@product_bp.route('/', methods=['POST'])
+@product_bp.route('', methods=['POST'])
 @jwt_required()
-@validate_role("admin")
+@validate_role(["admin"])
 def create_product():
   try:
     product_data = request.get_json()
@@ -22,9 +22,9 @@ def create_product():
   except BadRequestError as e:
     return format_response("error", e.code, error=e.description)
         
-@product_bp.route('/', methods=['GET'])
+@product_bp.route('', methods=['GET'])
 @jwt_required()
-@validate_role("admin")
+@validate_role(["admin", "seller", "customer"])
 def get_products():
   try:
     products = ProductService.get_all()
@@ -44,3 +44,18 @@ def get_product_by_id(product_id):
 @product_bp.route('/ping', methods=['GET'])
 def ping():
   return format_response("success", 200, "pong")
+
+@product_bp.route('/<string:product_id>/quantity', methods=['PUT'])
+@jwt_required()
+def update_product_quantity(product_id):
+    try:
+        request_data = request.get_json() 
+        updated_product = ProductService.update_quantity(product_id, request_data)
+        return format_response(
+            "success",
+            200,
+            "Cantidad del producto actualizada con éxito",
+            product_schema.dump(updated_product)
+        )
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)

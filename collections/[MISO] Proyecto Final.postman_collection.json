@@ -1295,9 +1295,83 @@
 							"body": ""
 						}
 					]
+				},
+				{
+					"name": "Crear Plan de Ventas por Vendedor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers",
+								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
+								"sales-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Plan de Ventas por Vendedor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"initial_date\": \"2025-04-28\",\n    \"end_date\": \"2025-09-29\",\n    \"sales_goals\": 120000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
+							"host": [
+								"{{PATH_URL_SELLERS}}"
+							],
+							"path": [
+								"sellers",
+								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
+								"sales-plans"
+							]
+						}
+					},
+					"response": []
 				}
 			],
-			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Crear Plan de Ventas por Vendedor:** `POST /sellers/seller-id/sales-plan`  \n    Permite registrar un nuevo plan de venta asociado al vendedor. Requiere autenticación con un token JWT de un usuario administrador.\n    \n4. **Obtener todos los planes de venta de un vendedor:** `GET /sellers/seller-id/sales-plan`  \n    Recupera la lista de todos los planes de venta de un vendedor especifico. Requiere autenticación con un token JWT de un usuario administrador\n    \n5. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		},
 		{
 			"name": "Products",
@@ -1337,7 +1411,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
+							"raw": "{\n    \"name\": \"Avena\",\n    \"description\": \"es una marca de avena en hojuelas o molida, conocida por su sabor natural y propiedades nutricionales. Es una opción popular para desayunos y otras comidas, siendo baja en grasas saturadas, colesterol y rica en fibra dietaria, especialmente fibra soluble.\",\n    \"quantity\": \"20\",\n    \"unit_amount\": \"15000\",\n    \"image_url\": \"http://localhost.3000/\",\n    \"manufacturer_id\": \"{{$randomUUID}}\",\n    \"category_id\": \"{{$randomUUID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
