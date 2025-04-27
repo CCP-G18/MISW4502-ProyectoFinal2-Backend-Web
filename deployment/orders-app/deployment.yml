@@ -40,6 +40,11 @@ spec:
               secretKeyRef:
                 name: appsecrets
                 key: ALLOWED_ORIGINS
+          - name: "PATH_API_AUTH"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: PATH_API_AUTH
         ports:
           - containerPort: 5000
         imagePullPolicy: Always
