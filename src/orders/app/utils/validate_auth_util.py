@@ -1,6 +1,5 @@
 import requests
 import os
-from urllib.parse import urljoin, urlparse
 from functools import wraps
 from flask import request
 from app.exceptions.http_exceptions import UnauthorizedError, NotFoundError, ForbiddenError
