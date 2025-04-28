@@ -128,11 +128,11 @@ class OrderService:
         summary = []
         
         for product_data in items:
-            product_id = product_data.get("product_id")
+            product_id = product_data.get("id")
             quantity = product_data.get("quantity")
 
-            if "product_id" not in product_data or "quantity" not in product_data:
-                raise BadRequestError("Cada producto debe incluir 'product_id' y 'quantity'")
+            if "id" not in product_data or "quantity" not in product_data:
+                raise BadRequestError("Cada producto debe incluir 'id' y 'quantity'")
            
             if not product_id or not validate_uuid(product_id):
                 raise BadRequestError("El ID del producto no es válido")
