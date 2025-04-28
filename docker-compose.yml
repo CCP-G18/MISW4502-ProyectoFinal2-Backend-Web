@@ -113,6 +113,27 @@ services:
     networks:
       - producers_app
       - app_net   
+    
+  visits_app:
+    build: ./src/visits
+    container_name: visits_app
+    ports:
+      - "5006:5006"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      PATH_API_USER: ${PATH_API_USER}
+      PATH_API_CUSTOMER: ${PATH_API_CUSTOMER}
+      PATH_API_SELLER: ${PATH_API_SELLER}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - visits_app
+      - app_net
 
   database:
     image: postgres:16-alpine
@@ -165,5 +186,8 @@ networks:
   producers_app:
     driver: bridge
     name: producers_app
+  visits_app:
+    driver: bridge
+    name: visits_app
 volumes:
   postgres_data:
