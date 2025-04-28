@@ -8,9 +8,7 @@ from app.utils.response_util import format_response
 
 
 PATH_API_USER = os.getenv("PATH_API_USER")
-parsed_url = urlparse(PATH_API_USER)
-BASE_API_URL = f"{parsed_url.scheme}://{parsed_url.netloc}"
-AUTH_SERVICE_URL = urljoin(BASE_API_URL, "/verify")
+AUTH_SERVICE_URL = PATH_API_USER.replace("/users", "/verify")
 
 def check_auth(token):
     response = requests.get(AUTH_SERVICE_URL, headers={"Authorization": token})
