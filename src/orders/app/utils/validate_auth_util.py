@@ -5,8 +5,8 @@ from flask import request
 from app.exceptions.http_exceptions import UnauthorizedError, NotFoundError, ForbiddenError
 from app.utils.response_util import format_response
 
-PATH_API_AUTH = f"{os.getenv('PATH_API_AUTH')}"
-AUTH_SERVICE_URL = PATH_API_AUTH.replace("/users", "/verify")
+PATH_API_USER = f"{os.getenv('PATH_API_USER')}"
+AUTH_SERVICE_URL = PATH_API_USER.replace("/users", "/verify")
 
 def check_auth(token):
     response = requests.get(AUTH_SERVICE_URL, headers={"Authorization": token})
