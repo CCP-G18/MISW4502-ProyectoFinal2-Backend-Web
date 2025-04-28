@@ -1,10 +1,12 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock
 from app.services.order_service import OrderService
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 
 
 @patch("app.repositories.order_repository.OrderRepository.get_all")
+@patch.dict(os.environ, {"PATH_API_USER": "http://user_app:5000/users"})
 def test_get_all_orders_success(mock_get_all):
     mock_get_all.return_value = [
         {
