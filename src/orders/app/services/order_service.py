@@ -59,12 +59,12 @@ class OrderService:
                     order_product = OrderProducts(
                         order_id=order_created.id,
                         product_id=item["product_id"],
-                        quantity_ordered=item["quantity"],
+                        quantity_ordered=item["quantity_ordered"],
                         amount=item["amount"]
                     )
                     OrderProductRepository.create_order_product(order_product)
 
-                    update_product_quantity(item["product_id"], item["quantity"])
+                    update_product_quantity(item["product_id"], item["quantity"] - item["quantity_ordered"])
 
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -79,8 +79,8 @@ class OrderService:
             "items": [
                 {
                     "title": item["name"],
-                    "quantity": item["quantity"],
-                    "price": item["price"],
+                    "quantity": item["quantity_ordered"],
+                    "price": item["amount"],
                     "image_url": item["image_url"]
                 }
                 for item in validated_items
@@ -153,7 +153,8 @@ class OrderService:
 
             validated_items.append({
                 "product_id": product_id,
-                "quantity": quantity,
+                "quantity": product_quantity,
+                "quantity_ordered": quantity,
                 "amount": amount,
                 "name": product_info["data"].get("name"),
                 "image_url": product_info["data"].get("image_url"),
