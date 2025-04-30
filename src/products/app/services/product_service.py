@@ -62,9 +62,9 @@ class ProductService:
   @staticmethod
   def update_quantity(product_id, product_data):
     if not validate_uuid(product_id):
-        raise BadRequestError("El ID del producto no es válido")
+        raise BadRequestError("El ID del producto no es válido")    
     
-    if not product_data.get("quantity"):
+    if "quantity" not in product_data:
       raise BadRequestError("La cantidad es requerida")                 
     if not isinstance(product_data.get("quantity"), int) or product_data.get("quantity") < 0:
         raise BadRequestError("La cantidad debe ser un número entero no negativo")    
