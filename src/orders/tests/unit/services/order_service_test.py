@@ -200,13 +200,15 @@ def test_validate_products_success(mock_get_product_info):
     assert total_amount == 19000.0
     assert summary == ["Producto A", "Producto B"]
     
-    assert validated_items[0]["quantity"] == 2
+    assert validated_items[0]["quantity"] == 10
+    assert validated_items[0]["quantity_ordered"] == 2
     assert validated_items[0]["amount"] == 10000.0
     assert validated_items[0]["name"] == "Producto A"
     assert validated_items[0]["image_url"] == "https://example.com/producto_a.jpg"
     assert validated_items[0]["price"] == 5000.0
 
-    assert validated_items[1]["quantity"] == 3
+    assert validated_items[1]["quantity"] == 20
+    assert validated_items[1]["quantity_ordered"] == 3
     assert validated_items[1]["amount"] == 9000.0
     assert validated_items[1]["name"] == "Producto B"
     assert validated_items[1]["image_url"] == "https://example.com/producto_b.jpg"
