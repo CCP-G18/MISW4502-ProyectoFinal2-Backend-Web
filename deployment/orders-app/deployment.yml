@@ -44,7 +44,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: appsecrets
-                key: PATH_API_USER    
+                key: PATH_API_USER
+          - name: "PATH_API_BASE"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: PATH_API_BASE
         ports:
           - containerPort: 5000
         imagePullPolicy: Always
