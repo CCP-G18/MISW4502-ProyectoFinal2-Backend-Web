@@ -63,7 +63,7 @@ def test_get_order_by_id_invalid(mock_get_by_id):
 def test_create_order_missing_date(mock_create):
     order_data = {
         "items": [
-            {"product_id": "123e4567-e89b-12d3-a456-426614174002", "quantity": 2}
+            {"id": "123e4567-e89b-12d3-a456-426614174002", "quantity": 2}
         ]
     }
     customer_id = "123e4567-e89b-12d3-a456-426614174001"
