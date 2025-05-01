@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: recommendation-app-service-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 5006
+    type: HTTP
+    requestPath: /recommendations/ping

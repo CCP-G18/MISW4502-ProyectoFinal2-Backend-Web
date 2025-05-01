@@ -112,7 +112,27 @@ services:
         condition: service_healthy
     networks:
       - producers_app
-      - app_net   
+      - app_net  
+
+  recommendations_app:
+    build: ./src/recommendations
+    container_name: recommendations_app
+    ports:
+      - "5006:5006"
+    env_file: 
+      - .env
+    environment:
+      POSTGRES_DB_URI: ${DB_POSTGRES_URI}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      GOOGLE_APPLICATION_CREDENTIALS: /src/recommendations/proyecto-final.json
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app_net
+    volumes:
+      - ./src/recommendations/proyecto-final.json:/src/recommendations/proyecto-final.json
 
   database:
     image: postgres:16-alpine
