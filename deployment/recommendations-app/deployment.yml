@@ -14,6 +14,7 @@ spec:
       labels:
         app: recommendations-app
     spec:
+      serviceAccountName: gcs-ksa
       containers:
       - name: recommendations-app
         image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/recommendations:latest
