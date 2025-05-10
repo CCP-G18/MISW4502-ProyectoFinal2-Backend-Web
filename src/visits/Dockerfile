@@ -28,5 +28,5 @@ RUN pip install --no-cache /wheels/*
 
 COPY . .
 
-EXPOSE 5006
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5006", "main:app"]
+EXPOSE 5007
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5007", "main:app"]
