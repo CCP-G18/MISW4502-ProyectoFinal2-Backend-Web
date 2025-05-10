@@ -41,7 +41,7 @@ spec:
                 name: appsecrets
                 key: ALLOWED_ORIGINS
         ports:
-          - containerPort: 5006
+          - containerPort: 5007
         imagePullPolicy: Always
       volumes:
         - name: appsecrets-volume
