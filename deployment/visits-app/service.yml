@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: visit-app-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "visit-app-service-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: producers-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5006
+      nodePort: 31024

@@ -112,11 +112,19 @@ services:
         condition: service_healthy
     networks:
       - producers_app
+<<<<<<< HEAD
+      - app_net   
+    
+  visits_app:
+    build: ./src/visits
+    container_name: visits_app
+=======
       - app_net  
 
   recommendations_app:
     build: ./src/recommendations
     container_name: recommendations_app
+>>>>>>> main
     ports:
       - "5006:5006"
     env_file: 
@@ -125,14 +133,25 @@ services:
       POSTGRES_DB_URI: ${DB_POSTGRES_URI}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+<<<<<<< HEAD
+      PATH_API_USER: ${PATH_API_USER}
+      PATH_API_CUSTOMER: ${PATH_API_CUSTOMER}
+      PATH_API_SELLER: ${PATH_API_SELLER}
+=======
       GOOGLE_APPLICATION_CREDENTIALS: /src/recommendations/proyecto-final.json
+>>>>>>> main
     depends_on:
       database:
         condition: service_healthy
     networks:
+<<<<<<< HEAD
+      - visits_app
+      - app_net
+=======
       - app_net
     volumes:
       - ./src/recommendations/proyecto-final.json:/src/recommendations/proyecto-final.json
+>>>>>>> main
 
   database:
     image: postgres:16-alpine
@@ -162,6 +181,24 @@ services:
       - customer_net
       - product_app
       - order_net
+
+  nginx_proxy:
+    image: nginx:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - user_app
+      - visits_app
+      - customer_app
+      - order_app
+      - seller_app
+      - product_app
+      - producers_app
+    networks:
+      - app_net
+
  
 networks:
   app_net:
@@ -185,5 +222,8 @@ networks:
   producers_app:
     driver: bridge
     name: producers_app
+  visits_app:
+    driver: bridge
+    name: visits_app
 volumes:
   postgres_data:
