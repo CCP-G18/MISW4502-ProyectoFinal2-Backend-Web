@@ -59,3 +59,13 @@ def update_product_quantity(product_id):
         )
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
+    
+@product_bp.route('/category/<string:category_id>', methods=['GET'])
+@jwt_required()
+@validate_role(["admin", "seller"])
+def get_products_by_category(category_id):
+    try:
+        products = ProductService.get_products_by_category(category_id)
+        return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)
