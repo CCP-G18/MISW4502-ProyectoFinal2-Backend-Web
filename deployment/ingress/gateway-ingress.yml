@@ -61,4 +61,11 @@ spec:
             name: order-app-service
             port:
               number: 80
+      - pathType: Prefix
+        path: /recommendations
+        backend:
+          service:
+            name: recommendation-app-service
+            port:
+              number: 80
           

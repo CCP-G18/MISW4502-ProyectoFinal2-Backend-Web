@@ -1,10 +1,12 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock
 from app.services.order_service import OrderService
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 
 
 @patch("app.repositories.order_repository.OrderRepository.get_all")
+@patch.dict(os.environ, {"PATH_API_USER": "http://user_app:5000/users"})
 def test_get_all_orders_success(mock_get_all):
     mock_get_all.return_value = [
         {
@@ -66,7 +68,7 @@ def test_get_order_by_id_success(mock_get_by_id):
 def test_create_order_missing_date(mock_create_order):
     order_data = {
         "items": [
-            {"product_id": "123e4567-e89b-12d3-a456-426614174002", "quantity": 2}
+            {"id": "123e4567-e89b-12d3-a456-426614174002", "quantity": 2}
         ]
     }
     customer_id = "123e4567-e89b-12d3-a456-426614174001"
@@ -98,7 +100,7 @@ def test_validate_products_product_not_found(mock_get_product_info):
 
     items = [
         {
-            "product_id": "123e4567-e89b-12d3-a456-426614174000",
+            "id": "123e4567-e89b-12d3-a456-426614174000",
             "quantity": 2
         }
     ]
@@ -111,7 +113,7 @@ def test_validate_products_invalid_product_id(mock_validate_uuid):
     mock_validate_uuid.return_value = False
 
     items = [
-        {"product_id": "invalid-uuid", "quantity": 2}
+        {"id": "invalid-uuid", "quantity": 2}
     ]
 
     with pytest.raises(BadRequestError, match="El ID del producto no es válido"):
@@ -127,7 +129,7 @@ def test_validate_products_without_product_id(mock_get_product_info):
         {"quantity": 2}
     ]
 
-    with pytest.raises(BadRequestError, match="Cada producto debe incluir 'product_id' y 'quantity'"):
+    with pytest.raises(BadRequestError, match="Cada producto debe incluir 'id' y 'quantity'"):
         OrderService.validate_products(items)
 
 @patch("app.services.order_service.get_product_info")
@@ -135,10 +137,10 @@ def test_validate_products_without_quantity(mock_get_product_info):
     mock_get_product_info.return_value = None
 
     items = [
-        {"product_id": "123e4567-e89b-12d3-a456-426614174000"}
+        {"id": "123e4567-e89b-12d3-a456-426614174000"}
     ]
 
-    with pytest.raises(BadRequestError, match="Cada producto debe incluir 'product_id' y 'quantity'"):
+    with pytest.raises(BadRequestError, match="Cada producto debe incluir 'id' y 'quantity'"):
         OrderService.validate_products(items)
 
 @patch("app.services.order_service.get_product_info")
@@ -147,7 +149,7 @@ def test_validate_products_negative_quantity(mock_get_product_info):
 
     items = [
         {
-            "product_id": "123e4567-e89b-12d3-a456-426614174000",
+            "id": "123e4567-e89b-12d3-a456-426614174000",
             "quantity": -1
         }]
 
@@ -160,7 +162,7 @@ def test_validate_products_invalid_quantity(mock_get_product_info):
 
     items = [
         {
-            "product_id": "123e4567-e89b-12d3-a456-426614174000",
+            "id": "123e4567-e89b-12d3-a456-426614174000",
             "quantity": "invalid_quantity"
         }]
 
@@ -189,24 +191,24 @@ def test_validate_products_success(mock_get_product_info):
     ]
 
     items = [
-        {"product_id": "123e4567-e89b-12d3-a456-426614174000", "quantity": 2},
-        {"product_id": "123e4567-e89b-12d3-a456-426614174001", "quantity": 3}
+        {"id": "123e4567-e89b-12d3-a456-426614174000", "quantity": 2},
+        {"id": "123e4567-e89b-12d3-a456-426614174001", "quantity": 3}
     ]
     validated_items, total_amount, summary = OrderService.validate_products(items)
 
     assert len(validated_items) == 2
     assert total_amount == 19000.0
     assert summary == ["Producto A", "Producto B"]
-
-    assert validated_items[0]["product_id"] == "123e4567-e89b-12d3-a456-426614174000"
-    assert validated_items[0]["quantity"] == 2
+    
+    assert validated_items[0]["quantity"] == 10
+    assert validated_items[0]["quantity_ordered"] == 2
     assert validated_items[0]["amount"] == 10000.0
     assert validated_items[0]["name"] == "Producto A"
     assert validated_items[0]["image_url"] == "https://example.com/producto_a.jpg"
     assert validated_items[0]["price"] == 5000.0
 
-    assert validated_items[1]["product_id"] == "123e4567-e89b-12d3-a456-426614174001"
-    assert validated_items[1]["quantity"] == 3
+    assert validated_items[1]["quantity"] == 20
+    assert validated_items[1]["quantity_ordered"] == 3
     assert validated_items[1]["amount"] == 9000.0
     assert validated_items[1]["name"] == "Producto B"
     assert validated_items[1]["image_url"] == "https://example.com/producto_b.jpg"
@@ -229,7 +231,7 @@ def test_validate_products_insufficient_stock(mock_get_product_info):
         }
     ]
     items = [
-        {"product_id": "123e4567-e89b-12d3-a456-426614174000", "quantity": 2}
+        {"id": "123e4567-e89b-12d3-a456-426614174000", "quantity": 2}
     ]
 
     with pytest.raises(BadRequestError, match="No hay suficiente cantidad del producto Producto A en stock"):
