@@ -69,3 +69,16 @@ def get_products_by_category(category_id):
         return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
+
+@product_bp.route('/upload-preview', methods=['POST'])
+@jwt_required()
+@validate_role(["admin"])
+def load_products_massive():
+  file = request.files.get('file')
+  if not file:
+    raise BadRequestError("Debe cargar un archivo válido.")
+  try:
+    result = ProductService.parse_and_validate_file(file)
+    return format_response("success", 200, "Archivo procesado correctamente", result)
+  except BadRequestError as e:
+      return BadRequestError(f"Error al procesar el archivo: {str(e)}")
