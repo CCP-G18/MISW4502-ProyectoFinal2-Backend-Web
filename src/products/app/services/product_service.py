@@ -77,3 +77,14 @@ class ProductService:
     updated_product = ProductRepository.update(product)
     
     return updated_product
+  
+  @staticmethod
+  def get_products_by_category(category_id):
+    if not validate_uuid(category_id):
+      raise BadRequestError("El id de la categoría no es válido")   
+    
+    products = ProductRepository.get_products_by_category(category_id)
+   
+    if products is None or len(products) == 0:
+        raise BadRequestError("No hay productos en esta categoría")       
+    return products

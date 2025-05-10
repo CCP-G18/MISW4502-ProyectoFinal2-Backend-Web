@@ -5,8 +5,7 @@ class ProductRepository:
   
   @staticmethod
   def get_all():
-    products = Product.query.all()
-    
+    products = Product.query.all()    
     return products
   
   @staticmethod
@@ -24,3 +23,8 @@ class ProductRepository:
   def update(product: Product):
     db.session.commit()
     return product
+  
+  @staticmethod
+  def get_products_by_category(category_id):
+    products = Product.query.filter_by(category_id=category_id).all()  
+    return products
