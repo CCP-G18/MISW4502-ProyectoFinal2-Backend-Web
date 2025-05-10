@@ -146,14 +146,15 @@ services:
       POSTGRES_DB_URI: ${DB_POSTGRES_URI}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
-      GOOGLE_APPLICATION_CREDENTIALS: /src/recommendations/proyecto-final.json
+      PATH_API_USER: ${PATH_API_USER}
+      PATH_API_CUSTOMER: ${PATH_API_CUSTOMER}
+      PATH_API_SELLER: ${PATH_API_SELLER}
     depends_on:
       database:
         condition: service_healthy
     networks:
+      - visits_app
       - app_net
-    volumes:
-      - ./src/recommendations/proyecto-final.json:/src/recommendations/proyecto-final.json
 
   database:
     image: postgres:16-alpine

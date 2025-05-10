@@ -157,4 +157,31 @@ def test_update_quantity_product_not_found(mock_get_product_by_id):
 
     with pytest.raises(BadRequestError, match="El producto no existe"):
         ProductService.update_quantity(product_id, product_data)
-    mock_get_product_by_id.assert_called_once_with(product_id)       
+    mock_get_product_by_id.assert_called_once_with(product_id)
+
+@patch('app.repositories.product_repository.ProductRepository.get_products_by_category')
+def test_get_products_by_category_success(mock_get_products_by_category):
+    category_id = "123e4567-e89b-12d3-a456-426614174000"
+    mock_products = [MagicMock(id="prod-1111"), MagicMock(id="prod-2222")]
+    mock_get_products_by_category.return_value = mock_products
+
+    result = ProductService.get_products_by_category(category_id)
+
+    mock_get_products_by_category.assert_called_once_with(category_id)
+    assert result == mock_products
+
+def test_get_products_by_category_invalid_id():
+    invalid_category_id = "invalid-uuid"
+
+    with pytest.raises(BadRequestError, match="El id de la categoría no es válido"):
+        ProductService.get_products_by_category(invalid_category_id)
+
+@patch('app.repositories.product_repository.ProductRepository.get_products_by_category')
+def test_get_products_by_category_not_found(mock_get_products_by_category):
+    category_id = "123e4567-e89b-12d3-a456-426614174000"
+    mock_get_products_by_category.return_value = []
+
+    with pytest.raises(BadRequestError, match="No hay productos en esta categoría"):
+        ProductService.get_products_by_category(category_id)
+
+    mock_get_products_by_category.assert_called_once_with(category_id)
