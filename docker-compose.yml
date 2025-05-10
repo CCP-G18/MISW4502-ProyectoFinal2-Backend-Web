@@ -163,6 +163,24 @@ services:
       - customer_net
       - product_app
       - order_net
+
+  nginx_proxy:
+    image: nginx:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - user_app
+      - visits_app
+      - customer_app
+      - order_app
+      - seller_app
+      - product_app
+      - producers_app
+    networks:
+      - app_net
+
  
 networks:
   app_net:
