@@ -111,3 +111,39 @@ class SellerService:
         raise BadRequestError("Las metas deben ser mayor a cero")
       
       return SellerRepository.create_sales_plan_by_seller(seller_id, sales_plan_data)
+
+  @staticmethod
+  def report_sales_plan_by_seller(seller_id):
+    sales_plans_seller = SellerRepository.get_all_sales_plan_by_seller(seller_id)
+    seller = SellerRepository.get_by_id(seller_id)
+    orders = SellerRepository.get_all_orders_by_seller(seller_id)
+
+    plan_reports = []
+    total_sales_goal = 0
+    total_achieved = 0
+
+    for i, plan in enumerate(sales_plans_seller, start=1):
+      achieved = sum(
+        order.total_amount for order in orders
+        if plan.initial_date <= order.created_at <= plan.end_date
+      )
+
+      plan_reports.append({
+        "name": f"Plan de venta #{i}",
+        "start_date": plan.initial_date.strftime("%Y-%m-%d"),
+        "end_date": plan.end_date.strftime("%Y-%m-%d"),
+        "sales_goal": plan.sales_goals,
+        "achieved_amount": achieved
+      })
+
+      total_sales_goal += plan.sales_goals
+      total_achieved += achieved
+    print("seller", seller)
+    seller_data = {
+      "assigned_area": seller.assigned_area,
+      "sales_goal": total_sales_goal,
+      "achieved_amount": total_achieved,
+      "planes": plan_reports
+    }
+
+    return seller_data
