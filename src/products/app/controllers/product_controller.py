@@ -78,12 +78,27 @@ def get_products_by_category(category_id):
 def load_products_massive():
   file = request.files.get('file')
   if not file:
-    raise BadRequestError("Debe cargar un archivo válido.")
+    return format_response("error", 400, "Debe cargar un archivo válido")
   try:
     result = ProductService.parse_and_validate_file(file)
     return format_response("success", 200, "Archivo procesado correctamente", result)
   except BadRequestError as e:
       return BadRequestError(f"Error al procesar el archivo: {str(e)}")
+  
+@product_bp.route('/bulk-save', methods=['POST'])
+@jwt_required()
+@validate_role(["admin"])
+def save_products_bulk():
+  data = request.get_json()
+
+  if not data or 'products' not in data:
+    return format_response("error", 400, "Debe enviar una lista de productos válida")
+   
+  try:
+    quantity = ProductService.bulk_save_products(data['products'])
+    return format_response("sucess", 201, f"{quantity} productos guardados exitosamente.")
+  except BadRequestError as e:
+    return BadRequestError(f"Error al guardar los productos: {str(e)}")
   
 @product_bp.route('/categories', methods=['GET'])
 @jwt_required()
