@@ -148,13 +148,13 @@ class ProductService:
 
         if not item['errores']:
           validos.append({
-            "Nombre del producto": row["Nombre del producto"],
-            "Descripción": row["Descripción"],
-            "Cantidad inicial": int(row["Cantidad inicial"]),
-            "Precio unitario": float(row["Precio unitario"]),
+            "name": row["Nombre del producto"],
+            "description": row["Descripción"],
+            "quantity": int(row["Cantidad inicial"]),
+            "amount_unit": float(row["Precio unitario"]),
             "manufacturer_id": manufacturer_id,
+            "manufacturer_name": row["Nombre del fabricante"],
             "category_id": category_id,
-            "image_url": None
           })
         else:
           errores.append(item)
@@ -164,3 +164,19 @@ class ProductService:
       "cantidad_validos": len(validos),
       "cantidad_errores": len(errores)
     }
+  
+  @staticmethod
+  def bulk_save_products(products):
+    products_objects = [
+      Product(
+        name=p["name"],
+        quantity=p["quantity"],
+        category_id=p["category_id"],
+        description=p["description"],
+        image_url=None,
+        manufacturer_id=p["manufacturer_id"],
+        unit_amount=p["amount_unit"]
+      )
+      for p in products
+    ]
+    return ProductRepository.save_bulk_products(products_objects)

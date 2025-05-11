@@ -28,3 +28,10 @@ class ProductRepository:
   def get_products_by_category(category_id):
     products = Product.query.filter_by(category_id=category_id).all()  
     return products
+  
+  @staticmethod
+  def save_bulk_products(products):
+    db.session.bulk_save_objects(products)
+    db.session.commit()
+
+    return len(products)

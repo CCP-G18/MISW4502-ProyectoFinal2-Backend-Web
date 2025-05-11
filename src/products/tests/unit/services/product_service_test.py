@@ -2,6 +2,7 @@ import pytest
 from flask import Flask
 from unittest.mock import patch, MagicMock
 from app.services.product_service import ProductService, BadRequestError
+from app.models.product_model import Product
 import io
 import pandas as pd
 import uuid
@@ -233,3 +234,29 @@ def test_parse_and_validate_file_csv():
   assert result["cantidad_errores"] == 1
   assert result["errores"][0]["Nombre del producto"] == ""
   assert "Columna 'Nombre del producto' vacía" in result["errores"][0]["errores"]
+
+def test_bulk_save_products_creates_and_saves():
+  product_input = [
+    {
+      "name": "Producto Test",
+      "quantity": 100,
+      "category_id": uuid.uuid4(),
+      "description": "Ejemplo",
+      "manufacturer_id": uuid.uuid4(),
+        "amount_unit": 12000
+    }
+  ]
+
+  with patch("app.services.product_service.ProductRepository.save_bulk_products") as mock_save:
+    result = ProductService.bulk_save_products(product_input)
+
+    mock_save.assert_called_once()
+
+    productos_pasados = mock_save.call_args[0][0]
+    assert isinstance(productos_pasados, list)
+    assert all(isinstance(p, Product) for p in productos_pasados)
+
+    assert productos_pasados[0].name == "Producto Test"
+    assert productos_pasados[0].quantity == 100
+    assert productos_pasados[0].description == "Ejemplo"
+    assert productos_pasados[0].unit_amount == 12000
