@@ -164,3 +164,8 @@ class ProductService:
       "cantidad_validos": len(validos),
       "cantidad_errores": len(errores)
     }
+
+  @staticmethod
+  def get_categories():
+    categories = ProductRepository.get_categories()
+    return categories  

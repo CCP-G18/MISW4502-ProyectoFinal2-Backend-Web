@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from app.models.category_model import CategorySchema
 from app.models.product_model import ProductSchema
 from app.services.product_service import ProductService
 from app.exceptions.http_exceptions import BadRequestError
@@ -9,6 +10,7 @@ from app.utils.validate_role import validate_role
 product_bp = Blueprint('product', __name__, url_prefix='/products')
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
+categories_schema = CategorySchema(many=True)
 
 
 @product_bp.route('', methods=['POST'])
@@ -82,3 +84,13 @@ def load_products_massive():
     return format_response("success", 200, "Archivo procesado correctamente", result)
   except BadRequestError as e:
       return BadRequestError(f"Error al procesar el archivo: {str(e)}")
+  
+@product_bp.route('/categories', methods=['GET'])
+@jwt_required()
+@validate_role(["seller"])
+def get_categories():
+    try:
+        categories = ProductService.get_categories()
+        return format_response("success", 200, "Categorías obtenidas con éxito", categories_schema.dump(categories))
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)
