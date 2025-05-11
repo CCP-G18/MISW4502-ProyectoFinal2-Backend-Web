@@ -39,5 +39,5 @@ class ProductRepository:
   
   @staticmethod
   def get_categories():
-    categories = Category.query.all()    
+    categories = Category.query.all()
     return categories

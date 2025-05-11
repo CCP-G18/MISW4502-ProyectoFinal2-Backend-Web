@@ -68,6 +68,8 @@ def update_product_quantity(product_id):
 def get_products_by_category(category_id):
     try:
         products = ProductService.get_products_by_category(category_id)
+        if not products:
+            return format_response("success", 200, "No hay productos disponibles en esta categoría", products_schema.dump(products))
         return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
@@ -106,6 +108,8 @@ def save_products_bulk():
 def get_categories():
     try:
         categories = ProductService.get_categories()
+        if not categories:
+            return format_response("success", 200, "No hay categorías disponibles", categories_schema.dump(categories))
         return format_response("success", 200, "Categorías obtenidas con éxito", categories_schema.dump(categories))
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
