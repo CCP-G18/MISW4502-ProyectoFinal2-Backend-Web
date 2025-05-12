@@ -252,7 +252,7 @@ def test_validate_products_empty_items(mock_get_product_info):
 def test_get_orders_by_customer_invalid_id(mock_get_all):
     invalid_customer_id = "invalid-uuid"
 
-    with pytest.raises(BadRequestError, match="El id de la categoría no es válido"):
+    with pytest.raises(BadRequestError, match="El id del cliente no es válido"):
         OrderService.get_orders_by_customer(invalid_customer_id)
 
     mock_get_all.assert_not_called()

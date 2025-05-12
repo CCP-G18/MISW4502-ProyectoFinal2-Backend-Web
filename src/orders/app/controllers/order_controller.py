@@ -27,7 +27,7 @@ def get_orders_by_customer():
 
 @order_bp.route('/<string:id>', methods=['GET'])
 @jwt_required()
-@validate_role(["customer"])
+@validate_role(["customer", "seller"])
 def get_order_by_id(id:str):
     try:
         order = OrderService.get_by_id(id)
