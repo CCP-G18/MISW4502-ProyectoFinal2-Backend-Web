@@ -91,7 +91,7 @@ class OrderService:
     @staticmethod
     def get_orders_by_customer(customer_id):
         if not validate_uuid(customer_id):
-            raise BadRequestError("El id de la categoría no es válido")
+            raise BadRequestError("El id del cliente no es válido")
               
         orders = Order.query.filter(Order.customer_id == customer_id).all()
         result = []
