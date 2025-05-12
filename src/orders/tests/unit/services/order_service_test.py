@@ -298,3 +298,54 @@ def test_create_order_seller_missing_items(mock_validate_products):
         OrderService.create_order_seller(seller_id, order_data)
 
     mock_validate_products.assert_not_called()
+
+@patch("app.repositories.order_repository.OrderRepository.get_all")
+def test_get_orders_by_customer_invalid_id(mock_get_all):
+    invalid_customer_id = "invalid-uuid"
+
+    with pytest.raises(BadRequestError, match="El id del cliente no es válido"):
+        OrderService.get_orders_by_customer(invalid_customer_id)
+
+    mock_get_all.assert_not_called()
+
+@patch("app.services.order_service.OrderService.validate_products")
+def test_create_order_seller_missing_date(mock_validate_products):  
+    seller_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {
+        "customer_id": "456e7890-e12b-34d5-a678-426614174111",
+        "items": [
+            {"product_id": "789e1234-e56b-78d9-a012-426614174222", "quantity": 2}
+        ]
+    }
+    with pytest.raises(BadRequestError, match="El campo 'date' es obligatorio"):
+        OrderService.create_order_seller(seller_id, order_data)
+
+    mock_validate_products.assert_not_called()
+
+@patch("app.services.order_service.OrderService.validate_products")
+def test_create_order_seller_invalid_customer_id(mock_validate_products):
+    seller_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {
+        "customer_id": "invalid-uuid",
+        "date": "2025-05-11",
+        "items": [
+            {"product_id": "789e1234-e56b-78d9-a012-426614174222", "quantity": 2}
+        ]
+    }
+    with pytest.raises(BadRequestError, match="El ID del cliente no es válido"):
+        OrderService.create_order_seller(seller_id, order_data)
+
+    mock_validate_products.assert_not_called()
+
+@patch("app.services.order_service.OrderService.validate_products")
+def test_create_order_seller_missing_items(mock_validate_products):
+    seller_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {
+        "customer_id": "456e7890-e12b-34d5-a678-426614174111",
+        "date": "2025-05-11"
+    }
+
+    with pytest.raises(BadRequestError, match="La petición debe contener una lista de productos válida"):
+        OrderService.create_order_seller(seller_id, order_data)
+
+    mock_validate_products.assert_not_called()

@@ -59,3 +59,15 @@ def create_sales_plans_by_seller(seller_id):
     return format_response("success", 201, "Plan de Ventas creado con éxito", sales_plan_schema.dump(sales_plan) )
   except BadRequestError as e:
     return format_response("error", e.code, error=e.description)
+  
+@seller_bp.route('/<string:seller_id>/report-sales-plans', methods=['GET'])
+@jwt_required()
+@validate_role("admin")
+def report_sales_plan_by_seller(seller_id):
+  try:
+    report = SellerService.report_sales_plan_by_seller(seller_id)
+    return format_response("success", 200, "Informe generado correctamente", report)
+  except BadRequestError as e:
+    return format_response("error", e.code, error=e.description)
+
+  
