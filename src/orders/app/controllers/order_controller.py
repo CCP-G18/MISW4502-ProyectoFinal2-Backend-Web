@@ -50,6 +50,33 @@ def create_order():
     else:
         return format_response("success", 201, "Pedido creado con éxito", data=order)
 
+
+@order_bp.route('/seller', methods=['POST'])
+@jwt_required()
+@validate_role(["seller"])
+def create_order_seller():
+    try:
+        order_data = request.get_json()
+        seller_id = get_authenticated_user_id()
+        order = OrderService.create_order_seller(seller_id, order_data)
+    except (BadRequestError, NotFoundError) as e:
+        return format_response("error", e.code, error=e.description)
+    else:
+        return format_response("success", 201, "Pedido creado con éxito", data=order)
+    
+
+@order_bp.route('/customer/<string:customer_id>', methods=['GET'])
+@jwt_required()
+@validate_role(["seller"])
+def get_orders_by_customer_for_seller(customer_id):
+    try:
+        orders = OrderService.get_orders_by_customer(customer_id)
+        if not orders:
+            return format_response("success", 200, message="No hay pedidos registrados para este cliente", data=[])
+        return format_response("success", 200, message="Todos los pedidos del cliente han sido obtenidos", data=orders)
+    except (BadRequestError, NotFoundError) as e:
+       return format_response("error", e.code, error=e.description)
+
 @order_bp.route('/ping', methods=['GET'])
 def ping():
     return format_response("success", 200, "pong")
