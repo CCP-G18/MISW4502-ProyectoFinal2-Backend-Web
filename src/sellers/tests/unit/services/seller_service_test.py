@@ -1,4 +1,5 @@
 import os
+import uuid
 import pytest
 from unittest.mock import patch, MagicMock
 from flask import Flask
@@ -248,3 +249,44 @@ def test_get_sales_plan_repository_error(mock_get_all_sales_plan):
   
   with pytest.raises(Exception, match="Database error"):
     SellerService.get_sales_plan_by_seller(seller_id)
+
+def test_report_sales_plan_by_seller():
+    seller_id = uuid.uuid4()
+
+    mock_seller = MagicMock()
+    mock_seller.assigned_area = "Zona Norte"
+
+    mock_plan_1 = MagicMock()
+    mock_plan_1.initial_date = datetime(2025, 5, 1)
+    mock_plan_1.end_date = datetime(2025, 5, 10)
+    mock_plan_1.sales_goals = 10000
+
+    mock_plan_2 = MagicMock()
+    mock_plan_2.initial_date = datetime(2025, 5, 11)
+    mock_plan_2.end_date = datetime(2025, 5, 20)
+    mock_plan_2.sales_goals = 15000
+
+    mock_order_1 = MagicMock()
+    mock_order_1.total_amount = 4000
+    mock_order_1.created_at = datetime(2025, 5, 5)
+
+    mock_order_2 = MagicMock()
+    mock_order_2.total_amount = 7000
+    mock_order_2.created_at = datetime(2025, 5, 12)
+
+    mock_order_3 = MagicMock()
+    mock_order_3.total_amount = 3000
+    mock_order_3.created_at = datetime(2025, 4, 25)  # fuera de rango
+
+    with patch("app.services.seller_service.SellerRepository.get_by_id", return_value=mock_seller), \
+         patch("app.services.seller_service.SellerRepository.get_all_sales_plan_by_seller", return_value=[mock_plan_1, mock_plan_2]), \
+         patch("app.services.seller_service.SellerRepository.get_all_orders_by_seller", return_value=[mock_order_1, mock_order_2, mock_order_3]):
+
+        result = SellerService.report_sales_plan_by_seller(seller_id)
+
+    assert result["assigned_area"] == "Zona Norte"
+    assert result["sales_goal"] == 25000
+    assert result["achieved_amount"] == 11000
+    assert len(result["planes"]) == 2
+    assert result["planes"][0]["achieved_amount"] == 4000
+    assert result["planes"][1]["achieved_amount"] == 7000

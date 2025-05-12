@@ -1,6 +1,19 @@
 import uuid
 from app.repositories.product_repository import ProductRepository, Product
 from app.exceptions.http_exceptions import BadRequestError
+from typing import IO
+from app.models.manufacturer_model import Manufacturer
+from app.models.category_model import Category
+import pandas as pd
+
+REQUIRED_COLUMNS = [
+    "Nombre del producto",
+    "Descripción",
+    "Cantidad inicial",
+    "Precio unitario",
+    "Nombre del fabricante",
+    "Nombre de la categoría"
+]
 
 def validate_uuid(id):
   try:
@@ -84,7 +97,88 @@ class ProductService:
       raise BadRequestError("El id de la categoría no es válido")   
     
     products = ProductRepository.get_products_by_category(category_id)
-   
-    if products is None or len(products) == 0:
-        raise BadRequestError("No hay productos en esta categoría")       
     return products
+  
+  @staticmethod
+  def parse_and_validate_file(file):
+    extension_file = file.filename.split('.')[-1].lower()
+    if extension_file not in ['csv', 'xlsx']:
+      raise BadRequestError("Formato no soportado. Solo se permite CSV o Excel")
+    
+    manufacturer_map = {
+      m.name.strip().lower(): m.id for m in Manufacturer.query.all()
+    }
+
+    category_map = {
+      c.name.strip().lower(): c.id for c in Category.query.all()
+    }
+
+    chunksize = 100
+    reader = pd.read_csv(file, chunksize=chunksize) if extension_file == 'csv' else pd.read_excel(file, chunksize=chunksize)
+
+    validos = []
+    errores = []
+
+    for chunk in reader:
+      chunk.fillna('', inplace=True)
+      for _, row in chunk.iterrows():
+        item = row.to_dict()
+        item['errores'] = []
+        for col in REQUIRED_COLUMNS:
+          if str(row.get(col)).strip() == '':
+            item['errores'].append(f"Columna '{col}' vacía")
+
+        name_manufacturer = str(row.get("Nombre del fabricante")).strip().lower()
+        manufacturer_id = manufacturer_map.get(name_manufacturer)
+        if not manufacturer_id:
+          item['errores'].append("Fabricante no encontrado")
+        else:
+          item['manufacturer_id'] = manufacturer_id
+
+        name_category = str(row.get("Nombre de la categoría")).strip().lower()
+        category_id = category_map.get(name_category)
+
+        if not category_id:
+          item['errores'].append("Categoría no encontrada")
+        else:
+          item['category_id'] = category_id
+
+        if not item['errores']:
+          validos.append({
+            "name": row["Nombre del producto"],
+            "description": row["Descripción"],
+            "quantity": int(row["Cantidad inicial"]),
+            "amount_unit": float(row["Precio unitario"]),
+            "manufacturer_id": manufacturer_id,
+            "manufacturer_name": row["Nombre del fabricante"],
+            "category_id": category_id,
+          })
+        else:
+          errores.append(item)
+    return {
+      "validos": validos,
+      "errores": errores,
+      "cantidad_validos": len(validos),
+      "cantidad_errores": len(errores)
+    }
+  
+  @staticmethod
+  def bulk_save_products(products):
+    products_objects = [
+      Product(
+        name=p["name"],
+        quantity=p["quantity"],
+        category_id=p["category_id"],
+        description=p["description"],
+        image_url=None,
+        manufacturer_id=p["manufacturer_id"],
+        unit_amount=p["amount_unit"]
+      )
+      for p in products
+    ]
+    return ProductRepository.save_bulk_products(products_objects)
+
+  @staticmethod
+  def get_categories():
+    categories = ProductRepository.get_categories()
+    return categories  

@@ -1,4 +1,5 @@
 from app.models.product_model import Product
+from app.models.category_model import Category
 from app.core.database import db
 
 class ProductRepository:
@@ -28,3 +29,15 @@ class ProductRepository:
   def get_products_by_category(category_id):
     products = Product.query.filter_by(category_id=category_id).all()  
     return products
+  
+  @staticmethod
+  def save_bulk_products(products):
+    db.session.bulk_save_objects(products)
+    db.session.commit()
+
+    return len(products)
+  
+  @staticmethod
+  def get_categories():
+    categories = Category.query.all()
+    return categories

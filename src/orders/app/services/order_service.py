@@ -83,14 +83,16 @@ class OrderService:
                     "price": item["amount"],
                     "image_url": item["image_url"]
                 }
-                for item in validated_items
             ]
         }
 
         return response        
     
     @staticmethod
-    def get_orders_by_customer(customer_id):        
+    def get_orders_by_customer(customer_id):
+        if not validate_uuid(customer_id):
+            raise BadRequestError("El id del cliente no es válido")
+              
         orders = Order.query.filter(Order.customer_id == customer_id).all()
         result = []
 
@@ -158,10 +160,66 @@ class OrderService:
                 "amount": amount,
                 "name": product_info["data"].get("name"),
                 "image_url": product_info["data"].get("image_url"),
-                "price": product_price
+                "price": product_price,
+                "description": product_info["data"].get("description")
             })
 
             if product_info["data"].get("name"):
                 summary.append(product_info["data"].get("name"))
 
         return validated_items, total_amount, summary
+    
+    @staticmethod
+    def create_order_seller(seller_id, order_data):
+        if not order_data.get("date"):
+            raise BadRequestError("El campo 'date' es obligatorio")
+        if not order_data.get("customer_id"):
+            raise BadRequestError("El campo 'customer_id' es obligatorio")
+        if not validate_uuid(order_data.get("customer_id")):
+            raise BadRequestError("El ID del cliente no es válido")
+        if not order_data.get("items") or not isinstance(order_data.get("items"), list):
+            raise BadRequestError("La petición debe contener una lista de productos válida")
+        
+        validated_items, total_amount, summary = OrderService.validate_products(order_data["items"])
+
+        try:
+            with db.session.begin():
+                order = Order(
+                    customer_id=order_data["customer_id"],
+                    seller_id=seller_id,
+                    total_amount=total_amount,
+                    delivery_date=get_delivery_date(order_data["date"])
+                )
+                order_created = OrderRepository.create_order(order)
+
+                for item in validated_items:
+                    order_product = OrderProducts(
+                        order_id=order_created.id,
+                        product_id=item["product_id"],
+                        quantity_ordered=item["quantity_ordered"],
+                        amount=item["amount"]
+                    )
+                    OrderProductRepository.create_order_product(order_product)
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            raise BadRequestError("Ocurrió un error al crear la orden. Inténtalo de nuevo.")
+        
+        response = {
+            "order_id": str(order_created.id),
+            "summary": ", ".join(summary[:3]) + ("..." if len(summary) > 3 else ""),
+            "date": order_created.delivery_date.strftime("%Y-%m-%d"),
+            "total": total_amount,
+            "status": order_created.state.value,
+            "items": [
+                {
+                    "title": item["name"],
+                    "quantity": item["quantity_ordered"],
+                    "price": item["amount"],
+                    "image_url": item["image_url"],
+                    "description": item["description"]
+                }
+            ]
+        }
+
+        return response
