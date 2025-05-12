@@ -183,11 +183,11 @@ def test_get_products_by_category_invalid_id():
 def test_get_products_by_category_not_found(mock_get_products_by_category):
     category_id = "123e4567-e89b-12d3-a456-426614174000"
     mock_get_products_by_category.return_value = []
-
-    with pytest.raises(BadRequestError, match="No hay productos en esta categoría"):
-        ProductService.get_products_by_category(category_id)
+    
+    result = ProductService.get_products_by_category(category_id)
 
     mock_get_products_by_category.assert_called_once_with(category_id)
+    assert result == []
 
 def test_parse_and_validate_file_csv():
   df = pd.DataFrame([
@@ -260,3 +260,29 @@ def test_bulk_save_products_creates_and_saves():
     assert productos_pasados[0].quantity == 100
     assert productos_pasados[0].description == "Ejemplo"
     assert productos_pasados[0].unit_amount == 12000
+
+@patch("app.repositories.product_repository.ProductRepository.get_categories")
+def test_get_categories_success(mock_get_categories):
+    mock_categories = [
+        MagicMock(id="cat-1111", name="Categoría 1"),
+        MagicMock(id="cat-2222", name="Categoría 2")
+    ]
+    mock_get_categories.return_value = mock_categories
+
+    result = ProductService.get_categories()
+
+    mock_get_categories.assert_called_once()
+    assert result == mock_categories
+
+@patch("app.repositories.product_repository.ProductRepository.get_categories")
+def test_get_categories_no_categories(mock_get_categories):
+    mock_get_categories.return_value = []
+    result = ProductService.get_categories()
+    mock_get_categories.assert_called_once()
+    assert result == []
+
+@patch("app.repositories.product_repository.ProductRepository.get_categories")
+def test_get_categories_error(mock_get_categories):
+    mock_get_categories.side_effect = Exception("Error al obtener categorías")
+    with pytest.raises(Exception, match="Error al obtener categorías"):
+        ProductService.get_categories() 

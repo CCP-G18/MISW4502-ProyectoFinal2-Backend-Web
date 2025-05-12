@@ -1,4 +1,5 @@
 from app.models.product_model import Product
+from app.models.category_model import Category
 from app.core.database import db
 
 class ProductRepository:
@@ -35,3 +36,8 @@ class ProductRepository:
     db.session.commit()
 
     return len(products)
+  
+  @staticmethod
+  def get_categories():
+    categories = Category.query.all()
+    return categories

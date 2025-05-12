@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from app.models.category_model import CategorySchema
 from app.models.product_model import ProductSchema
 from app.services.product_service import ProductService
 from app.exceptions.http_exceptions import BadRequestError
@@ -9,6 +10,7 @@ from app.utils.validate_role import validate_role
 product_bp = Blueprint('product', __name__, url_prefix='/products')
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
+categories_schema = CategorySchema(many=True)
 
 
 @product_bp.route('', methods=['POST'])
@@ -66,6 +68,8 @@ def update_product_quantity(product_id):
 def get_products_by_category(category_id):
     try:
         products = ProductService.get_products_by_category(category_id)
+        if not products:
+            return format_response("success", 200, "No hay productos disponibles en esta categoría", products_schema.dump(products))
         return format_response("success", 200, "Productos obtenidos con éxito", products_schema.dump(products))
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
@@ -97,3 +101,15 @@ def save_products_bulk():
     return format_response("sucess", 201, f"{quantity} productos guardados exitosamente.")
   except BadRequestError as e:
     return BadRequestError(f"Error al guardar los productos: {str(e)}")
+  
+@product_bp.route('/categories', methods=['GET'])
+@jwt_required()
+@validate_role(["seller"])
+def get_categories():
+    try:
+        categories = ProductService.get_categories()
+        if not categories:
+            return format_response("success", 200, "No hay categorías disponibles", categories_schema.dump(categories))
+        return format_response("success", 200, "Categorías obtenidas con éxito", categories_schema.dump(categories))
+    except BadRequestError as e:
+        return format_response("error", e.code, error=e.description)

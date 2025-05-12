@@ -97,9 +97,6 @@ class ProductService:
       raise BadRequestError("El id de la categoría no es válido")   
     
     products = ProductRepository.get_products_by_category(category_id)
-   
-    if products is None or len(products) == 0:
-        raise BadRequestError("No hay productos en esta categoría")       
     return products
   
   @staticmethod
@@ -180,3 +177,8 @@ class ProductService:
       for p in products
     ]
     return ProductRepository.save_bulk_products(products_objects)
+
+  @staticmethod
+  def get_categories():
+    categories = ProductRepository.get_categories()
+    return categories  
