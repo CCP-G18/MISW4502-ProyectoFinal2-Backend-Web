@@ -12,7 +12,7 @@ visits_schema = VisitSchema(many=True)
 
 @visit_bp.route('/', methods=['GET'])
 @jwt_required()
-@validate_role("admin")
+@validate_role("seller")
 def get_visits():
     try:
         visits = VisitService.get_all()
@@ -24,7 +24,7 @@ def get_visits():
 
 @visit_bp.route('/<string:id>', methods=['GET'])
 @jwt_required()
-@validate_role("admin")
+@validate_role("seller")
 def get_visit(id:str):
     try:
         visit = VisitService.get_by_id(id)
@@ -35,7 +35,7 @@ def get_visit(id:str):
     
 @visit_bp.route('/customer/<string:id>', methods=['GET'])
 @jwt_required()
-@validate_role("admin")
+@validate_role("seller")
 def get_visits_by_customer(id:str):
     try:
         visit = VisitService.get_by_id_customer(id)
@@ -46,7 +46,7 @@ def get_visits_by_customer(id:str):
 
 @visit_bp.route('/', methods=['POST'])
 @jwt_required()
-@validate_role("admin")
+@validate_role("seller")
 def create_visit():
     try:
         visit_data = request.get_json()
