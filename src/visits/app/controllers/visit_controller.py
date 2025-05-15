@@ -40,7 +40,7 @@ def get_visits_by_customer(id:str):
     try:
         visit = VisitService.get_by_id_customer(id)
     except (NotFoundError, BadRequestError) as e:
-        return format_response("error", e.code, error=e.description)
+        return format_response("error", e.code, error=e.description, data=[])
     else:
         return format_response("success", 200, "Visitas encontradas con éxito", visits_schema.dump(visit))
 
