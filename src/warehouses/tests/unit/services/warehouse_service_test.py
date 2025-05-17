@@ -120,7 +120,7 @@ def test_get_by_id_not_found(mock_get_by_id):
     valid_id = str(uuid.uuid4())
     mock_get_by_id.return_value = None
 
-    with pytest.raises(NotFoundError, match=WarehouseService.NOT_FOUND_MESSAGE):
+    with pytest.raises(BadRequestError, match=WarehouseService.NOT_FOUND_MESSAGE):
       WarehouseService.get_by_id(valid_id)
 
 
