@@ -84,12 +84,12 @@ def test_create_visit_invalid_seller_id(visit_data):
     with pytest.raises(BadRequestError, match="El id del vendedor no es válido"):
         VisitService.create(visit_data)
 
-def test_create_visit_register_date_not_today(visit_data):
+def test_create_visit_register_date_not_today(visit_data, app):
     from datetime import timedelta
-
     visit_data['register_date'] = date.today() - timedelta(days=1)
-    with pytest.raises(BadRequestError, match="La fecha de registro debe ser hoy"):
-        VisitService.create(visit_data)
+    with app.app_context():
+        with pytest.raises(BadRequestError, match="La fecha de registro debe ser hoy"):
+            VisitService.create(visit_data)
 
 def test_get_by_id_customer_invalid_customer_id():
     invalid_id = "invalid-uuid"
