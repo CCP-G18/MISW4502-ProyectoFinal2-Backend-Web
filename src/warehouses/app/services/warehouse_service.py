@@ -1,7 +1,7 @@
 import uuid
 from app.repositories.warehouse_repository import WarehouseRepository, Warehouse
 from app.models.warehouse_model import Warehouse
-from app.exceptions.http_exceptions import BadRequestError
+from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 
 def validate_uuid(id):
   try:
@@ -39,5 +39,5 @@ class WarehouseService:
       raise BadRequestError("El formato del id de la bodega no es correcto")   
     warehouse = WarehouseRepository.get_by_id(warehouse_id)
     if not warehouse:
-      raise BadRequestError("Bodega no encontrada")    
+      raise NotFoundError("Bodega no encontrada")    
     return warehouse
