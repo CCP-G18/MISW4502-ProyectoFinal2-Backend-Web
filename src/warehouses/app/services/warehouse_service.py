@@ -36,8 +36,8 @@ class WarehouseService:
   @staticmethod
   def get_by_id(warehouse_id):
     if not validate_uuid(warehouse_id):
-      raise BadRequestError("El id no es válido")   
+      raise BadRequestError("El formato del id de la bodega no es correcto")   
     warehouse = WarehouseRepository.get_by_id(warehouse_id)
     if not warehouse:
-      raise BadRequestError("La bodega no existe")    
+      raise BadRequestError("Bodega no encontrada")    
     return warehouse

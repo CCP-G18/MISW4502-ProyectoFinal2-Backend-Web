@@ -113,7 +113,7 @@ def test_get_by_id_success(mock_get_by_id):
 def test_get_by_id_invalid_uuid():
     invalid_id = "not-a-uuid"
     with pytest.raises(BadRequestError, match=WarehouseService.INVALID_ID_FORMAT_MESSAGE):
-        WarehouseService.get_by_id(invalid_id)
+      WarehouseService.get_by_id(invalid_id)
 
 @patch('app.repositories.warehouse_repository.WarehouseRepository.get_by_id')
 def test_get_by_id_not_found(mock_get_by_id):
@@ -121,7 +121,7 @@ def test_get_by_id_not_found(mock_get_by_id):
     mock_get_by_id.return_value = None
 
     with pytest.raises(NotFoundError, match=WarehouseService.NOT_FOUND_MESSAGE):
-        WarehouseService.get_by_id(valid_id)
+      WarehouseService.get_by_id(valid_id)
 
 
 @patch('app.repositories.warehouse_repository.WarehouseRepository.create')
