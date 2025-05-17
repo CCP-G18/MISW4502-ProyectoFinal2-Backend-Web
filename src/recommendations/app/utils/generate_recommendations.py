@@ -4,9 +4,8 @@ from openai import OpenAI
 import httpx
 import mimetypes
 
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"], http_client=httpx.Client(verify=False))
-
 def ask_gpt_with_images(image_paths: list[str], prompt: str):
+    client = get_openai_client()
     messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
 
     for path in image_paths:
@@ -29,3 +28,6 @@ def ask_gpt_with_images(image_paths: list[str], prompt: str):
     )
 
     return response.choices[0].message.content
+
+def get_openai_client():
+    return OpenAI(api_key=os.environ["OPENAI_API_KEY"], http_client=httpx.Client(verify=False))
