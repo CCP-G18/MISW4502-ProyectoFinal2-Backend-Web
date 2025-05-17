@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-app
+  name: warehouses-app
   labels:
-    app: orders-app
+    app: warehouses-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: orders-app
+      app: warehouses-app
   template:
     metadata:
       labels:
-        app: orders-app
+        app: warehouses-app
     spec:
       containers:
-      - name: orders-app
-        image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/orders:latest
+      - name: warehouses-app
+        image: us-central1-docker.pkg.dev/proyecto-final-452204/uniandes-misw-proyecto-final/warehouses:latest
         resources:
           requests:
             memory: "64Mi"
@@ -40,23 +40,8 @@ spec:
               secretKeyRef:
                 name: appsecrets
                 key: ALLOWED_ORIGINS
-          - name: "PATH_API_USER"
-            valueFrom:
-              secretKeyRef:
-                name: appsecrets
-                key: PATH_API_USER
-          - name: "PATH_API_BASE"
-            valueFrom:
-              secretKeyRef:
-                name: appsecrets
-                key: PATH_API_BASE
-          - name: "EXECUTION_MINUTES_JOB"
-            valueFrom:
-              secretKeyRef:
-                name: appsecrets
-                key: EXECUTION_MINUTES_JOB
         ports:
-          - containerPort: 5000
+          - containerPort: 5009
         imagePullPolicy: Always
       volumes:
         - name: appsecrets-volume
