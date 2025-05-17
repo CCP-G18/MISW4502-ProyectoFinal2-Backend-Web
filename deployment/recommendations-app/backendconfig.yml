@@ -5,8 +5,6 @@ metadata:
 spec:
   connectionDraining:
     drainingTimeoutSec: 0
-  timeoutSec: 600
-  maxRequestBytes: 943718400
   healthCheck:
     checkIntervalSec: 30
     port: 5006
