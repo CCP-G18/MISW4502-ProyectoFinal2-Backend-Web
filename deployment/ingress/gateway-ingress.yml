@@ -75,4 +75,11 @@ spec:
             name: visit-app-service
             port:
               number: 80
+      - pathType: Prefix
+        path: /warehouses
+        backend:
+          service:
+            name: warehouse-app-service
+            port:
+              number: 80
           

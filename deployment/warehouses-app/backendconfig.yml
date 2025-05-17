@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: warehouses-app-service-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 5009
+    type: HTTP
+    requestPath: /warehouses/ping
