@@ -426,4 +426,4 @@ def test_create_order_seller_success(mock_notify, mock_update_stock, mock_get_in
     assert len(created_order["items"]) == 2
     assert mock_update_stock.call_count == 2
     assert mock_notify.call_count == 1
-    assert mock_session.begin.called    
+    assert mock_session.begin.called

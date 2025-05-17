@@ -29,4 +29,4 @@ RUN pip install --no-cache /wheels/*
 COPY . .
 
 EXPOSE 5006
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5006", "main:app"]
+CMD ["gunicorn", "-w", "10", "-b", "0.0.0.0:5006", "--timeout", "600",  "main:app"]

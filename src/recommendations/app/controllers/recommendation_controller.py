@@ -22,6 +22,16 @@ def create_recommendation():
         return format_response("success", 201, "Recomendación creada correctamente", recommendation_schema.dump(recommendation))
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
+    
+
+@recommendation_bp.route('<string:recommendation_id>', methods=['PUT'])
+@jwt_required()
+def generate_recommendation(recommendation_id):
+    try:
+        recommendation = RecommendationService.generate(recommendation_id)
+        return format_response("success", 200, "Recomendación generada correctamente", recommendation_schema.dump(recommendation))
+    except BadRequestError as e:
+        return format_response('error', e.code, error=e.description)
 
 @recommendation_bp.route('/ping', methods=['GET'])
 def ping():

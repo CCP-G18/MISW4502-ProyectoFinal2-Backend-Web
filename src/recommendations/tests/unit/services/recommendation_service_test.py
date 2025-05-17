@@ -1,4 +1,5 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock
 from app.services.recommendation_service import RecommendationService
 from app.exceptions.http_exceptions import BadRequestError
@@ -54,3 +55,36 @@ def test_create_successful(mock_generate_name_file, mock_connect_to_bucket, mock
         "video_url": expected_path
     })
     assert result == {"id": "abc123"}
+
+@patch("app.services.recommendation_service.RecommendationRepository.get_by_id", return_value=None)
+def test_generate_should_raise_if_recommendation_not_found(mock_get_by_id):
+    with pytest.raises(BadRequestError, match="La recomendación no existe"):
+        RecommendationService.generate("nonexistent-id")
+
+@patch("app.services.recommendation_service.ask_gpt_with_images", return_value="Recomendación generada")
+@patch("app.services.recommendation_service.extract_frames")
+@patch("app.services.recommendation_service.download_video_from_gcs")
+@patch("app.services.recommendation_service.RecommendationRepository.get_by_id")
+@patch("app.services.recommendation_service.RecommendationRepository.update_recommendation")
+def test_generate_should_return_updated_recommendation(
+    mock_update, mock_get_by_id, mock_download, mock_extract, mock_ask_gpt
+):
+    mock_recommendation = MagicMock()
+    mock_recommendation.video_url = "customer/video.mp4"
+    mock_recommendation.id = "abc123"
+    mock_get_by_id.return_value = mock_recommendation
+    mock_update.return_value = "updated"
+
+    os.environ["OPENAI_PROMPT"] = "Test prompt"
+    os.environ["OPENAI_NRO_FRAMES"] = "1"
+    os.makedirs("frames", exist_ok=True)
+    with open("frames/test.jpg", "wb") as f:
+        f.write(b"fake image")
+
+    result = RecommendationService.generate("abc123")
+
+    assert result == "updated"
+    mock_download.assert_called_once()
+    mock_extract.assert_called_once()
+    mock_ask_gpt.assert_called_once()
+    mock_update.assert_called_once()
