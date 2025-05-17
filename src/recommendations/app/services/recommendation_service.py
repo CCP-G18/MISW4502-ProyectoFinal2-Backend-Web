@@ -1,7 +1,10 @@
 import uuid
+import os
 from app.exceptions.http_exceptions import BadRequestError
 from werkzeug.utils import secure_filename
-from app.utils.bucket_utils import create_customer_folder, connect_to_bucket, generate_name_file
+from app.utils.bucket_utils import create_customer_folder, connect_to_bucket, generate_name_file, download_video_from_gcs, cleanup_files
+from app.utils.extract_frames import extract_frames
+from app.utils.generate_recommendations import ask_gpt_with_images
 from app.repositories.recommendation_repository import RecommendationRepository
 
 
@@ -14,6 +17,10 @@ def validate_uuid(id):
 
 
 class RecommendationService:
+
+    BUCKET_NAME = os.getenv("NAME_BUCKET_RECOMMENDATIONS")
+    DESTINATION_FILE = "video.mp4"
+    OUTPUT_DIR = "frames"
 
     @staticmethod
     def create(recommendation_data, video):
@@ -29,7 +36,7 @@ class RecommendationService:
             raise BadRequestError("El cliente no es valido")
         
         filename_secure = secure_filename(generate_name_file(video.filename))
-        bucket = connect_to_bucket("recommendations-videos")
+        bucket = connect_to_bucket(RecommendationService.BUCKET_NAME)
         folder_user = create_customer_folder(recommendation_data.get("customer_id"))
         filename_path = f'{folder_user}{filename_secure}'
 
@@ -44,5 +51,28 @@ class RecommendationService:
 
         return RecommendationRepository.create(recommendation)
 
-        
-        
+    @staticmethod
+    def generate(recommendation_id):
+        recommendation = RecommendationRepository.get_by_id(recommendation_id)
+        if not recommendation:
+            raise BadRequestError("La recomendación no existe")
+        download_video_from_gcs(
+            RecommendationService.BUCKET_NAME, 
+            recommendation.video_url, 
+            RecommendationService.DESTINATION_FILE
+        )
+        extract_frames(
+            RecommendationService.DESTINATION_FILE,
+            RecommendationService.OUTPUT_DIR,
+            int(os.getenv("OPENAI_NRO_FRAMES"))
+        )
+        prompt= os.getenv("OPENAI_PROMPT")
+        image_paths = [
+            os.path.join(RecommendationService.OUTPUT_DIR, f) 
+            for f in os.listdir(RecommendationService.OUTPUT_DIR)
+        ]
+        response = ask_gpt_with_images(image_paths, prompt)
+
+        cleanup_files(RecommendationService.DESTINATION_FILE, RecommendationService.OUTPUT_DIR)
+
+        return RecommendationRepository.update_recommendation(recommendation, response)

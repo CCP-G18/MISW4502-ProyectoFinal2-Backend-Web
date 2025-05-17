@@ -8,7 +8,7 @@ class Recommendation(db.Model):
   id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
   video_url = db.Column(db.String(255), nullable=False)
   recommendation_date = db.Column(db.DateTime, nullable=True)
-  recommendations = db.Column(db.String(500), nullable=True)
+  recommendations = db.Column(db.Text, nullable=True)
   created_at = db.Column(db.DateTime, server_default=db.func.now())
   updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
@@ -30,4 +30,4 @@ class RecommendationSchema(ma.SQLAlchemyAutoSchema):
     model = Recommendation
     load_instance = True
     include_relationship = True
-    fields = ('id', 'video_url', 'seller_id', 'customer_id', 'created_at', 'updated_at')
+    fields = ('id', 'video_url', 'seller_id', 'customer_id', 'created_at', 'updated_at', 'recommendations')

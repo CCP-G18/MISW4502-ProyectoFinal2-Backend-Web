@@ -150,6 +150,14 @@ services:
       PATH_API_USER: ${PATH_API_USER}
       PATH_API_CUSTOMER: ${PATH_API_CUSTOMER}
       PATH_API_SELLER: ${PATH_API_SELLER}
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+      NAME_BUCKET_RECOMMENDATIONS: ${NAME_BUCKET_RECOMMENDATIONS}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_PROMPT: ${OPENAI_PROMPT}
+      OPENAI_NRO_FRAMES: ${OPENAI_NRO_FRAMES}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+    volumes:
+      - ./src/recommendations/proyecto-final.json:/src/recommendations/proyecto-final.json
     depends_on:
       database:
         condition: service_healthy

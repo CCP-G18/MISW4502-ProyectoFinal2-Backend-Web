@@ -41,6 +41,31 @@ spec:
               secretKeyRef:
                 name: appsecrets
                 key: ALLOWED_ORIGINS
+          - name: "NAME_BUCKET_RECOMMENDATIONS"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: NAME_BUCKET_RECOMMENDATIONS
+          - name: "OPENAI_API_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: OPENAI_API_KEY
+          - name: "OPENAI_PROMPT"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: OPENAI_PROMPT
+          - name: "OPENAI_NRO_FRAMES"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: OPENAI_NRO_FRAMES
+          - name: "OPENAI_MODEL"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: OPENAI_MODEL
         ports:
           - containerPort: 5006
         imagePullPolicy: Always
