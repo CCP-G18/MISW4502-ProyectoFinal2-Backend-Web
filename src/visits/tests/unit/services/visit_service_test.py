@@ -114,7 +114,7 @@ def test_get_by_id_customer_success(visit_data, app):
 def test_create_visit_success(mock_create, app, visit_schema):
     visit_data = {
         "observations": "Cliente mostró interés en el nuevo producto.",
-        "register_date": date(2025, 5, 16),
+        "register_date": get_today_bogota_date(),
         "customer_id": "231d4cd4-eb84-4867-a2c8-918215b01331",
         "seller_id": "3a6ea01b-1ed7-4cb5-aa2e-bd03ee394080"
     }
