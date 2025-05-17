@@ -89,6 +89,7 @@ services:
       PATH_API_CUSTOMER: ${PATH_API_CUSTOMER}
       PATH_API_SELLER: ${PATH_API_SELLER}
       PATH_API_PRODUCT: ${PATH_API_PRODUCT}
+      EXECUTION_MINUTES_JOB: ${EXECUTION_MINUTES_JOB}
     depends_on:
       database:
         condition: service_healthy
