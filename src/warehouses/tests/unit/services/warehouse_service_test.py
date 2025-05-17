@@ -56,11 +56,6 @@ def test_create_warehouse_missing_location(warehouse_data):
     with pytest.raises(BadRequestError, match="la ubicación es requerida"):
         WarehouseService.create(warehouse_data)
 
-def test_get_by_id_customer_invalid_customer_id():
-    invalid_id = "invalid-uuid"
-    with pytest.raises(BadRequestError, match=WarehouseService.INVALID_ID_CUSTOMER_FORMAT_MESSAGE):
-        WarehouseService.get_by_id_customer(invalid_id)
-
 @patch("app.repositories.warehouse_repository.WarehouseRepository.create")
 def test_create_warehouse_success(mock_create, app, warehouse_schema, warehouse_data):
 

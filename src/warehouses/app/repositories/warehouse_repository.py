@@ -16,5 +16,5 @@ class WarehouseRepository:
     return warehouse
   
   @staticmethod
-  def get_warehouse_by_id(warehouse_id):
+  def get_by_id(warehouse_id):
     return Warehouse.query.get(warehouse_id)
