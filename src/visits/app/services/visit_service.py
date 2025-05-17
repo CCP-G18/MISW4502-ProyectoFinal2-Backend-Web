@@ -1,6 +1,7 @@
 import uuid
 import re
-from datetime import date, datetime
+from datetime import date, datetime, time
+from zoneinfo import ZoneInfo
 from app.repositories.visit_repository import VisitRepository
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError, UnauthorizedError, ForbiddenError
 from app.models.visit_model import Visit
@@ -42,7 +43,7 @@ class VisitService:
             
         visits = VisitRepository.get_by_id_customer(customer_id)
         if not visits:
-            raise NotFoundError(VisitService.NOT_FOUND_MESSAGE)
+            raise NotFoundError("No hay visitas registradas")
         return visits
 
     def create(data):
@@ -70,7 +71,11 @@ class VisitService:
         else:
             raise BadRequestError("La fecha de registro debe ser un date o un string ISO (YYYY-MM-DD)")
         
-        if register_date != date.today():
+        register_datetime = datetime.combine(register_date, time.min).replace(tzinfo=ZoneInfo("America/Bogota"))
+
+        today_bogota = datetime.now(ZoneInfo("America/Bogota")).date()
+
+        if register_datetime.date() != today_bogota:
             raise BadRequestError("La fecha de registro debe ser hoy")
         
         customer_id = uuid.UUID(data["customer_id"])

@@ -11,8 +11,8 @@ class Visit(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-    customer_id = db.Column(UUID(as_uuid=True), unique=True, nullable=False)
-    seller_id = db.Column(UUID(as_uuid=True), unique=True, nullable=False)
+    customer_id = db.Column(UUID(as_uuid=True), nullable=False)
+    seller_id = db.Column(UUID(as_uuid=True), nullable=False)
 
     def __init__(self, observations, register_date, customer_id, seller_id):
         self.observations = observations
