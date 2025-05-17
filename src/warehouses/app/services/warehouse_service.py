@@ -11,10 +11,15 @@ def validate_uuid(id):
     return False
     
 class WarehouseService:
+
+  INVALID_ID_FORMAT_MESSAGE = "El formato del id de la bodega no es correcto"
+  NOT_FOUND_MESSAGE = "Bodega no encontrada"
     
   @staticmethod
   def get_all():
     warehouses = WarehouseRepository.get_all()
+    if not warehouses:
+            raise ValueError("No hay bodegas registradas")
     return warehouses
     
   @staticmethod
