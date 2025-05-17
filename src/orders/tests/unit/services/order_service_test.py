@@ -5,6 +5,18 @@ from unittest.mock import patch, MagicMock
 from app.services.order_service import OrderService
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 
+@pytest.fixture
+def order_service():
+    return OrderService()
+
+@pytest.fixture
+def mock_session():
+    return MagicMock()
+
+@pytest.fixture
+def mock_update_product_stock():
+    with patch("app.services.order_service.update_product_stock") as mock:
+        yield mock
 
 @patch("app.repositories.order_repository.OrderRepository.get_all")
 @patch.dict(os.environ, {"PATH_API_USER": "http://user_app:5000/users"})
@@ -349,3 +361,79 @@ def test_create_order_seller_missing_items(mock_validate_products):
         OrderService.create_order_seller(seller_id, order_data)
 
     mock_validate_products.assert_not_called()
+
+def test_create_order_success(order_service):
+    customer_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {        
+        "date": "2023-01-01",
+        "items": [
+            {"id": "6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d", "quantity": 2},
+            {"id": "1d2561f3-9f43-46c9-9af7-b2a43edc1956", "quantity": 1}
+        ]
+    }
+
+@patch("app.services.order_service.db.session")
+@patch("app.services.order_service.get_product_info")
+@patch("app.services.order_service.update_product_quantity")
+def test_create_order_success(mock_update_stock, mock_get_info, mock_session, order_service):
+    customer_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {        
+        "date": "2023-01-01",
+        "items": [
+            {"id": "6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d", "quantity": 2},
+            {"id": "1d2561f3-9f43-46c9-9af7-b2a43edc1956", "quantity": 1}
+        ]
+    }
+
+    mock_product_response = {
+        "data": {
+            "product_id": "dummy-id",
+            "name": "Test Product",
+            "quantity": 10,
+            "unit_amount": 100.0,
+            "image_url": "http://example.com/image.png",
+            "description": "Descripción del producto"
+        }
+    }
+
+    mock_get_info.side_effect = [mock_product_response, mock_product_response]
+    created_order = order_service.create_order(customer_id, order_data)
+    assert created_order["date"] == "2023-01-03"
+    assert len(created_order["items"]) == 2
+    assert mock_update_stock.call_count == 2
+    assert mock_session.begin.called
+
+@patch("app.services.order_service.db.session")
+@patch("app.services.order_service.get_product_info")
+@patch("app.services.order_service.update_product_quantity")
+@patch("app.services.order_service.notify_inventory_update")
+def test_create_order_seller_success(mock_notify, mock_update_stock, mock_get_info, mock_session, order_service):
+    seller_id = "223e4567-e89b-12d3-a456-426614174111"
+    customer_id = "123e4567-e89b-12d3-a456-426614174000"
+    order_data = {        
+        "date": "2023-01-01",
+        "customer_id": customer_id,
+        "items": [
+            {"id": "6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d", "quantity": 2},
+            {"id": "1d2561f3-9f43-46c9-9af7-b2a43edc1956", "quantity": 1}
+        ]
+    }
+
+    mock_product_response = {
+        "data": {
+            "product_id": "dummy-id",
+            "name": "Test Product",
+            "quantity": 10,
+            "unit_amount": 100.0,
+            "image_url": "http://example.com/image.png",
+            "description": "Descripción del producto"
+        }
+    }
+
+    mock_get_info.side_effect = [mock_product_response, mock_product_response]
+    created_order = order_service.create_order_seller(seller_id, order_data)
+    assert created_order["date"] == "2023-01-03"
+    assert len(created_order["items"]) == 2
+    assert mock_update_stock.call_count == 2
+    assert mock_notify.call_count == 2
+    assert mock_session.begin.called    
