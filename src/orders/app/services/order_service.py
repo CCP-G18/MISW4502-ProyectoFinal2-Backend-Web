@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime
 from app.repositories.order_repository import OrderRepository
 from app.repositories.order_product_repository import OrderProductRepository
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
@@ -9,6 +8,7 @@ from app.utils.delivery_date_util import get_delivery_date
 from app.utils.product_info_util import get_product_info, update_product_quantity
 from sqlalchemy.exc import SQLAlchemyError
 from app.core.database import db
+from ..websockets.inventory_websocket import notify_inventory_update
 
 
 def validate_uuid(id):
@@ -83,6 +83,7 @@ class OrderService:
                     "price": item["amount"],
                     "image_url": item["image_url"]
                 }
+                for item in validated_items
             ]
         }
 
@@ -181,6 +182,7 @@ class OrderService:
             raise BadRequestError("La petición debe contener una lista de productos válida")
         
         validated_items, total_amount, summary = OrderService.validate_products(order_data["items"])
+        notifiable_updates = []
 
         try:
             with db.session.begin():
@@ -201,10 +203,24 @@ class OrderService:
                     )
                     OrderProductRepository.create_order_product(order_product)
 
+                    new_quantity = item["quantity"] - item["quantity_ordered"]
+                    update_product_quantity(item["product_id"], new_quantity)
+
+                    # Guarda la información de los productos actualizados para notificar después del commit a la BD
+                    notifiable_updates.append({
+                        "product_id": item["product_id"],
+                        "name": item["name"],
+                        "new_quantity": new_quantity
+                    })
+
         except SQLAlchemyError as e:
             db.session.rollback()
-            raise BadRequestError("Ocurrió un error al crear la orden. Inténtalo de nuevo.")
+            raise BadRequestError(f"Ocurrió un error al crear la orden. Inténtalo de nuevo. Error: {str(e)}")
         
+        # Se notifica a los vendedores sobre el cambio en el inventario
+        for update in notifiable_updates:
+            notify_inventory_update(update["product_id"], update["name"], update["new_quantity"])
+
         response = {
             "order_id": str(order_created.id),
             "summary": ", ".join(summary[:3]) + ("..." if len(summary) > 3 else ""),
@@ -219,6 +235,7 @@ class OrderService:
                     "image_url": item["image_url"],
                     "description": item["description"]
                 }
+                for item in validated_items
             ]
         }
 

@@ -29,4 +29,4 @@ RUN pip install --no-cache /wheels/*
 COPY . .
 
 EXPOSE 5004
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5004", "main:app"]
+CMD ["gunicorn", "-k", "eventlet", "-w", "1", "-b", "0.0.0.0:5004", "main:app"]
