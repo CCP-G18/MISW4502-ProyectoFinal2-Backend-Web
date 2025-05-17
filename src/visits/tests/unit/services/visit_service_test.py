@@ -86,7 +86,8 @@ def test_create_visit_invalid_seller_id(visit_data):
 
 def test_create_visit_register_date_not_today(visit_data, app):
     from datetime import timedelta
-    visit_data['register_date'] = date.today() - timedelta(days=1)
+    visit_data['register_date'] = get_today_bogota_date() - timedelta(days=1)
+
     with app.app_context():
         with pytest.raises(BadRequestError, match="La fecha de registro debe ser hoy"):
             VisitService.create(visit_data)
