@@ -162,7 +162,8 @@ class OrderService:
                 "name": product_info["data"].get("name"),
                 "image_url": product_info["data"].get("image_url"),
                 "price": product_price,
-                "description": product_info["data"].get("description")
+                "description": product_info["data"].get("description"),
+                "category_id": product_info["data"].get("category_id")
             })
 
             if product_info["data"].get("name"):
@@ -210,7 +211,8 @@ class OrderService:
                     notifiable_updates.append({
                         "product_id": item["product_id"],
                         "name": item["name"],
-                        "new_quantity": new_quantity
+                        "new_quantity": new_quantity,
+                        "category": item["category_id"]
                     })
 
         except SQLAlchemyError as e:
@@ -218,8 +220,7 @@ class OrderService:
             raise BadRequestError(f"Ocurrió un error al crear la orden. Inténtalo de nuevo. Error: {str(e)}")
         
         # Se notifica a los vendedores sobre el cambio en el inventario
-        for update in notifiable_updates:
-            notify_inventory_update(update["product_id"], update["name"], update["new_quantity"])
+        notify_inventory_update(notifiable_updates)
 
         response = {
             "order_id": str(order_created.id),
