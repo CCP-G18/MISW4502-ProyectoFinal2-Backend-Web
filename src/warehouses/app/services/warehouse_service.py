@@ -34,7 +34,7 @@ class WarehouseService:
     return WarehouseRepository.create(warehouse)
   
   @staticmethod
-  def get_warehouse_by_id(warehouse_id):
+  def get_by_id(warehouse_id):
     if not validate_uuid(warehouse_id):
       raise BadRequestError("El id no es válido")   
     warehouse = WarehouseRepository.get_warehouse_by_id(warehouse_id)
