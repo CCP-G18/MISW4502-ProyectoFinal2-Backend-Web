@@ -50,6 +50,11 @@ spec:
               secretKeyRef:
                 name: appsecrets
                 key: PATH_API_BASE
+          - name: "EXECUTION_MINUTES_JOB"
+            valueFrom:
+              secretKeyRef:
+                name: appsecrets
+                key: EXECUTION_MINUTES_JOB
         ports:
           - containerPort: 5000
         imagePullPolicy: Always

@@ -35,3 +35,4 @@ pytest-mock==3.14.0
 flask-socketio==5.5.1
 eventlet==0.39.1
 python-socketio==5.13.0
+APScheduler==3.11.0
