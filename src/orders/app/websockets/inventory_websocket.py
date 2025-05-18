@@ -24,14 +24,13 @@ def handle_disconnect():
         print(f"Vendedor {seller_id} desconectado.")
 
 @socketio.on('update_inventory')
-def notify_inventory_update(product_id, product_name, new_quantity):
+def notify_inventory_update(notifiable_updates):
+    if not notifiable_updates:
+        return
+        
     message = {
         "type": "inventory_update",
-        "product": {
-            "id": product_id,
-            "name": product_name,
-            "new_quantity": new_quantity
-        } 
+        "products": notifiable_updates         
     }
     for sid in connected_sellers.values():
         try:
@@ -42,8 +41,8 @@ def notify_inventory_update(product_id, product_name, new_quantity):
                 try:
                     socketio.emit('inventory_error', {
                         "error": "No se pudo enviar la notificación a uno o más vendedores.",
-                        "product_id": product_id,
-                        "product_name": product_name,
+                        "products": notifiable_updates,
+
                     }, to=request.sid)
                 except RuntimeError:
                     pass

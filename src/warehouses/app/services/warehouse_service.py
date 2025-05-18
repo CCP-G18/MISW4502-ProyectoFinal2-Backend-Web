@@ -19,7 +19,7 @@ class WarehouseService:
   def get_all():
     warehouses = WarehouseRepository.get_all()
     if not warehouses:
-            raise ValueError("No hay bodegas registradas")
+      raise ValueError("No hay bodegas registradas")
     return warehouses
     
   @staticmethod
@@ -41,3 +41,32 @@ class WarehouseService:
     if not warehouse:
       raise NotFoundError("Bodega no encontrada")    
     return warehouse
+  
+
+  @staticmethod
+  def get_warehouses_by_product_id(product_id):
+    if not validate_uuid(product_id):
+      raise BadRequestError("El formato del id del producto no es correcto") 
+    warehouses = WarehouseRepository.get_warehouses_by_product_id(product_id)
+    if not warehouses:
+      raise NotFoundError("Bodegas no encontradas")
+    return warehouses
+  
+  @staticmethod
+  def create_warehouse_by_product(warehouse_data):
+    if not warehouse_data.get("quantity"):
+      raise BadRequestError("La cantidad es requerida")
+    if not warehouse_data.get("product_id"):
+      raise BadRequestError("El id del producto es requerido")
+    if not warehouse_data.get("warehouse_id"):
+      raise BadRequestError("El id de la bodega es requerido")
+    if not warehouse_data.get("place"):
+      raise BadRequestError("El lugar es requerido")
+      
+    if not validate_uuid(warehouse_data.get("product_id")):
+      raise BadRequestError("El formato del id del producto no es correcto")
+    if not validate_uuid(warehouse_data.get("warehouse_id")):
+      raise BadRequestError("El formato del id de la bodega no es correcto")
+      
+    warehouse_product = WarehouseRepository.create_warehouse_by_product(warehouse_data)
+    return warehouse_product
