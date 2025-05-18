@@ -88,3 +88,12 @@ def test_generate_should_return_updated_recommendation(
     mock_extract.assert_called_once()
     mock_ask_gpt.assert_called_once()
     mock_update.assert_called_once()
+
+@patch("app.services.recommendation_service.RecommendationRepository.get_recommendations_by_seller_by_customer")
+def test_get_recommendations_by_seller_by_customer(mock_repo):
+    mock_repo.return_value = [{"id": "rec1"}, {"id": "rec2"}]
+
+    result = RecommendationService.get_recommendations_by_seller_by_customer("seller-uuid", "customer-uuid")
+
+    assert result == [{"id": "rec1"}, {"id": "rec2"}]
+    mock_repo.assert_called_once_with("seller-uuid", "customer-uuid")
