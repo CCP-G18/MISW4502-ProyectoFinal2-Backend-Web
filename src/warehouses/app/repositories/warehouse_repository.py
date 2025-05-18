@@ -22,7 +22,7 @@ class WarehouseRepository:
   
   @staticmethod
   def get_warehouses_by_product_id(product_id):
-    return Warehouse.query.join(Warehouse.warehouse_products).filter(WarehouseProducts.product_id == product_id).all()
+    return WarehouseProducts.query.filter(WarehouseProducts.product_id == product_id).all()
   
   @staticmethod
   def create_warehouse_by_product(warehouse_product: WarehouseProducts):
