@@ -30,4 +30,4 @@ class RecommendationSchema(ma.SQLAlchemyAutoSchema):
     model = Recommendation
     load_instance = True
     include_relationship = True
-    fields = ('id', 'video_url', 'seller_id', 'customer_id', 'created_at', 'updated_at', 'recommendations')
+    fields = ('id', 'video_url', 'seller_id', 'customer_id', 'created_at', 'updated_at', 'recommendations', 'recommendation_date')
