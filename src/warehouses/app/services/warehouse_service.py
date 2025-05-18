@@ -19,7 +19,7 @@ class WarehouseService:
   def get_all():
     warehouses = WarehouseRepository.get_all()
     if not warehouses:
-            raise ValueError("No hay bodegas registradas")
+      raise ValueError("No hay bodegas registradas")
     return warehouses
     
   @staticmethod
@@ -41,3 +41,12 @@ class WarehouseService:
     if not warehouse:
       raise NotFoundError("Bodega no encontrada")    
     return warehouse
+  
+
+  @staticmethod
+  def get_warehouses_by_product_id(product_id):
+    if not validate_uuid(product_id):
+      raise BadRequestError("El formato del id del producto no es correcto") 
+    warehouses = WarehouseRepository.get_warehouses_by_product_id(product_id)
+    if not warehouses:
+      raise NotFoundError("Bodegas no encontradas")

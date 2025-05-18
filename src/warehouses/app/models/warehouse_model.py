@@ -22,6 +22,7 @@ class Warehouse(db.Model):
 class WarehouseSchema(ma.Schema):
   class Meta:
     model = Warehouse
+    load_instance = True
     fields = (
       'id',
       'name',
