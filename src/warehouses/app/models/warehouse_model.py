@@ -12,6 +12,12 @@ class Warehouse(db.Model):
   
   created_at = db.Column(db.DateTime, server_default=db.func.now())
   updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
+  warehouse_products = db.relationship(
+    'WarehouseProducts',
+    back_populates='warehouse',
+    cascade='all, delete-orphan'
+  )
     
   def __init__(self, name, location):
     self.name = name
