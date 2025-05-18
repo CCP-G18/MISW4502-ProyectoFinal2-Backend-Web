@@ -123,13 +123,46 @@ def test_get_by_id_not_found(mock_get_by_id):
     with pytest.raises(NotFoundError, match=WarehouseService.NOT_FOUND_MESSAGE):
       WarehouseService.get_by_id(valid_id)
 
-
-@patch('app.repositories.warehouse_repository.WarehouseRepository.create')
-def test_create_success(mock_create, warehouse_data):
+@patch('app.repositories.warehouse_repository.WarehouseRepository.get_warehouses_by_product_id')
+def test_get_warehouses_by_product_id_success(mock_get_warehouses):
     mock_warehouse = MagicMock()
-    mock_create.return_value = mock_warehouse
+    mock_warehouse.id = uuid.uuid4()
+    mock_warehouse.name = "Bodega Central"
+    mock_warehouse.location = "Calle 123, Bogotá"
 
-    warehouse = WarehouseService.create(warehouse_data)
+    mock_warehouse_product = MagicMock()
+    mock_warehouse_product.id = uuid.uuid4()
+    mock_warehouse_product.product_id = uuid.uuid4()
+    mock_warehouse_product.quantity = 10
+    mock_warehouse_product.place = "Estante 5B"
+    mock_warehouse_product.warehouse = mock_warehouse
 
-    assert warehouse == mock_warehouse
-    mock_create.assert_called_once()
+    mock_get_warehouses.return_value = [mock_warehouse_product]
+
+    product_id = str(uuid.uuid4())
+    warehouses = WarehouseService.get_warehouses_by_product_id(product_id)
+
+    assert len(warehouses) == 1
+    assert warehouses[0].warehouse.name == "Bodega Central"
+    assert warehouses[0].quantity == 10
+    assert warehouses[0].place == "Estante 5B"
+    mock_get_warehouses.assert_called_once_with(product_id)
+
+
+@patch('app.repositories.warehouse_repository.WarehouseRepository.get_warehouses_by_product_id')
+def test_get_warehouses_by_product_id_not_found(mock_get_warehouses):
+    mock_get_warehouses.return_value = []
+
+    product_id = str(uuid.uuid4())
+
+    with pytest.raises(NotFoundError, match="Bodegas no encontradas"):
+        WarehouseService.get_warehouses_by_product_id(product_id)
+
+    mock_get_warehouses.assert_called_once_with(product_id)
+
+
+def test_get_warehouses_by_product_id_invalid_uuid():
+    invalid_id = "no-es-uuid"
+
+    with pytest.raises(BadRequestError, match="El formato del id del producto no es correcto"):
+        WarehouseService.get_warehouses_by_product_id(invalid_id)
