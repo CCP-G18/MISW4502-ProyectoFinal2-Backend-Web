@@ -18,6 +18,15 @@ def warehouse_data():
     }
 
 @pytest.fixture
+def warehouse_product_data():
+    return {
+        "product_id": str(uuid.uuid4()),
+        "warehouse_id": str(uuid.uuid4()),
+        "quantity": 10,
+        "place": "Estante B2",
+    }
+
+@pytest.fixture
 def app():
     app = Flask(__name__)
     app.config['JWT_SECRET_KEY'] = 'test-secret'
@@ -166,3 +175,44 @@ def test_get_warehouses_by_product_id_invalid_uuid():
 
     with pytest.raises(BadRequestError, match="El formato del id del producto no es correcto"):
         WarehouseService.get_warehouses_by_product_id(invalid_id)
+
+@patch('app.repositories.warehouse_repository.WarehouseRepository.create_warehouse_by_product')
+def test_create_warehouse_by_product_success(mock_create, warehouse_product_data):
+    mock_warehouse_product = MagicMock()
+    mock_create.return_value = mock_warehouse_product
+
+    result = WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+    assert result == mock_warehouse_product
+    mock_create.assert_called_once_with(warehouse_product_data)
+
+
+def test_create_warehouse_by_product_missing_quantity(warehouse_product_data):
+    del warehouse_product_data["quantity"]
+    with pytest.raises(BadRequestError, match="La cantidad es requerida"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+def test_create_warehouse_by_product_missing_product_id(warehouse_product_data):
+    del warehouse_product_data["product_id"]
+    with pytest.raises(BadRequestError, match="El id del producto es requerido"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+def test_create_warehouse_by_product_missing_warehouse_id(warehouse_product_data):
+    del warehouse_product_data["warehouse_id"]
+    with pytest.raises(BadRequestError, match="El id de la bodega es requerido"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+def test_create_warehouse_by_product_missing_place(warehouse_product_data):
+    del warehouse_product_data["place"]
+    with pytest.raises(BadRequestError, match="El lugar es requerido"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+def test_create_warehouse_by_product_invalid_product_id(warehouse_product_data):
+    warehouse_product_data["product_id"] = "no-es-uuid"
+    with pytest.raises(BadRequestError, match="El formato del id del producto no es correcto"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
+
+def test_create_warehouse_by_product_invalid_warehouse_id(warehouse_product_data):
+    warehouse_product_data["warehouse_id"] = "no-es-uuid"
+    with pytest.raises(BadRequestError, match="El formato del id de la bodega no es correcto"):
+        WarehouseService.create_warehouse_by_product(warehouse_product_data)
