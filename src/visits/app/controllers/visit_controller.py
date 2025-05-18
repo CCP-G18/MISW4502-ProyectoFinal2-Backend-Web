@@ -21,6 +21,8 @@ visit_routes_schema = VisitRouteSchema(many=True)
 def get_visits():
     try:
         visits = VisitService.get_all()
+        if not visits:
+            return format_response("success", 200, message="No hay rutas de visitas registrados", data=[])
     except HTTPException as e:
         return format_response("error", e.code, error=e.description)
     else:
