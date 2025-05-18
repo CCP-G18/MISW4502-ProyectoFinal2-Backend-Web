@@ -6,6 +6,7 @@ from flask import Flask
 from app.services.warehouse_service import WarehouseService
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 from app.repositories.warehouse_repository import WarehouseRepository
+from app.models.warehouse_products_model import WarehouseProducts
 from app.models.warehouse_model import WarehouseSchema, Warehouse
 from app.core.database import init_db
 
@@ -178,13 +179,26 @@ def test_get_warehouses_by_product_id_invalid_uuid():
 
 @patch('app.repositories.warehouse_repository.WarehouseRepository.create_warehouse_by_product')
 def test_create_warehouse_by_product_success(mock_create, warehouse_product_data):
-    mock_warehouse_product = MagicMock()
-    mock_create.return_value = mock_warehouse_product
+    expected_instance = WarehouseProducts(
+        warehouse_id=warehouse_product_data["warehouse_id"],
+        product_id=warehouse_product_data["product_id"],
+        quantity=warehouse_product_data["quantity"],
+        place=warehouse_product_data["place"]
+    )
+
+    mock_create.return_value = expected_instance
 
     result = WarehouseService.create_warehouse_by_product(warehouse_product_data)
 
-    assert result == mock_warehouse_product
-    mock_create.assert_called_once_with(warehouse_product_data)
+    assert isinstance(result, WarehouseProducts)
+    assert result.quantity == warehouse_product_data["quantity"]
+    assert result.place == warehouse_product_data["place"]
+    assert str(result.product_id) == warehouse_product_data["product_id"]
+    assert str(result.warehouse_id) == warehouse_product_data["warehouse_id"]
+
+    mock_create.assert_called_once()
+    args, _ = mock_create.call_args
+    assert isinstance(args[0], WarehouseProducts)
 
 
 def test_create_warehouse_by_product_missing_quantity(warehouse_product_data):
