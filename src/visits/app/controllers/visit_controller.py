@@ -1,3 +1,4 @@
+from werkzeug.exceptions import HTTPException
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.visit_service import VisitService
@@ -20,8 +21,8 @@ visit_routes_schema = VisitRouteSchema(many=True)
 def get_visits():
     try:
         visits = VisitService.get_all()
-    except ValueError as e:
-        return format_response("success", 200, message=str(e), data=[])
+    except HTTPException as e:
+        return format_response("error", e.code, error=e.description)
     else:
         return format_response("success", 200, message="Todas las visitas han sido obtenidas", data=visits_schema.dump(visits))
 
@@ -70,8 +71,8 @@ def ping():
 def get_visit_routes():
     try:
         routes = VisitRouteService.get_all()
-    except ValueError as e:
-        return format_response("success", 200, message=str(e), data=[])
+    except HTTPException as e:
+        return format_response("error", e.code, error=e.description)
     else:
         return format_response("success", 200, "Todas las rutas de visita han sido obtenidas", visit_routes_schema.dump(routes))
 
