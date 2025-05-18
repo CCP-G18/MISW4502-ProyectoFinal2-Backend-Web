@@ -76,3 +76,8 @@ class RecommendationService:
         cleanup_files(RecommendationService.DESTINATION_FILE, RecommendationService.OUTPUT_DIR)
 
         return RecommendationRepository.update_recommendation(recommendation, response)
+    
+    @staticmethod
+    def get_recommendations_by_seller_by_customer(seller_id:str, customer_id: str):
+        recommendations = RecommendationRepository.get_recommendations_by_seller_by_customer(seller_id, customer_id)
+        return recommendations
