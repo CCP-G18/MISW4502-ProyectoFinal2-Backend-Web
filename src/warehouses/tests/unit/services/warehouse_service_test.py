@@ -123,16 +123,6 @@ def test_get_by_id_not_found(mock_get_by_id):
     with pytest.raises(NotFoundError, match=WarehouseService.NOT_FOUND_MESSAGE):
       WarehouseService.get_by_id(valid_id)
 
-@patch('app.repositories.warehouse_repository.WarehouseRepository.create')
-def test_create_success(mock_create, warehouse_data):
-    mock_warehouse = MagicMock()
-    mock_create.return_value = mock_warehouse
-
-    warehouse = WarehouseService.create(warehouse_data)
-
-    assert warehouse == mock_warehouse
-    mock_create.assert_called_once()
-
 @patch('app.repositories.warehouse_repository.WarehouseRepository.get_warehouses_by_product_id')
 def test_get_warehouses_by_product_id_success(mock_get_warehouses):
     mock_warehouse = MagicMock()

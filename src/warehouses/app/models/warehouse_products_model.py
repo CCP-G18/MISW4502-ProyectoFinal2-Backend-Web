@@ -36,7 +36,8 @@ class WarehouseProductsSchema(ma.Schema):
       'quantity',
       'place',
       'created_at',
-      'updated_at'
+      'updated_at',
+      'warehouse'
     )
 
   warehouse = ma.Nested('WarehouseSchema')
