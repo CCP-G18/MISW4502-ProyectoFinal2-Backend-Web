@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
+from sqlalchemy.exc import SQLAlchemyError
 from app.repositories.visit_route_repository import VisitRouteRepository
 from app.exceptions.http_exceptions import BadRequestError, NotFoundError
 from app.models.visit_route_model import VisitRoute
@@ -95,4 +95,7 @@ class VisitRouteService:
             seller_id=seller_id
         )
 
-        return VisitRouteRepository.create(route)
+        try:
+            return VisitRouteRepository.create(route)
+        except SQLAlchemyError as e:
+            raise BadRequestError(f"No se pudo crear (guardar) la ruta de visita en la base de datos. Error: {str(e)}")

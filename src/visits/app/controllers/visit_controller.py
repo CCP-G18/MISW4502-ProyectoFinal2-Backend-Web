@@ -122,5 +122,7 @@ def create_visit_route():
         route = VisitRouteService.create(route_data)
     except BadRequestError as e:
         return format_response("error", e.code, error=e.description)
+    except Exception as e:
+        return format_response("error", 500, error="Error interno del servidor: " + str(e))
     else:
         return format_response("success", 201, "Ruta de visita creada con éxito", visit_route_schema.dump(route))
