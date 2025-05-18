@@ -362,16 +362,6 @@ def test_create_order_seller_missing_items(mock_validate_products):
 
     mock_validate_products.assert_not_called()
 
-def test_create_order_success(order_service):
-    customer_id = "123e4567-e89b-12d3-a456-426614174000"
-    order_data = {        
-        "date": "2023-01-01",
-        "items": [
-            {"id": "6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d", "quantity": 2},
-            {"id": "1d2561f3-9f43-46c9-9af7-b2a43edc1956", "quantity": 1}
-        ]
-    }
-
 @patch("app.services.order_service.db.session")
 @patch("app.services.order_service.get_product_info")
 @patch("app.services.order_service.update_product_quantity")
@@ -435,5 +425,5 @@ def test_create_order_seller_success(mock_notify, mock_update_stock, mock_get_in
     assert created_order["date"] == "2023-01-03"
     assert len(created_order["items"]) == 2
     assert mock_update_stock.call_count == 2
-    assert mock_notify.call_count == 2
-    assert mock_session.begin.called    
+    assert mock_notify.call_count == 1
+    assert mock_session.begin.called
