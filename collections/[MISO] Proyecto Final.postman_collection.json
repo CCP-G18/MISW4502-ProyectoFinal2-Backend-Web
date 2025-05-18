@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "df728186-68b7-485b-86f4-5c16ff20762a",
+		"_postman_id": "27cd0bad-7b0b-47f4-b664-fccba299e88a",
 		"name": "[MISO] Proyecto Final",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34458013",
-		"_collection_link": "https://gp1844.postman.co/workspace/CCP~1e5935b8-9131-4c63-abc8-20265c303449/collection/34458013-df728186-68b7-485b-86f4-5c16ff20762a?action=share&source=collection_link&creator=34458013"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26593736"
 	},
 	"item": [
 		{
@@ -40,15 +39,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/login",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"login"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/login"
 					},
 					"response": [
 						{
@@ -65,15 +56,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/login"
 							},
 							"status": "OK",
 							"code": 200,
@@ -117,15 +100,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/login"
 							},
 							"status": "UNAUTHORIZED",
 							"code": 401,
@@ -169,15 +144,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/login",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"login"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/login"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -214,25 +181,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/verify",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"verify"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/verify"
 					},
 					"response": [
 						{
@@ -240,15 +195,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/verify",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"verify"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/verify"
 							},
 							"status": "OK",
 							"code": 200,
@@ -359,15 +306,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
+						"url": "{{PATH_URL_CUSTOMERS}}/customers"
 					},
 					"response": [
 						{
@@ -384,15 +323,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
+								"url": "{{PATH_URL_CUSTOMERS}}/customers"
 							},
 							"status": "CREATED",
 							"code": 201,
@@ -436,15 +367,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
+								"url": "{{PATH_URL_CUSTOMERS}}/customers"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -488,15 +411,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
+								"url": "{{PATH_URL_CUSTOMERS}}/customers"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -533,25 +448,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
+						"url": "{{PATH_URL_CUSTOMERS}}/customers"
 					},
 					"response": [
 						{
@@ -559,15 +462,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_CUSTOMERS}}/customers",
-									"host": [
-										"{{PATH_URL_CUSTOMERS}}"
-									],
-									"path": [
-										"customers"
-									]
-								}
+								"url": "{{PATH_URL_CUSTOMERS}}/customers"
 							},
 							"status": "OK",
 							"code": 200,
@@ -604,16 +499,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers/ping",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers",
-								"ping"
-							]
-						}
+						"url": "{{PATH_URL_CUSTOMERS}}/customers/ping"
 					},
 					"response": []
 				}
@@ -628,13 +514,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -647,15 +529,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_ORDERS}}/orders",
-							"host": [
-								"{{PATH_URL_ORDERS}}"
-							],
-							"path": [
-								"orders"
-							]
-						}
+						"url": "{{PATH_URL_ORDERS}}/orders"
 					},
 					"response": [
 						{
@@ -672,15 +546,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "CREATED",
 							"code": 201,
@@ -724,15 +590,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -776,15 +634,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -828,15 +678,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -880,15 +722,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "NOT FOUND",
 							"code": 404,
@@ -932,15 +766,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -977,13 +803,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -996,16 +818,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-							"host": [
-								"{{PATH_URL_ORDERS}}"
-							],
-							"path": [
-								"orders",
-								"seller"
-							]
-						}
+						"url": "{{PATH_URL_ORDERS}}/orders/seller"
 					},
 					"response": [
 						{
@@ -1022,16 +835,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"seller"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/seller"
 							},
 							"status": "Created",
 							"code": 201,
@@ -1087,16 +891,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"seller"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/seller"
 							},
 							"status": "Bad Request",
 							"code": 400,
@@ -1152,16 +947,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"seller"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/seller"
 							},
 							"status": "Bad Request",
 							"code": 400,
@@ -1217,16 +1003,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"seller"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/seller"
 							},
 							"status": "Not Found",
 							"code": 404,
@@ -1282,16 +1059,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/seller",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"seller"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/seller"
 							},
 							"status": "Bad Request",
 							"code": 400,
@@ -1340,26 +1108,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_ORDERS}}/orders/customer",
-							"host": [
-								"{{PATH_URL_ORDERS}}"
-							],
-							"path": [
-								"orders",
-								"customer"
-							]
-						}
+						"url": "{{PATH_URL_ORDERS}}/orders/customer"
 					},
 					"response": [
 						{
@@ -1367,16 +1122,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer"
 							},
 							"status": "OK",
 							"code": 200,
@@ -1411,16 +1157,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer"
 							},
 							"status": "OK",
 							"code": 200,
@@ -1455,16 +1192,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer"
 							},
 							"status": "FORBIDDEN",
 							"code": 403,
@@ -1501,9 +1229,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": ""
-						}
+						"url": ""
 					},
 					"response": [
 						{
@@ -1511,17 +1237,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer/f486dab9-eeac-4630-9c76-272af1fea05e",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer",
-										"f486dab9-eeac-4630-9c76-272af1fea05e"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer/f486dab9-eeac-4630-9c76-272af1fea05e"
 							},
 							"status": "OK",
 							"code": 200,
@@ -1556,17 +1272,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer/680beb9f-6099-4ade-a7d9-742abb2f51af",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer",
-										"680beb9f-6099-4ade-a7d9-742abb2f51af"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer/680beb9f-6099-4ade-a7d9-742abb2f51af"
 							},
 							"status": "OK",
 							"code": 200,
@@ -1613,17 +1319,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/customer/680beb9f-6099-4ade-a7d9-742abb2f51af",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"customer",
-										"680beb9f-6099-4ade-a7d9-742abb2f51af"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/customer/680beb9f-6099-4ade-a7d9-742abb2f51af"
 							},
 							"status": "Forbidden",
 							"code": 403,
@@ -1672,16 +1368,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c",
-							"host": [
-								"{{PATH_URL_ORDERS}}"
-							],
-							"path": [
-								"orders",
-								"7c7e9b63-7981-4143-93ed-21d1a106c55c"
-							]
-						}
+						"url": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c"
 					},
 					"response": [
 						{
@@ -1689,16 +1376,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"7c7e9b63-7981-4143-93ed-21d1a106c55c"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c"
 							},
 							"status": "OK",
 							"code": 200,
@@ -1733,16 +1411,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c5",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"7c7e9b63-7981-4143-93ed-21d1a106c5"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c5"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -1777,16 +1446,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/46e8a440-6ec3-4b96-8396-b6cda3a0eb8c",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"46e8a440-6ec3-4b96-8396-b6cda3a0eb8c"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/46e8a440-6ec3-4b96-8396-b6cda3a0eb8c"
 							},
 							"status": "NOT FOUND",
 							"code": 404,
@@ -1821,16 +1481,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c",
-									"host": [
-										"{{PATH_URL_ORDERS}}"
-									],
-									"path": [
-										"orders",
-										"7c7e9b63-7981-4143-93ed-21d1a106c55c"
-									]
-								}
+								"url": "{{PATH_URL_ORDERS}}/orders/7c7e9b63-7981-4143-93ed-21d1a106c55c"
 							},
 							"status": "Forbidden",
 							"code": 403,
@@ -1879,16 +1530,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_CUSTOMERS}}/customers/ping",
-							"host": [
-								"{{PATH_URL_CUSTOMERS}}"
-							],
-							"path": [
-								"customers",
-								"ping"
-							]
-						}
+						"url": "{{PATH_URL_CUSTOMERS}}/customers/ping"
 					},
 					"response": []
 				}
@@ -1903,13 +1545,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -1922,15 +1560,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products"
 					},
 					"response": [
 						{
@@ -1947,15 +1577,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products"
 							},
 							"status": "CREATED",
 							"code": 201,
@@ -1999,15 +1621,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -2044,25 +1658,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products"
 					},
 					"response": [
 						{
@@ -2070,15 +1672,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2115,25 +1709,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products"
 					},
 					"response": [
 						{
@@ -2141,16 +1723,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2185,16 +1758,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -2231,25 +1795,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products"
 					},
 					"response": [
 						{
@@ -2257,17 +1809,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/category/6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"category",
-										"6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/category/6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5d"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2314,17 +1856,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/category/6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"category",
-										"6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/category/6b7c8d99-3e4f-5a6b-7c8d-9e1f2a3b4c5"
 							},
 							"status": "Bad Request",
 							"code": 400,
@@ -2373,25 +1905,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products"
 					},
 					"response": [
 						{
@@ -2399,16 +1919,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/categories",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"categories"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/categories"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2443,16 +1954,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/categories",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"categories"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/categories"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2501,13 +2003,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "PUT",
 						"header": [],
@@ -2520,17 +2018,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"ea25e8a6-184d-4d79-a645-03febb5641a1",
-								"quantity"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity"
 					},
 					"response": [
 						{
@@ -2547,17 +2035,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity"
 							},
 							"status": "OK",
 							"code": 200,
@@ -2601,17 +2079,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -2655,17 +2123,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity",
-									"host": [
-										"{{PATH_URL_PRODUCTS}}"
-									],
-									"path": [
-										"products",
-										"ea25e8a6-184d-4d79-a645-03febb5641a1",
-										"quantity"
-									]
-								}
+								"url": "{{PATH_URL_PRODUCTS}}/products/ea25e8a6-184d-4d79-a645-03febb5641a1/quantity"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -2702,13 +2160,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -2722,16 +2176,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/upload-preview",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"upload-preview"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products/upload-preview"
 					},
 					"response": []
 				},
@@ -2743,13 +2188,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -2762,16 +2203,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/bulk-save",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"bulk-save"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products/bulk-save"
 					},
 					"response": []
 				},
@@ -2780,16 +2212,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_PRODUCTS}}/products/ping",
-							"host": [
-								"{{PATH_URL_PRODUCTS}}"
-							],
-							"path": [
-								"products",
-								"ping"
-							]
-						}
+						"url": "{{PATH_URL_PRODUCTS}}/products/ping"
 					},
 					"response": []
 				}
@@ -2804,13 +2227,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -2823,15 +2242,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers"
-							]
-						}
+						"url": "{{PATH_URL_SELLERS}}/sellers"
 					},
 					"response": [
 						{
@@ -2848,15 +2259,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
+								"url": "{{PATH_URL_SELLERS}}/sellers"
 							},
 							"_postman_previewlanguage": "Text",
 							"header": [],
@@ -2877,15 +2280,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
+								"url": "{{PATH_URL_SELLERS}}/sellers"
 							},
 							"_postman_previewlanguage": "Text",
 							"header": [],
@@ -2899,25 +2294,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers"
-							]
-						}
+						"url": "{{PATH_URL_SELLERS}}/sellers"
 					},
 					"response": [
 						{
@@ -2925,15 +2308,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_SELLERS}}/sellers",
-									"host": [
-										"{{PATH_URL_SELLERS}}"
-									],
-									"path": [
-										"sellers"
-									]
-								}
+								"url": "{{PATH_URL_SELLERS}}/sellers"
 							},
 							"_postman_previewlanguage": "Text",
 							"header": [],
@@ -2947,27 +2322,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
-								"sales-plans"
-							]
-						}
+						"url": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans"
 					},
 					"response": []
 				},
@@ -2976,13 +2337,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -2995,17 +2352,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"8ae8b72a-166d-4720-9675-d2aac6afe95c",
-								"sales-plans"
-							]
-						}
+						"url": "{{PATH_URL_SELLERS}}/sellers/8ae8b72a-166d-4720-9675-d2aac6afe95c/sales-plans"
 					},
 					"response": []
 				},
@@ -3014,21 +2361,86 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_SELLERS}}/sellers/ping",
-							"host": [
-								"{{PATH_URL_SELLERS}}"
-							],
-							"path": [
-								"sellers",
-								"ping"
-							]
-						}
+						"url": "{{PATH_URL_SELLERS}}/sellers/ping"
 					},
 					"response": []
 				}
 			],
 			"description": "El servicio de vendedores permite gestionar la información de los vendedores en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un vendedor:** `POST /sellers/`  \n    Permite registrar un nuevo vendedor en el sistema. Requiere autenticación con un token JWT de un usuario administrador.\n    \n2. **Obtener todos los vendedores:** `GET /sellers/`  \n    Recupera la lista de todos los vendedores registrados. Requiere autenticación con un token JWT de un usuario administrador.\n    \n3. **Crear Plan de Ventas por Vendedor:** `POST /sellers/seller-id/sales-plan`  \n    Permite registrar un nuevo plan de venta asociado al vendedor. Requiere autenticación con un token JWT de un usuario administrador.\n    \n4. **Obtener todos los planes de venta de un vendedor:** `GET /sellers/seller-id/sales-plan`  \n    Recupera la lista de todos los planes de venta de un vendedor especifico. Requiere autenticación con un token JWT de un usuario administrador\n    \n5. **Ping (Prueba de conectividad).** `GET /sellers/ping`  \n    Verifica que el servicio de vendedores está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
+		},
+		{
+			"name": "Recommendations",
+			"item": [
+				{
+					"name": "HealthCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{PATH_URL_RECOMMENDATIONS}}/recommendations/ping"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Recommendation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": "/Users/jhon.parra/Downloads/7754395-sd_240_426_30fps.mp4"
+								},
+								{
+									"key": "customer_id",
+									"value": "25bc9316-8fd3-4bd9-93f1-bea79859ed12",
+									"type": "text"
+								},
+								{
+									"key": "seller_id",
+									"value": "936d2a12-ce9f-4980-a565-075f9f44f3f9",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{PATH_URL_RECOMMENDATIONS}}/recommendations"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Recommendation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{PATH_URL_RECOMMENDATIONS}}/recommendations/{{recomendationId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recommendations By Customer By Seller",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{PATH_URL_RECOMMENDATIONS}}/recommendations/sellers/{{seller_id}}/customers/{{customerId}}"
+					},
+					"response": []
+				}
+			],
+			"description": "El servicio de recomendaciones permite gestionar las recomendaciones realizadas por los vendedores a sus clientes. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear una recomendacion:** `POST /recommendations/`  \n    Permite registrar una nueva recomendación. Requiere autenticación con un token JWT de un usuario vendedor.\n    \n2. **Obtener recomendaciones por vendedor y cliente:** `GET /recommendations/sellers/seller_id/customers/customerId`  \n    Recupera la lista de recomendaciones de un vendedor realizadas a un cliente. Requiere autenticación con un token JWT de un usuario vendedor.\n    \n3. **Generar recomendación:** `PUT /recommendations/recommendation-id`  \n    Genera una texto de recomendaciones o observación mediante el analisis de un video y el uso de inteligencia artificial. Requiere autenticación con un token JWT de un usuario vendedor.\n    \n4. **Ping (Prueba de conectividad).** `GET /recommendations/ping`  \n    Verifica que el servicio de recomendaciones está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
 		},
 		{
 			"name": "Users",
@@ -3038,16 +2450,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users/29f7a9b8-f608-4826-893d-622bb5f09ca3",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users",
-								"29f7a9b8-f608-4826-893d-622bb5f09ca3"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users/29f7a9b8-f608-4826-893d-622bb5f09ca3"
 					},
 					"response": [
 						{
@@ -3055,18 +2458,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "http://localhost:5000/users/29f7a9b8-f608-4826-893d-622bb5f09ca3",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "5000",
-									"path": [
-										"users",
-										"29f7a9b8-f608-4826-893d-622bb5f09ca3"
-									]
-								}
+								"url": "http://localhost:5000/users/29f7a9b8-f608-4826-893d-622bb5f09ca3"
 							},
 							"status": "OK",
 							"code": 200,
@@ -3103,25 +2495,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users"
 					},
 					"response": [
 						{
@@ -3129,15 +2509,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/users",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"users"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/users"
 							},
 							"status": "OK",
 							"code": 200,
@@ -3242,15 +2614,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users"
 					},
 					"response": [
 						{
@@ -3267,15 +2631,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/users",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"users"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/users"
 							},
 							"status": "CREATED",
 							"code": 201,
@@ -3319,15 +2675,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/users",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"users"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/users"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -3371,15 +2719,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/users",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"users"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/users"
 							},
 							"status": "BAD REQUEST",
 							"code": 400,
@@ -3423,15 +2763,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{PATH_URL_USERS}}/users",
-									"host": [
-										"{{PATH_URL_USERS}}"
-									],
-									"path": [
-										"users"
-									]
-								}
+								"url": "{{PATH_URL_USERS}}/users"
 							},
 							"_postman_previewlanguage": "Text",
 							"header": [],
@@ -3516,15 +2848,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users"
 					},
 					"response": []
 				},
@@ -3533,13 +2857,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{ACCESS_TOKEN}}"
+							}
 						},
 						"method": "PATCH",
 						"header": [],
@@ -3552,15 +2872,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users"
 					},
 					"response": [
 						{
@@ -3577,17 +2889,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "http://localhost:5000/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "5000",
-									"path": [
-										"users"
-									]
-								}
+								"url": "http://localhost:5000/users"
 							},
 							"status": "OK",
 							"code": 200,
@@ -3624,73 +2926,12 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{PATH_URL_USERS}}/users/ping",
-							"host": [
-								"{{PATH_URL_USERS}}"
-							],
-							"path": [
-								"users",
-								"ping"
-							]
-						}
+						"url": "{{PATH_URL_USERS}}/users/ping"
 					},
 					"response": []
 				}
 			],
 			"description": "El **servicio de usuarios** permite gestionar la información de los usuarios en el sistema. A través de este servicio, se pueden realizar las siguientes operaciones:\n\n1. **Crear un usuario:** `POST /users/`  \n    Permite registrar un nuevo usuario en el sistema.\n    \n2. **Obtener todos los usuarios:** `GET /users/`  \n    Recupera la lista de todos los usuarios registrados. Requiere autenticación con un token JWT.\n    \n3. **Obtener un usuario por ID:** `GET /users/`  \n    Recupera la información de un usuario específico mediante su ID. Requiere autenticación con un token JWT.\n    \n4. **Actualizar el estado de un usuario:** `PATCH /users/`  \n    Permite actualizar el estado de un usuario autenticado (por ejemplo, activar, bloquear, etc.). Requiere autenticación con un token JWT.\n    \n5. **Ping (Prueba de conectividad).** `GET /users/ping`  \n    Verifica que el servicio de usuarios está funcionando correctamente. Devuelve un mensaje de \"pong\" para confirmar que el servicio está activo."
-		},
-		{
-			"name": "Recommendations",
-			"item": [
-				{
-					"name": "Create Recommendation",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "video",
-									"type": "file",
-									"src": "/Users/jhon.parra/Downloads/SampleVideo_1280x720_1mb.mp4"
-								},
-								{
-									"key": "customer_id",
-									"value": "25bc9316-8fd3-4bd9-93f1-bea79859ed12",
-									"type": "text"
-								},
-								{
-									"key": "seller_id",
-									"value": "936d2a12-ce9f-4980-a565-075f9f44f3f9",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{PATH_URL_RECOMMENDATIONS}}/recommendations",
-							"host": [
-								"{{PATH_URL_RECOMMENDATIONS}}"
-							],
-							"path": [
-								"recommendations"
-							]
-						}
-					},
-					"response": []
-				}
-			]
 		}
 	]
 }
