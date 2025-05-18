@@ -3691,6 +3691,841 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Visits",
+			"item": [
+				{
+					"name": "Crear ruta de visita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"route_name\": \"Ruta Visita 1\",\r\n  \"visit_date\": \"2025-05-20\",\r\n  \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\r\n  \"origin_lat\": 4.624335,\r\n  \"origin_lng\": -74.063644,\r\n  \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\r\n  \"destination_lat\": 4.676707,\r\n  \"destination_lng\": -74.048489,\r\n  \"estimated_time\": \"45 minutos\",\r\n  \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PATH_URL_VISITS}}/visits/routes",
+							"host": [
+								"{{PATH_URL_VISITS}}"
+							],
+							"path": [
+								"visits",
+								"routes"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 | Crear ruta exitosa",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"route_name\": \"Ruta Visita 1\",\r\n  \"visit_date\": \"2025-05-17\",\r\n  \"origin_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\r\n  \"origin_lat\": 4.676707,\r\n  \"origin_lng\": -74.048489,\r\n  \"destination_address\": \"Calle 100 #8a-55, Bogotá, Colombia\",\r\n  \"destination_lat\": 4.676123,\r\n  \"destination_lng\": -74.048739,\r\n  \"estimated_time\": \"10 minutos\",\r\n  \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:18:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "587"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"data\": {\n        \"created_at\": \"2025-05-17T23:18:07.381539\",\n        \"destination_address\": \"Calle 100 #8a-55, Bogotá, Colombia\",\n        \"destination_lat\": 4.676123,\n        \"destination_lng\": -74.048739,\n        \"estimated_time\": \"10 minutos\",\n        \"id\": \"3a6a4dbf-df7b-4ec5-8b72-8d9f34df495b\",\n        \"origin_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n        \"origin_lat\": 4.676707,\n        \"origin_lng\": -74.048489,\n        \"route_name\": \"Ruta Visita 1\",\n        \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n        \"updated_at\": \"2025-05-17T23:18:07.381539\",\n        \"visit_date\": \"2025-05-17\"\n    },\n    \"message\": \"Ruta de visita creada con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Campos obligatorios",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"route_name\": \"Ruta Visita 1\",\r\n  \"visit_date\": \"2025-05-20\",\r\n  \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\r\n  \"origin_lat\": 4.624335,\r\n  \"origin_lng\": -74.063644,\r\n  \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\r\n  \"destination_lat\": 4.676707,\r\n  \"destination_lng\": -74.048489,\r\n  \"estimated_time\": \"45 minutos\",\r\n  \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:01:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El campo destination_lat es requerido.\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Id vendedor inválido",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"route_name\": \"Ruta Visita 1\",\r\n  \"visit_date\": \"2025-05-20\",\r\n  \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\r\n  \"origin_lat\": 4.624335,\r\n  \"origin_lng\": -74.063644,\r\n  \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\r\n  \"destination_lat\": 4.676707,\r\n  \"destination_lng\": -74.048489,\r\n  \"estimated_time\": \"45 minutos\",\r\n  \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:02:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "77"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El id del vendedor no es válido\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Fecha formato inválido",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"route_name\": \"Ruta Visita 1\",\r\n  \"visit_date\": \"2025-05\",\r\n  \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\r\n  \"origin_lat\": 4.624335,\r\n  \"origin_lng\": -74.063644,\r\n  \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\r\n  \"destination_lat\": 4.676707,\r\n  \"destination_lng\": -74.048489,\r\n  \"estimated_time\": \"45 minutos\",\r\n  \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:04:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "104"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La fecha de visita no tiene un formato válido (YYYY-MM-DD)\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar rutas de visita",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_VISITS}}/visits/routes",
+							"host": [
+								"{{PATH_URL_VISITS}}"
+							],
+							"path": [
+								"visits",
+								"routes"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:22:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1096"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"created_at\": \"2025-05-17T23:06:25.193041\",\n            \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n            \"destination_lat\": 4.676707,\n            \"destination_lng\": -74.048489,\n            \"estimated_time\": \"45 minutos\",\n            \"id\": \"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1\",\n            \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\n            \"origin_lat\": 4.624335,\n            \"origin_lng\": -74.063644,\n            \"route_name\": \"Ruta Visita 1\",\n            \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n            \"updated_at\": \"2025-05-17T23:06:25.193041\",\n            \"visit_date\": \"2025-05-20\"\n        },\n        {\n            \"created_at\": \"2025-05-17T23:18:07.381539\",\n            \"destination_address\": \"Calle 100 #8a-55, Bogotá, Colombia\",\n            \"destination_lat\": 4.676123,\n            \"destination_lng\": -74.048739,\n            \"estimated_time\": \"10 minutos\",\n            \"id\": \"3a6a4dbf-df7b-4ec5-8b72-8d9f34df495b\",\n            \"origin_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n            \"origin_lat\": 4.676707,\n            \"origin_lng\": -74.048489,\n            \"route_name\": \"Ruta Visita 2\",\n            \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n            \"updated_at\": \"2025-05-17T23:18:07.381539\",\n            \"visit_date\": \"2025-05-17\"\n        }\n    ],\n    \"message\": \"Todas las rutas de visita han sido obtenidas\",\n    \"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar rutas de visita por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_VISITS}}/visits/routes/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+							"host": [
+								"{{PATH_URL_VISITS}}"
+							],
+							"path": [
+								"visits",
+								"routes",
+								"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:27:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "591"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"created_at\": \"2025-05-17T23:06:25.193041\",\n        \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n        \"destination_lat\": 4.676707,\n        \"destination_lng\": -74.048489,\n        \"estimated_time\": \"45 minutos\",\n        \"id\": \"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1\",\n        \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\n        \"origin_lat\": 4.624335,\n        \"origin_lng\": -74.063644,\n        \"route_name\": \"Ruta Visita 1\",\n        \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n        \"updated_at\": \"2025-05-17T23:06:25.193041\",\n        \"visit_date\": \"2025-05-20\"\n    },\n    \"message\": \"Ruta de visita encontrada con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "404 | Ruta no encontrada",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/a68e9bdd-f86a-45b1-a466-89034d8d42ad",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"a68e9bdd-f86a-45b1-a466-89034d8d42ad"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:28:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": \"Ruta de visita no encontrada\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Id ruta de visita inválido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/a68e9bdd-f86a-45b1-a466-89034d8d42a",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"a68e9bdd-f86a-45b1-a466-89034d8d42a"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:28:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "84"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El formato del id de la ruta no es correcto\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar rutas de visita por id del vendedor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_VISITS}}/visits/routes/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+							"host": [
+								"{{PATH_URL_VISITS}}"
+							],
+							"path": [
+								"visits",
+								"routes",
+								"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/a68e9bdd-f86a-45b1-a466-89034d8d42ad",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"a68e9bdd-f86a-45b1-a466-89034d8d42ad"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:32:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1094"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"created_at\": \"2025-05-17T23:06:25.193041\",\n            \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n            \"destination_lat\": 4.676707,\n            \"destination_lng\": -74.048489,\n            \"estimated_time\": \"45 minutos\",\n            \"id\": \"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1\",\n            \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\n            \"origin_lat\": 4.624335,\n            \"origin_lng\": -74.063644,\n            \"route_name\": \"Ruta Visita 1\",\n            \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n            \"updated_at\": \"2025-05-17T23:06:25.193041\",\n            \"visit_date\": \"2025-05-20\"\n        },\n        {\n            \"created_at\": \"2025-05-17T23:18:07.381539\",\n            \"destination_address\": \"Calle 100 #8a-55, Bogotá, Colombia\",\n            \"destination_lat\": 4.676123,\n            \"destination_lng\": -74.048739,\n            \"estimated_time\": \"10 minutos\",\n            \"id\": \"3a6a4dbf-df7b-4ec5-8b72-8d9f34df495b\",\n            \"origin_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n            \"origin_lat\": 4.676707,\n            \"origin_lng\": -74.048489,\n            \"route_name\": \"Ruta Visita 2\",\n            \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n            \"updated_at\": \"2025-05-17T23:18:07.381539\",\n            \"visit_date\": \"2025-05-17\"\n        }\n    ],\n    \"message\": \"Rutas de visita encontradas con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "400 | Id vendedor inválido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/a68e9bdd-f86a-45b1-a466-89034d8d42a",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"a68e9bdd-f86a-45b1-a466-89034d8d42a"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:36:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "86"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"El formato del id del vendedor no es correcto\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "404 | Vendedor sin rutas",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:37:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "82"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": \"No hay rutas registradas para el vendedor\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Consultar rutas por vendedor y por fecha",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PATH_URL_VISITS}}/visits/routes/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+							"host": [
+								"{{PATH_URL_VISITS}}"
+							],
+							"path": [
+								"visits",
+								"routes",
+								"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 | Consulta exitosa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/a68e9bdd-f86a-45b1-a466-89034d8d42ad/date/2025-05-20",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"a68e9bdd-f86a-45b1-a466-89034d8d42ad",
+										"date",
+										"2025-05-20"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:46:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "585"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"created_at\": \"2025-05-17T23:06:25.193041\",\n            \"destination_address\": \"Avenida Calle 100 #15-30, Bogotá, Colombia\",\n            \"destination_lat\": 4.676707,\n            \"destination_lng\": -74.048489,\n            \"estimated_time\": \"45 minutos\",\n            \"id\": \"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1\",\n            \"origin_address\": \"Carrera 7 #34-80, Bogotá, Colombia\",\n            \"origin_lat\": 4.624335,\n            \"origin_lng\": -74.063644,\n            \"route_name\": \"Ruta Visita 1\",\n            \"seller_id\": \"a68e9bdd-f86a-45b1-a466-89034d8d42ad\",\n            \"updated_at\": \"2025-05-17T23:06:25.193041\",\n            \"visit_date\": \"2025-05-20\"\n        }\n    ],\n    \"message\": \"Rutas encontradas con éxito\",\n    \"status\": \"success\"\n}"
+						},
+						{
+							"name": "404 | Sin rutas para la fecha",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1/date/2025-05-25",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+										"date",
+										"2025-05-25"
+									]
+								}
+							},
+							"status": "NOT FOUND",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:39:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "80"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": \"No hay rutas programadas para esa fecha\",\n    \"status\": \"error\"\n}"
+						},
+						{
+							"name": "400 | Formato fecha inválido",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{PATH_URL_VISITS}}/visits/routes/seller/b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1/date/2025-05",
+									"host": [
+										"{{PATH_URL_VISITS}}"
+									],
+									"path": [
+										"visits",
+										"routes",
+										"seller",
+										"b97a03f2-f4a9-44fa-ba8c-364d6ccdbef1",
+										"date",
+										"2025-05"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "gunicorn"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 04:44:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "94"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"error\": \"La fecha no tiene un formato válido (YYYY-MM-DD)\",\n    \"status\": \"error\"\n}"
+						}
+					]
+				}
+			]
 		}
 	]
 }
