@@ -50,3 +50,4 @@ class WarehouseService:
     warehouses = WarehouseRepository.get_warehouses_by_product_id(product_id)
     if not warehouses:
       raise NotFoundError("Bodegas no encontradas")
+    return warehouses
