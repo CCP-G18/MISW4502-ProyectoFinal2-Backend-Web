@@ -23,3 +23,10 @@ class WarehouseRepository:
   @staticmethod
   def get_warehouses_by_product_id(product_id):
     return Warehouse.query.join(Warehouse.warehouse_products).filter(WarehouseProducts.product_id == product_id).all()
+  
+  @staticmethod
+  def create_warehouse_by_product(warehouse_product: WarehouseProducts):
+    db.session.add(warehouse_product)
+    db.session.commit()
+    
+    return warehouse_product
