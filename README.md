@@ -1,167 +1,198 @@
-# Backend - Aplicación Web CCP
+# Guía de Desarrollo
 
-Este repositorio contiene el backend de la aplicación web para la compañía comercializadora de productos **CCP**. La aplicación está diseñada para gestionar las funcionalidades de **compra**, **venta** y **logística** de productos de consumo masivo, con presencia en varios países y operaciones en múltiples bodegas.
+Esta guía proporciona instrucciones completas para los desarrolladores que trabajan con la aplicación web de backend de CCP. Cubre la configuración del entorno, los procesos de desarrollo local, los procedimientos de prueba y los flujos de trabajo de despliegue. Para documentación específica de la API, consulta la sección correspondiente.
 
-## Funcionalidades
+## Tabla de Contenidos
 
-CCP es una empresa dedicada a la distribución y venta de productos de consumo masivo en más de 5 países. El sistema está orientado a optimizar las operaciones comerciales, de ventas y logística de la compañía, asegurando un control eficiente de inventarios, pedidos y rutas de entrega, con un enfoque en la mejora continua del servicio al cliente.
+- [Configuración del Entorno](#configuración-del-entorno)
+- [Desarrollo Local](#desarrollo-local)
+- [Prácticas de Prueba](#prácticas-de-prueba)
+- [Proceso de Despliegue](#proceso-de-despliegue)
+- [Problemas Comunes y Solución de Problemas](#problemas-comunes-y-solución-de-problemas)
 
-El backend proporciona las siguientes funcionalidades principales:
+## Configuración del Entorno
 
-- **Compra de productos**: Gestión de registros de fabricantes y productos, optimización de compras y coordinación con el inventario.
-- **Ventas**: Gestión de pedidos, vendedores, clientes y cotizaciones.
-- **Logística**: Gestión de rutas de entrega, inventarios en tiempo real y optimización de procesos en bodegas.
+Antes de comenzar el desarrollo en el backend de CCP, necesitas configurar tu entorno local con las herramientas y dependencias necesarias.
 
-## Servicios del Proyecto
+### Requisitos Previos
 
-El proyecto está compuesto por varios servicios independientes que trabajan en conjunto para proporcionar las funcionalidades principales. A continuación, se describen brevemente:
+- Python 3.11 o superior
+- Docker y Docker Compose
+- Git
+- PostgreSQL (para base de datos local si no se utiliza Docker)
+- Postman (para pruebas de API)
 
-### 1. **Servicio de Usuarios**
-   Gestiona la creación, consulta, actualización y autenticación de usuarios en el sistema.
-   - **Principales Endpoints:**
-     - `POST /users/`: Crear un nuevo usuario.
-     - `GET /users/`: Obtener todos los usuarios.
-     - `GET /users/<id>`: Obtener un usuario por ID.
-     - `PATCH /users/`: Actualizar el estado de un usuario.
-     - `GET /users/ping`: Verificar la conectividad del servicio.
+### Configuración del Repositorio
 
-### 2. **Servicio de Autenticación**
-   Maneja el inicio de sesión y la verificación de usuarios mediante tokens JWT.
-   - **Principales Endpoints:**
-     - `POST /login`: Iniciar sesión y obtener un token JWT.
-     - `GET /verify`: Verificar la validez del token JWT y el estado del usuario.
+1. Clona el repositorio:
 
-### 3. **Servicio de Clientes**
-  Gestiona la creación y administración de clientes, asegurando la seguridad mediante el uso de tokens JWT.
-   - **Principales Endpoints:**
-     - `POST /customers`: Registra un nuevo cliente en la base de datos.
-     - `GET /customers`: Recupera la lista completa de clientes registrados. Requiere un token JWT válido.
-     - `GET /customers/ping`: Verificar la conectividad del servicio.
-
-### 4. **Servicio de Vendedores**
-  Gestiona la creación y administración de vendedores, asegurando la seguridad mediante el uso de tokens JWT.
-   - **Principales Endpoints:**
-     - `POST /sellers`: Registra un nuevo vendedor en la base de datos.
-     - `GET /sellers`: Recupera la lista completa de vendedores registrados. Requiere un token JWT válido.
-     - `GET /sellers/ping`: Verificar la conectividad del servicio.
-
-### 5. **Servicio de Productos**
-   Gestiona la creación, consulta y actualización de productos en el sistema.
-   - **Principales Endpoints:**
-     - `POST /products/`: Crear un nuevo producto. Requiere autenticación con un token JWT de un usuario administrador.
-     - `GET /products/`: Obtener todos los productos registrados.
-     - `GET /products/<product_id>`: Obtener un producto por su ID.
-     - `PUT /products/<product_id>/quantity`: Actualizar la cantidad de un producto.
-     - `GET /products/ping`: Verificar la conectividad del servicio.
-
-### 6. **Servicio de Órdenes**
-   Gestiona la creación, consulta y administración de órdenes en el sistema.
-   - **Principales Endpoints:**
-     - `POST /orders/`: Crear una nueva orden.
-     - `GET /orders/<order_id>`: Obtener una orden por su ID.
-     - `GET /orders/customer`: Obtener todas las órdenes asociadas a un cliente autenticado.
-     - `GET /orders/ping`: Verificar la conectividad del servicio.
- 
-  
-## Despliegue de los servicios
-
-### 1. Despliegue Local
-Para ejecutar el servicio de usuarios en tu máquina local, sigue estos pasos:
-
-#### 1.1 Clonar el repositorio:
-```bash
-git clone https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web.git
-cd MISW4502-ProyectoFinal2-Backend-Web
-```
-
-#### 1.2 Crear un entorno virtual de Python:
-```bash
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-```
-
-#### 1.3 Instalar las dependencias:
-```bash
-pip install -r requirements.txt
-```
-
-#### 1.4 Configurar las variables de entorno: 
-Crea un archivo .env en la raíz del proyecto y configura correctamente las variables necesarias, como JWT_SECRET_KEY y las conexiones a la base de datos.
-
-#### 1.5 Iniciar el servidor:
-```bash
-flask run
-```
-
-El servicio estará disponible en http://localhost:5000. 
-
-### 2. Despliegue con Docker
-
-Para ejecutar el servicio utilizando Docker (asegurarse de tener docker instalado), sigue estos pasos:
-
-#### 2.1 Construir y levantar los contenedores
-Ejecuta el siguiente comando en la raíz del proyecto para construir y levantar los servicios definidos en el archivo docker-compose.yml:
-  ```bash
-  docker-compose up --build
-  ```
-
-#### 2.2 Verificar que el servicio está corriendo
-Una vez que los contenedores estén en ejecución, el servicio estará disponible en: http://localhost:5000
-
-#### 2.4 Construir y levantar los contenedores
-Para detener los contenedores y liberar los recursos, ejecuta:
-  ```bash
-  docker-compose down
-  ```
-## Ejecución de Tests
-
-### 1. Ejecutar los tests
-Para ejecutar los tests, utiliza el siguiente comando en la raíz del proyecto:
-  ```bash
-  pytest
+   ```bash
+   git clone https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web.git
+   cd MISW4502-ProyectoFinal2-Backend-Web
    ```
 
-### 2. Generar reporte de cobertura de código 
-Para verificar la cobertura de código, utiliza los siguientes comandos:
-  ```bash
-  coverage run -m pytest
-  coverage report -m
-  coverage html
-  ```
+2. Crea y activa un entorno virtual:
 
-## Documentación de API (Colecciones de Postman)
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # En Windows: venv\Scripts\activate
+   ```
 
-A continuación, se describen los recursos disponibles y cómo utilizarlas:
+3. Instala las dependencias:
 
-### 1. Colección y Ambientes para usar en Postman
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-La colección de servicios y los ambientes disponibles se encuentran en el repositorio en la carpeta ```collections``` o en los siguientes enlaces.
+4. Configura las variables de entorno: Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
-| **Recurso**                  | **Enlace**                                              |
-|-------------------------------|------------------------------------------------------------------------|
-| **Colección de los servicios**      | [Colección de los servicios](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/%5BMISO%5D%20Proyecto%20Final.postman_collection.json)  |
-| **Ambiente Local**      | [Ambiente Local](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/MISO%20Proyecto%20Final%20Local.postman_environment.json)     |
-| **Ambiente Productivo**      | [Ambiente Local](https://github.com/CCP-G18/MISW4502-ProyectoFinal2-Backend-Web/blob/253799be3062cd863df541d7dd7d831ec3e6bb95/collections/MISO%20Proyecto%20Final%20Production.postman_environment.json)     |
+   ```env
+   JWT_SECRET_KEY=tu_clave_secreta_jwt
+   POSTGRES_DB_URI=postgresql://usuario:contraseña@localhost:5432/ccp_db
+   SOCKET_SECRET_KEY=tu_clave_secreta_socket
+   ```
 
-### 2. Importar una Colección en Postman
+## Desarrollo Local
 
-1. Descarga la colección correspondiente desde los enlaces proporcionados.2. 
-3. Abre Postman y selecciona la opción **Importar**.
-4. Carga el archivo `.json` de la colección descargada.
+### Ejecución de Servicios Localmente
 
-### 3. Configurar el entorno en Postman
-1. Puedes utilizar dos ambientes para el consumo de los servicios, de manera local o de manera productivo. Debes escoger el archivo listado en el punto 1 y descarga el archivo de entorno de Postman.
-2. Importa el archivo de entorno en Postman desde la pestaña **Environments**.
+Puedes ejecutar los servicios de backend directamente con Flask o utilizando Docker Compose.
 
-### 4. Probar los endpoints
-- Usa los endpoints disponibles en la colección para realizar pruebas.
-- Asegúrate de iniciar sesión primero para obtener el token JWT y almacenarlo en la variable `jwt_token`
+#### Método 1: Usando Flask (para desarrollo)
 
-## Colaboradores
+1. Navega al directorio del servicio que deseas ejecutar, por ejemplo:
 
-| **Nombre**               | **Correo Electrónico**       |
-|--------------------------|------------------------------|
-| Jeniffer Corredor        | j.corredore@uniandes.edu.co  | 
-| Juan Diego García        | j.garcia55@uniandes.edu.co   |
-| Brayan Ricardo García    | br.garciam1@uniandes.edu.co  |
-| Jhon Andrés Parra        | ja.parrar12@uniandes.edu.co  |
+   ```bash
+   cd src/orders
+   ```
+
+2. Ejecuta la aplicación:
+
+   ```bash
+   flask run
+   ```
+
+#### Método 2: Usando Docker Compose (recomendado)
+
+1. En la raíz del proyecto, ejecuta:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   Esto construirá e iniciará todos los servicios definidos en el archivo `docker-compose.yml`.
+
+### Arquitectura de Microservicios
+
+El backend está estructurado como una colección de microservicios independientes, cada uno responsable de un dominio específico de la aplicación.
+
+### Estructura del Servicio
+
+Cada microservicio sigue una estructura similar para mantener la coherencia en la base de código:
+
+```
+src/[nombre_servicio]/
+├── app/
+│   ├── controllers/       # Endpoints HTTP
+│   ├── models/            # Modelos de datos
+│   ├── repositories/      # Operaciones de base de datos
+│   ├── services/          # Lógica de negocio
+│   ├── schemas/           # Serialización/deserialización
+│   ├── core/              # Configuración
+│   └── extensions.py      # Extensiones de Flask
+├── tests/
+│   ├── unit/              # Pruebas unitarias
+│   └── integration/       # Pruebas de integración
+├── Dockerfile             # Definición del contenedor
+├── requirements.txt       # Dependencias
+├── version                # Número de versión del servicio
+└── main.py                # Punto de entrada de la aplicación
+```
+
+## Pruebas
+
+### Ejecución de Pruebas
+
+La base de código utiliza `pytest` para las pruebas. Para ejecutar las pruebas de un servicio específico:
+
+1. Navega al directorio del servicio, por ejemplo:
+
+   ```bash
+   cd src/orders
+   ```
+
+2. Ejecuta las pruebas:
+
+   ```bash
+   pytest --cov=app tests/
+   ```
+
+### Requisitos de Cobertura
+
+La canalización de integración continua (CI) impone una cobertura mínima de código del 70% para todos los servicios. Esto se verifica automáticamente en cada solicitud de extracción (pull request).
+
+## Proceso de Despliegue
+
+1. Visión General del Despliegue Continuo
+
+   El sistema backend utiliza un flujo de trabajo de GitHub Actions que despliega automáticamente los microservicios cuando se realiza un push al branch principal. Este flujo de trabajo detecta dinámicamente todos los microservicios en el repositorio, construye las imágenes Docker y las despliega en Google Kubernetes Engine (GKE).
+
+2. Proceso de Descubrimiento de Servicios
+
+   La canalización CI/CD identifica automáticamente los microservicios desplegables escaneando la estructura del repositorio en busca de directorios que contengan archivos Dockerfile:
+
+   ```bash
+   find src -mindepth 1 -maxdepth 1 -type d -exec test -f "{}/Dockerfile" \; -print
+   ```
+   Este enfoque permite que nuevos microservicios se incluyan automáticamente en el proceso de despliegue sin modificar la configuración del flujo de trabajo.
+
+3. Construcción y Publicación de Imágenes Docker
+
+   Cada microservicio incluye un archivo de versión que contiene su número de versión semántica. Esta versión se utiliza para etiquetar las imágenes Docker durante el proceso de construcción.
+
+   El flujo de trabajo CI/CD realiza los siguientes pasos para cada servicio:
+
+   1. Lee el número de versión desde el archivo de versión del servicio.
+   2. Construye una imagen Docker con etiquetas de versión específica y "latest".
+   3. Publica ambas etiquetas en Google Cloud Artifact Registry.
+
+4. Estructura de Despliegue en Kubernetes
+
+   El sistema despliega cada microservicio como un Deployment separado en Kubernetes, con recursos asociados de Service y BackendConfig.
+
+   Cada despliegue de servicio consta de tres recursos clave de Kubernetes:
+
+   1. Deployment: Define la especificación del contenedor, límites de recursos, variables de entorno y conteo de réplicas.
+   2. Service: Expone el despliegue internamente y al balanceador de carga.
+   3. BackendConfig: Configura las verificaciones de salud y otras configuraciones del balanceador de carga.
+
+5. Componentes de Configuración de Despliegue
+   1. La configuración de despliegue de cada microservicio especifica:
+      - Límites de recursos (CPU y memoria)
+      - Variables de entorno (incluyendo conexión a la base de datos, claves JWT, etc.)
+      - Referencia de la imagen del contenedor
+      - Configuración de puertos
+
+      Variables de entorno clave se obtienen de secretos de Kubernetes:
+
+      - POSTGRES_DB_URI: Cadena de conexión a la base de datos
+      - JWT_SECRET_KEY: Clave de firma de tokens de autenticación
+      - ALLOWED_ORIGINS: Configuración de CORS
+      - PATH_API_USER: Ruta al servicio de API de usuarios
+      - PATH_API_BASE: Ruta base de la API
+
+   2. Configuración de Service
+      Los servicios exponen cada despliegue al clúster de Kubernetes y configuran cómo se accede a ellos internamente y a través del balanceador de carga.
+   3. Configuración de BackendConfig
+      El recurso BackendConfig configura aspectos adicionales del balanceador de carga, como las verificaciones de salud, para garantizar que solo las instancias saludables reciban tráfico.
+
+
+El recurso BackendConfig configura aspectos adicionales del balanceador de carga, como las verificaciones de salud, para garantizar que solo las instancias saludables reciban tráfico.
+
+## Problemas Comunes y Solución de Problemas
+
+- **Error de conexión a la base de datos**: Verifica que PostgreSQL esté en ejecución y que las credenciales en el archivo `.env` sean correctas.
+
+- **Problemas al instalar dependencias**: Asegúrate de estar utilizando la versión correcta de Python y de que el entorno virtual esté activado.
+
+- **Errores al ejecutar Docker Compose**: Verifica que Docker esté instalado y en ejecución. Revisa los logs para identificar problemas específicos.
